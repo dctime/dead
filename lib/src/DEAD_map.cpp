@@ -2,14 +2,14 @@
 #include <SDL2/SDL_log.h>
 #include "../include/DEAD_map.h"
 
-Map::Map() {
+DEAD_Map::DEAD_Map() {
   SDL_Log("Map Init");
 }
 
-Map::~Map() {
+DEAD_Map::~DEAD_Map() {
   SDL_Log("Map Destoryed");
 }
 
-void Map::renderMap() {
+void DEAD_Map::renderMap() {
   SDL_Log("Rendering Map");
 }

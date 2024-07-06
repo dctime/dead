@@ -1,9 +1,9 @@
 #include <vector>
 
-class Map {
+class DEAD_Map {
 public:
-  Map();
-  ~Map();
+  DEAD_Map();
+  ~DEAD_Map();
   void renderMap();
 private:
   std::vector<std::vector<int>> mapObjects;
