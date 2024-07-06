@@ -1,6 +1,7 @@
 #include <DEAD_game.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_log.h>
+#include <SDL2/SDL_render.h>
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL.h>
 
@@ -20,6 +21,8 @@ DEAD_Game::DEAD_Game(const char* mapFilePath) {
   DEAD_Map map = DEAD_Map(mapFilePath);
   this->map = &map;
 
+  this->renderer = SDL_CreateRenderer(this->window, 0, SDL_RENDERER_ACCELERATED);
+
 }
 
 DEAD_Game::~DEAD_Game() {
@@ -30,6 +33,7 @@ DEAD_Game::~DEAD_Game() {
 
 void DEAD_Game::tick() {
   this->eventHandle();
+  this->render();
 }
 
 void DEAD_Game::eventHandle() {
@@ -40,6 +44,12 @@ void DEAD_Game::eventHandle() {
     case SDL_QUIT:
       this->running = false;      
   }
+}
+
+void DEAD_Game::render() {
+  SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 0);
+  SDL_RenderClear(this->renderer);
+  SDL_RenderPresent(this->renderer);
 }
 
 void DEAD_Game::run() {
