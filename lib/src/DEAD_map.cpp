@@ -4,11 +4,11 @@
 #include <fstream>
 #include <string>
 #include <iostream>
-#include "../include/DEAD_map.h"
+#include <DEAD_map.h>  
 
-DEAD_Map::DEAD_Map() {
+DEAD_Map::DEAD_Map(const char* filePath) {
   SDL_Log("Map Init");
-  this->loadMap("awad");
+  this->loadMap(filePath);
 }
 
 DEAD_Map::~DEAD_Map() {
