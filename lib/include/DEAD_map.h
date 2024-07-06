@@ -7,4 +7,5 @@ public:
   void renderMap();
 private:
   std::vector<std::vector<int>> mapObjects;
+  void loadMap(const char* filePath);
 };
