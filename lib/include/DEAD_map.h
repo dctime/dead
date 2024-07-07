@@ -9,6 +9,6 @@ public:
 
 
 private:
-  std::vector<std::vector<int>> mapObjects;
+  std::vector<std::vector<char>> mapObjects;
   void loadMap(const char* filePath);
 };
