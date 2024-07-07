@@ -36,13 +36,8 @@ void DEAD_Renderer::renderMapObjects() {
   SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
   SDL_RenderClear(this->renderer);
 
-  SDL_Surface *mapObjectSurface = IMG_Load(DEAD_FilePaths::MAP_OBJECT_PNG_FILE_PATH.c_str());
-  SDL_Texture *mapObjectTexture = SDL_CreateTextureFromSurface(this->renderer, mapObjectSurface);
-  SDL_FreeSurface(mapObjectSurface);
-  
   SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 0);
-  SDL_RenderCopy(this->renderer, mapObjectTexture, &WOOD_LOCATION_RECT, &renderRect);
-  
+  SDL_RenderCopy(this->renderer, this->mapObjectTexture, &WOOD_LOCATION_RECT, &renderRect);
   
   SDL_RenderPresent(this->renderer);
 }

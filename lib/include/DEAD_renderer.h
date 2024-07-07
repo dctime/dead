@@ -12,15 +12,15 @@ public:
   static const SDL_Rect WOOD_LOCATION_RECT;
 private:
   void renderMapObjects();
-
   SDL_Renderer* renderer;
-  double renderBlockSize;
-  struct renderAnchor {
+  int renderBlockSize = 30;
+  struct RenderAnchor {
     double x;
     double y;
   };
   
-  SDL_Rect renderRect = {.x=10, .y=10, .w=30, .h=30};
+  RenderAnchor renderAnchor = {.x=0, .y=0};
+  SDL_Rect renderRect = {.x=0, .y=0, .w=renderBlockSize, .h=renderBlockSize};
   SDL_Texture *mapObjectTexture;
 
 
