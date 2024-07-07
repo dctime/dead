@@ -7,8 +7,10 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_video.h>
-DEAD_Game::DEAD_Game(const char *mapFilePath) {
+#include <DEAD_renderer.h>
 
+DEAD_Game::DEAD_Game(const char *mapFilePath) {
+  
   SDL_Log("Game Init");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
     SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
@@ -32,7 +34,7 @@ DEAD_Game::DEAD_Game(const char *mapFilePath) {
 
   DEAD_Map map = DEAD_Map(mapFilePath);
   this->map = &map;
-
+  this->deadRenderer = new DEAD_Renderer(this->window);
   this->renderer =
       SDL_CreateRenderer(this->window, 0, SDL_RENDERER_ACCELERATED);
 }
@@ -43,11 +45,12 @@ DEAD_Game::~DEAD_Game() {
   IMG_Quit();
   SDL_Quit();
   SDL_Log("Game Destroyed");
+  delete this->deadRenderer;
 }
 
 void DEAD_Game::tick() {
   this->eventHandle();
-  this->render();
+  this->deadRenderer->render();
 }
 
 void DEAD_Game::eventHandle() {
@@ -60,23 +63,6 @@ void DEAD_Game::eventHandle() {
   }
 }
 
-void DEAD_Game::render() {
-  SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
-  SDL_RenderClear(this->renderer);
-
-  SDL_Surface *mapObjectSurface = IMG_Load("assets/imgs/map_objects.png");
-  SDL_Texture *mapObjectTexture = SDL_CreateTextureFromSurface(this->renderer, mapObjectSurface);
-  SDL_FreeSurface(mapObjectSurface);
-  
-  SDL_Rect stoneLocationRect = {.x=0, .y=0, .w=100, .h=100 };
-  SDL_Rect renderRect = {.x=10, .y=10, .w=30, .h=30};
-  
-  SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 0);
-  SDL_RenderCopy(this->renderer, mapObjectTexture, &stoneLocationRect, &renderRect);
-  SDL_GetError();
-  
-  SDL_RenderPresent(this->renderer);
-}
 
 void DEAD_Game::run() {
   while (this->running) {
