@@ -1,11 +1,10 @@
 #include <DEAD_renderer.h>
+#include <DEAD_filepaths.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_log.h>
 #include <SDL2/SDL_render.h>
-#include <ostream>
-#include <iostream>
 
 const SDL_Rect DEAD_Renderer::WOOD_LOCATION_RECT = {.x=100, .y=0, .w=100, .h=100};
 const SDL_Rect DEAD_Renderer::STONE_LOCATION_RECT = {.x=0, .y=0, .w=100, .h=100};
@@ -37,15 +36,12 @@ void DEAD_Renderer::renderMapObjects() {
   SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
   SDL_RenderClear(this->renderer);
 
-  SDL_Surface *mapObjectSurface = IMG_Load("assets/imgs/map_objects.png");
+  SDL_Surface *mapObjectSurface = IMG_Load(DEAD_FilePaths::MAP_OBJECT_PNG_FILE_PATH.c_str());
   SDL_Texture *mapObjectTexture = SDL_CreateTextureFromSurface(this->renderer, mapObjectSurface);
   SDL_FreeSurface(mapObjectSurface);
   
-  SDL_Rect stoneLocationRect = {.x=0, .y=0, .w=100, .h=100 };
-  SDL_Rect renderRect = {.x=10, .y=10, .w=30, .h=30};
-  
   SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 0);
-  SDL_RenderCopy(this->renderer, mapObjectTexture, &stoneLocationRect, &renderRect);
+  SDL_RenderCopy(this->renderer, mapObjectTexture, &WOOD_LOCATION_RECT, &renderRect);
   
   
   SDL_RenderPresent(this->renderer);

@@ -7,7 +7,7 @@
 #include <SDL2/SDL_video.h>
 
 int main() {
-  DEAD_Game game = DEAD_Game("assets/data/map");
+  DEAD_Game game = DEAD_Game();
   game.run();
 
   return 0;

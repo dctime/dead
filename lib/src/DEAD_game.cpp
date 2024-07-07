@@ -9,7 +9,7 @@
 #include <SDL2/SDL_video.h>
 #include <DEAD_renderer.h>
 
-DEAD_Game::DEAD_Game(const char *mapFilePath) {
+DEAD_Game::DEAD_Game() {
   
   SDL_Log("Game Init");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
@@ -32,7 +32,7 @@ DEAD_Game::DEAD_Game(const char *mapFilePath) {
     SDL_Log("Unable to init window: %s", SDL_GetError());
   }
 
-  DEAD_Map map = DEAD_Map(mapFilePath);
+  DEAD_Map map = DEAD_Map();
   this->map = &map;
   this->deadRenderer = new DEAD_Renderer(this->window);
   this->renderer =

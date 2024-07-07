@@ -7,7 +7,7 @@
 
 class DEAD_Game {
 public:
-  DEAD_Game(const char* mapFilePath);
+  DEAD_Game();
   ~DEAD_Game();
   void tick();
   void run();

@@ -4,7 +4,7 @@
 
 class DEAD_Map {
 public:
-  DEAD_Map(const char* filePath);
+  DEAD_Map();
   ~DEAD_Map();
   void renderMap();
   
@@ -12,5 +12,5 @@ public:
 
 private:
   std::vector<std::vector<char>> mapObjects;
-  void loadMap(const char* filePath);
+  void loadMap();
 };

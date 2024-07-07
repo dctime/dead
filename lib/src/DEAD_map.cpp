@@ -4,12 +4,13 @@
 #include <fstream>
 #include <string>
 #include <iostream>
-#include <DEAD_map.h>  
+#include <DEAD_map.h>
+#include <DEAD_filepaths.h>
 #include <vector>
 
-DEAD_Map::DEAD_Map(const char* filePath) {
+DEAD_Map::DEAD_Map() {
   SDL_Log("Map Init");
-  this->loadMap(filePath);
+  this->loadMap();
 }
 
 DEAD_Map::~DEAD_Map() {
@@ -20,10 +21,10 @@ void DEAD_Map::renderMap() {
   SDL_Log("Rendering Map");
 }
 
-void DEAD_Map::loadMap(const char* filePath) {
+void DEAD_Map::loadMap() {
   mapObjects.clear();
-
-  std::ifstream inputFile(filePath);
+  const char* inputFilePath = DEAD_FilePaths::MAP_FILE_PATH.c_str();
+  std::ifstream inputFile(inputFilePath);
   std::string line;
 
   while (getline(inputFile, line)) {
