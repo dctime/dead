@@ -2,10 +2,12 @@
 
 #include <SDL2/SDL_render.h>
 
+class DEAD_Game;
+
 class DEAD_Renderer {
 public:
   DEAD_Renderer();
-  DEAD_Renderer(SDL_Window* window);
+  DEAD_Renderer(SDL_Window* window, DEAD_Game* game);
   ~DEAD_Renderer();
   void render();
   static const SDL_Rect STONE_LOCATION_RECT;

@@ -1,4 +1,5 @@
 #include <DEAD_game.h>
+#include <DEAD_renderer.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
@@ -7,7 +8,6 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_video.h>
-#include <DEAD_renderer.h>
 
 DEAD_Game::DEAD_Game() {
   
@@ -34,7 +34,7 @@ DEAD_Game::DEAD_Game() {
 
   DEAD_Map map = DEAD_Map();
   this->map = &map;
-  this->deadRenderer = new DEAD_Renderer(this->window);
+  this->deadRenderer = new DEAD_Renderer(this->window, this);
   this->renderer =
       SDL_CreateRenderer(this->window, 0, SDL_RENDERER_ACCELERATED);
 }

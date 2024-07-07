@@ -6,12 +6,13 @@
 #include <SDL2/SDL_log.h>
 #include <SDL2/SDL_render.h>
 
+
 const SDL_Rect DEAD_Renderer::WOOD_LOCATION_RECT = {.x=100, .y=0, .w=100, .h=100};
 const SDL_Rect DEAD_Renderer::STONE_LOCATION_RECT = {.x=0, .y=0, .w=100, .h=100};
 
 DEAD_Renderer::DEAD_Renderer() {}
 
-DEAD_Renderer::DEAD_Renderer(SDL_Window* window) {
+DEAD_Renderer::DEAD_Renderer(SDL_Window* window, DEAD_Game* game) {
   if (window == NULL) { SDL_LogError(SDL_LOG_CATEGORY_VIDEO, "[Renderer] Window is null"); }
   this->renderer =
       SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED);
@@ -38,7 +39,7 @@ void DEAD_Renderer::renderMapObjects() {
 
   SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 0);
   SDL_RenderCopy(this->renderer, this->mapObjectTexture, &WOOD_LOCATION_RECT, &renderRect);
-  
+   
   SDL_RenderPresent(this->renderer);
 }
 
