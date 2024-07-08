@@ -9,6 +9,7 @@
 int main() {
   DEAD_Game game = DEAD_Game();
   game.run();
-
+  DEAD_Player::Position playerPos1 = {.x=1.5, .y=1.5};
+  DEAD_Player player1 = DEAD_Player(&playerPos1);
   return 0;
 }

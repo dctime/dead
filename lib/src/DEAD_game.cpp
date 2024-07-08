@@ -30,26 +30,23 @@ DEAD_Game::DEAD_Game() {
   if (window == NULL) {
     SDL_Log("Unable to init window: %s", SDL_GetError());
   }
-
   this->map = new DEAD_Map();
-  this->deadRenderer = new DEAD_Renderer(this->window, this);
-  this->renderer =
-      SDL_CreateRenderer(this->window, 0, SDL_RENDERER_ACCELERATED);
+  this->renderer = new DEAD_Renderer(this->window, this);
+  
 }
 
 DEAD_Game::~DEAD_Game() {
   SDL_DestroyWindow(this->window);
-  SDL_DestroyRenderer(this->renderer);
   IMG_Quit();
   SDL_Quit();
   SDL_Log("Game Destroyed");
-  delete this->deadRenderer;
+  delete this->renderer;
   delete this->map;
 }
 
 void DEAD_Game::tick() {
   this->eventHandle();
-  this->deadRenderer->render();
+  this->renderer->render();
 }
 
 void DEAD_Game::eventHandle() {
@@ -73,13 +70,7 @@ DEAD_Map* DEAD_Game::getMap() {
   return this->map;
 }
 
-SDL_Renderer* DEAD_Game::getRenderer() {
-  return this->renderer;
-}
 
-SDL_Window* DEAD_Game::getWindow() {
-  return this->window;
-}
 
 
 

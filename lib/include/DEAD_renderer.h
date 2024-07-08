@@ -9,10 +9,10 @@ struct RenderAnchor {
     double y;
 };
 
-class DEAD_LocationRectMapObject {
+class DEAD_RectLocMapObjects {
 public:
-  static const SDL_Rect WOOD_LOCATION_RECT;
-  static const SDL_Rect STONE_LOCATION_RECT;
+  static const SDL_Rect STONE;
+  static const SDL_Rect WOOD;
 };
 
 class DEAD_Renderer {

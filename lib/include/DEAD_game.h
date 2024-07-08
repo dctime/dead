@@ -13,8 +13,6 @@ public:
   void tick();
   void run();
   DEAD_Map* getMap();
-  SDL_Renderer* getRenderer();
-  SDL_Window* getWindow();
   const int SCREEN_WIDTH = 720;
   const int SCREEN_HEIGHT = 480;
 private:
@@ -22,6 +20,5 @@ private:
   DEAD_Map* map;
   void eventHandle();
   bool running = true;
-  SDL_Renderer* renderer;
-  DEAD_Renderer* deadRenderer;
+  DEAD_Renderer* renderer;
 };

@@ -1,14 +1,15 @@
 #pragma once
 
-#include <SDL2/SDL_render.h>
-
-class DEAD_Game;
-
 class DEAD_Player {
 public:
-  DEAD_Player(DEAD_Game* game);
+  struct Position {
+    double x;
+    double y;
+  };
+  DEAD_Player(DEAD_Player::Position *pos);
   ~DEAD_Player();
+  Position *getPos();
+
 private:
-  DEAD_Game* game;
-  SDL_Texture* playerTexture;
+  Position *position;
 };
