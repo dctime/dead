@@ -11,6 +11,7 @@ public:
   ~DEAD_Game();
   void tick();
   void run();
+  DEAD_Map* getMap();
   const int SCREEN_WIDTH = 720;
   const int SCREEN_HEIGHT = 480;
 private:

@@ -4,6 +4,11 @@
 
 class DEAD_Game;
 
+struct RenderAnchor {
+    double x;
+    double y;
+};
+
 class DEAD_Renderer {
 public:
   DEAD_Renderer();
@@ -16,11 +21,8 @@ private:
   void renderMapObjects();
   SDL_Renderer* renderer;
   int renderBlockSize = 30;
-  struct RenderAnchor {
-    double x;
-    double y;
-  };
-  
+
+  DEAD_Game* game;
   RenderAnchor renderAnchor = {.x=0, .y=0};
   SDL_Rect renderRect = {.x=0, .y=0, .w=renderBlockSize, .h=renderBlockSize};
   SDL_Texture *mapObjectTexture;

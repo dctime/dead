@@ -1,5 +1,4 @@
 #include <DEAD_game.h>
-#include <DEAD_renderer.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
@@ -32,8 +31,7 @@ DEAD_Game::DEAD_Game() {
     SDL_Log("Unable to init window: %s", SDL_GetError());
   }
 
-  DEAD_Map map = DEAD_Map();
-  this->map = &map;
+  this->map = new DEAD_Map();
   this->deadRenderer = new DEAD_Renderer(this->window, this);
   this->renderer =
       SDL_CreateRenderer(this->window, 0, SDL_RENDERER_ACCELERATED);
@@ -46,6 +44,7 @@ DEAD_Game::~DEAD_Game() {
   SDL_Quit();
   SDL_Log("Game Destroyed");
   delete this->deadRenderer;
+  delete this->map;
 }
 
 void DEAD_Game::tick() {
@@ -68,4 +67,8 @@ void DEAD_Game::run() {
   while (this->running) {
     this->tick();
   }
+}
+
+DEAD_Map* DEAD_Game::getMap() {
+  return this->map;
 }
