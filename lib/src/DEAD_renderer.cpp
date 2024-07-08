@@ -11,10 +11,8 @@
 #include <iterator>
 #include <vector>
 
-const SDL_Rect DEAD_Renderer::WOOD_LOCATION_RECT = {
-    .x = 100, .y = 0, .w = 100, .h = 100};
-const SDL_Rect DEAD_Renderer::STONE_LOCATION_RECT = {
-    .x = 0, .y = 0, .w = 100, .h = 100};
+const SDL_Rect DEAD_RectLocMapObjects::STONE = {.x=0, .y=0, .w=100, .h=100};
+const SDL_Rect DEAD_RectLocMapObjects::WOOD = {.x=100, .y=0, .w=100, .h=100};
 
 DEAD_Renderer::DEAD_Renderer() {}
 
@@ -50,7 +48,7 @@ void DEAD_Renderer::render() {
 
 void DEAD_Renderer::renderMapObjects() {
   DEAD_Map *map = this->game->getMap();
-  SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 0);
+  SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
   SDL_RenderClear(this->renderer);
 
   float windowWidthMid = this->game->SCREEN_WIDTH / 2.0;
@@ -71,10 +69,10 @@ void DEAD_Renderer::renderMapObjects() {
       bool isAir = false;
       switch (mapObjects[i][j]) {
       case 's':
-        locationRect = &STONE_LOCATION_RECT;
+        locationRect = &DEAD_RectLocMapObjects::STONE;
         break;
       case 'w':
-        locationRect = &WOOD_LOCATION_RECT;
+        locationRect = &DEAD_RectLocMapObjects::WOOD;
         break;
       default:
         isAir = true;
@@ -85,8 +83,5 @@ void DEAD_Renderer::renderMapObjects() {
     }
   }
 
-  SDL_Rect testRect = {.x = 0, .y = 0, .w = 30, .h = 30};
-  SDL_SetRenderDrawColor(renderer, 255, 255, 0, 0);
-  SDL_RenderDrawPoint(renderer, windowWidthMid, windowHeightMid);
   SDL_RenderPresent(this->renderer);
 }
