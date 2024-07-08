@@ -4,6 +4,7 @@
 #include <SDL2/SDL_render.h>
 #include "DEAD_map.h"
 #include "DEAD_renderer.h"
+#include "DEAD_player.h"
 
 class DEAD_Game {
 public:
