@@ -72,3 +72,17 @@ void DEAD_Game::run() {
 DEAD_Map* DEAD_Game::getMap() {
   return this->map;
 }
+
+SDL_Renderer* DEAD_Game::getRenderer() {
+  return this->renderer;
+}
+
+SDL_Window* DEAD_Game::getWindow() {
+  return this->window;
+}
+
+
+
+
+
+

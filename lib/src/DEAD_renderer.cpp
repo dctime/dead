@@ -7,14 +7,13 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_log.h>
 #include <SDL2/SDL_render.h>
-#include <iostream>
-#include <iterator>
 #include <vector>
 
-const SDL_Rect DEAD_Renderer::WOOD_LOCATION_RECT = {
+const SDL_Rect DEAD_LocationRectMapObject::WOOD_LOCATION_RECT = {
     .x = 100, .y = 0, .w = 100, .h = 100};
-const SDL_Rect DEAD_Renderer::STONE_LOCATION_RECT = {
+const SDL_Rect DEAD_LocationRectMapObject::STONE_LOCATION_RECT = {
     .x = 0, .y = 0, .w = 100, .h = 100};
+
 
 DEAD_Renderer::DEAD_Renderer() {}
 
@@ -28,7 +27,8 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game) {
     SDL_LogError(SDL_LOG_CATEGORY_RENDER, "[Renderer] %s", SDL_GetError());
   }
   this->renderer = SDL_GetRenderer(window);
-  SDL_Surface *mapObjectSurface = IMG_Load("assets/imgs/map_objects.png");
+  
+  SDL_Surface *mapObjectSurface = IMG_Load(DEAD_FilePaths::MAP_OBJECT_PNG_FILE_PATH.c_str());
   if (mapObjectSurface == NULL) {
     SDL_LogError(SDL_LOG_CATEGORY_VIDEO,
                  "[Renderer] Cant Find map_objects.png");
@@ -36,6 +36,10 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game) {
   this->mapObjectTexture =
       SDL_CreateTextureFromSurface(this->renderer, mapObjectSurface);
   SDL_FreeSurface(mapObjectSurface);
+
+  SDL_Surface* playerTextureSurface = IMG_Load(DEAD_FilePaths::PLAYER_TEXTURE_PNG.c_str());
+  this->playerTexture = SDL_CreateTextureFromSurface(this->game->getRenderer(), playerTextureSurface);
+  SDL_FreeSurface(playerTextureSurface);
 
   this->game = game;
 }
@@ -50,13 +54,12 @@ void DEAD_Renderer::render() {
 
 void DEAD_Renderer::renderMapObjects() {
   DEAD_Map *map = this->game->getMap();
-  SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 0);
+  SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
   SDL_RenderClear(this->renderer);
 
   float windowWidthMid = this->game->SCREEN_WIDTH / 2.0;
   float windowHeightMid = this->game->SCREEN_HEIGHT / 2.0;
 
-  SDL_SetRenderDrawColor(this->renderer, 255, 255, 255, 0);
 
   std::vector<std::vector<char>> mapObjects = map->getMapObjects();
 
@@ -71,10 +74,10 @@ void DEAD_Renderer::renderMapObjects() {
       bool isAir = false;
       switch (mapObjects[i][j]) {
       case 's':
-        locationRect = &STONE_LOCATION_RECT;
+        locationRect = &DEAD_LocationRectMapObject::STONE_LOCATION_RECT;
         break;
       case 'w':
-        locationRect = &WOOD_LOCATION_RECT;
+        locationRect = &DEAD_LocationRectMapObject::WOOD_LOCATION_RECT;
         break;
       default:
         isAir = true;
@@ -84,9 +87,5 @@ void DEAD_Renderer::renderMapObjects() {
 
     }
   }
-
-  SDL_Rect testRect = {.x = 0, .y = 0, .w = 30, .h = 30};
-  SDL_SetRenderDrawColor(renderer, 255, 255, 0, 0);
-  SDL_RenderDrawPoint(renderer, windowWidthMid, windowHeightMid);
   SDL_RenderPresent(this->renderer);
 }
