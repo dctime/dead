@@ -53,8 +53,8 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game) {
 DEAD_Renderer::~DEAD_Renderer() { SDL_DestroyRenderer(this->renderer); }
 
 void DEAD_Renderer::render() {
-  this->renderAnchor.x = this->game->getPlayer()->getPos()->x;
-  this->renderAnchor.y = this->game->getPlayer()->getPos()->y;
+  this->renderAnchor.x = 0;
+  this->renderAnchor.y = 0;
 
 
   SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);

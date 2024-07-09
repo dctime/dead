@@ -7,7 +7,7 @@
 #include <SDL2/SDL_video.h>
 
 int main() {
-  DEAD_Player::Position playerPos = {.x=1.5, .y=1.5};
+  DEAD_Player::Position playerPos = {.x=3, .y=3};
   DEAD_ControllablePlayer player = DEAD_ControllablePlayer(&playerPos);
   DEAD_Game game = DEAD_Game(&player);
   game.run();

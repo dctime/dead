@@ -9,3 +9,8 @@ DEAD_Player::~DEAD_Player() {}
 DEAD_Player::Position* DEAD_Player::getPos() {
   return this->position;
 }
+
+void DEAD_Player::setPos(double x, double y) {
+  this->position->x = x;
+  this->position->y = y;
+} 

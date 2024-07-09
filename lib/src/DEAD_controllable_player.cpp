@@ -22,18 +22,18 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
 
 void DEAD_ControllablePlayer::handleKeyState(const Uint8* state) {
   if (state[SDL_SCANCODE_W] ) {
-    std::cout << ("[ControllablePlayer] Move Up") << std::endl;
+    this->setPos(this->getPos()->x, this->getPos()->y - 0.0001); 
   } 
 
   if (state[SDL_SCANCODE_S]) {
-    std::cout << ("[ControllablePlayer] Move Down") << std::endl;
+    this->setPos(this->getPos()->x, this->getPos()->y + 0.0001); 
   }
 
   if (state[SDL_SCANCODE_A]) {
-    std::cout << ("[ControllablePlayer] Move Left") << std::endl;
+    this->setPos(this->getPos()->x - 0.0001, this->getPos()->y); 
   }
 
   if (state[SDL_SCANCODE_D]) {
-    std::cout << ("[ControllablePlayer] Move Right") << std::endl;
+    this->setPos(this->getPos()->x + 0.0001, this->getPos()->y); 
   }
 }
