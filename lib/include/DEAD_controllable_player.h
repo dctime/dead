@@ -6,4 +6,6 @@ public:
   DEAD_ControllablePlayer(DEAD_Player::Position* pos);
   ~DEAD_ControllablePlayer();
   void playerEvents(SDL_Event event);
+private:
+  void handleKeyState(const Uint8* state);
 };  

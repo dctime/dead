@@ -26,7 +26,7 @@ private:
   void renderMapObjects();
   SDL_Renderer* renderer;
   int renderBlockSize = 30;
-
+  int entitySize = 15;
   DEAD_Game* game;
   RenderAnchor renderAnchor = {.x=0, .y=0};
   SDL_Rect renderRect = {.x=0, .y=0, .w=renderBlockSize, .h=renderBlockSize};

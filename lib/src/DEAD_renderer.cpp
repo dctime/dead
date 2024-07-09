@@ -8,6 +8,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_log.h>
 #include <SDL2/SDL_render.h>
+#include <iostream>
 #include <vector>
 
 const SDL_Rect DEAD_RectLocMapObjects::STONE = {
@@ -52,8 +53,9 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game) {
 DEAD_Renderer::~DEAD_Renderer() { SDL_DestroyRenderer(this->renderer); }
 
 void DEAD_Renderer::render() {
-  this->renderAnchor.x = 1.5;
-  this->renderAnchor.y = 2;
+  this->renderAnchor.x = this->game->getPlayer()->getPos()->x;
+  this->renderAnchor.y = this->game->getPlayer()->getPos()->y;
+
 
   SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
   SDL_RenderClear(this->renderer);
@@ -67,7 +69,6 @@ void DEAD_Renderer::render() {
 void DEAD_Renderer::renderMapObjects() {
   DEAD_Map *map = this->game->getMap();
   
-
   float windowWidthMid = this->game->SCREEN_WIDTH / 2.0;
   float windowHeightMid = this->game->SCREEN_HEIGHT / 2.0;
 
@@ -103,7 +104,13 @@ void DEAD_Renderer::renderMapObjects() {
 void DEAD_Renderer::renderPlayer(DEAD_Player* player) {
   DEAD_Player::Position* pos = player->getPos();
   SDL_Rect rect = {.x=0, .y=0, .w=50, .h=50};
-  SDL_Rect renderRect= {.x=0, .y=0, .w=15, .h=15};
+
+  float windowWidthMid = this->game->SCREEN_WIDTH / 2.0;
+  float windowHeightMid = this->game->SCREEN_HEIGHT / 2.0;
+
+  int renderRectX = (pos->x - this->renderAnchor.x) * this->renderBlockSize - this->entitySize / 2.0 + windowWidthMid;
+  int renderRectY = (pos->y - this->renderAnchor.y) * this->renderBlockSize - this->entitySize / 2.0 + windowHeightMid;
+  SDL_Rect renderRect = {.x=renderRectX, .y=renderRectY, .w=this->entitySize, .h=entitySize};
   SDL_RenderCopy(this->renderer, this->playerTexture, &rect, &renderRect);
 }
 
