@@ -8,16 +8,18 @@
 
 class DEAD_Game {
 public:
-  DEAD_Game();
+  DEAD_Game(DEAD_Player* player);
   ~DEAD_Game();
   void tick();
   void run();
   DEAD_Map* getMap();
+  DEAD_Player* getPlayer();
   const int SCREEN_WIDTH = 720;
   const int SCREEN_HEIGHT = 480;
 private:
   SDL_Window* window;
   DEAD_Map* map;
+  DEAD_Player* player;
   void eventHandle();
   bool running = true;
   DEAD_Renderer* renderer;

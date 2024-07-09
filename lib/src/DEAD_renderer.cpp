@@ -2,6 +2,7 @@
 #include <DEAD_game.h>
 #include <DEAD_map.h>
 #include <DEAD_renderer.h>
+#include <DEAD_player.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_image.h>
@@ -53,13 +54,19 @@ DEAD_Renderer::~DEAD_Renderer() { SDL_DestroyRenderer(this->renderer); }
 void DEAD_Renderer::render() {
   this->renderAnchor.x = 1.5;
   this->renderAnchor.y = 2;
+
+  SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
+  SDL_RenderClear(this->renderer);
+
   this->renderMapObjects();
+  this->renderPlayer(this->game->getPlayer());
+
+  SDL_RenderPresent(this->renderer);
 }
 
 void DEAD_Renderer::renderMapObjects() {
   DEAD_Map *map = this->game->getMap();
-  SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
-  SDL_RenderClear(this->renderer);
+  
 
   float windowWidthMid = this->game->SCREEN_WIDTH / 2.0;
   float windowHeightMid = this->game->SCREEN_HEIGHT / 2.0;
@@ -91,5 +98,20 @@ void DEAD_Renderer::renderMapObjects() {
 
     }
   }
-  SDL_RenderPresent(this->renderer);
 }
+
+void DEAD_Renderer::renderPlayer(DEAD_Player* player) {
+  DEAD_Player::Position* pos = player->getPos();
+  SDL_Rect rect = {.x=0, .y=0, .w=50, .h=50};
+  SDL_Rect renderRect= {.x=0, .y=0, .w=15, .h=15};
+  SDL_RenderCopy(this->renderer, this->playerTexture, &rect, &renderRect);
+}
+
+
+
+
+
+
+
+
+

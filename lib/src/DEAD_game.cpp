@@ -1,3 +1,4 @@
+#include "DEAD_player.h"
 #include <DEAD_game.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
@@ -8,7 +9,7 @@
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_video.h>
 
-DEAD_Game::DEAD_Game() {
+DEAD_Game::DEAD_Game(DEAD_Player* player) {
   
   SDL_Log("Game Init");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
@@ -32,7 +33,7 @@ DEAD_Game::DEAD_Game() {
   }
   this->map = new DEAD_Map();
   this->renderer = new DEAD_Renderer(this->window, this);
-  
+  this->player = player;
 }
 
 DEAD_Game::~DEAD_Game() {
@@ -68,6 +69,10 @@ void DEAD_Game::run() {
 
 DEAD_Map* DEAD_Game::getMap() {
   return this->map;
+}
+
+DEAD_Player* DEAD_Game::getPlayer() {
+  return this->player;
 }
 
 

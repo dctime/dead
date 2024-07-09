@@ -7,9 +7,9 @@
 #include <SDL2/SDL_video.h>
 
 int main() {
-  DEAD_Game game = DEAD_Game();
+  DEAD_Player::Position playerPos = {.x=1.5, .y=1.5};
+  DEAD_Player player = DEAD_Player(&playerPos);
+  DEAD_Game game = DEAD_Game(&player);
   game.run();
-  DEAD_Player::Position playerPos1 = {.x=1.5, .y=1.5};
-  DEAD_Player player1 = DEAD_Player(&playerPos1);
   return 0;
 }

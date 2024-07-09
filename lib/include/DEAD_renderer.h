@@ -3,6 +3,7 @@
 #include <SDL2/SDL_render.h>
 
 class DEAD_Game;
+class DEAD_Player;
 
 struct RenderAnchor {
     double x;
@@ -31,6 +32,7 @@ private:
   SDL_Rect renderRect = {.x=0, .y=0, .w=renderBlockSize, .h=renderBlockSize};
   SDL_Texture *mapObjectTexture;
   SDL_Texture *playerTexture;
+  void renderPlayer(DEAD_Player* player);
 
 
 };
