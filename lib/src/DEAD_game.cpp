@@ -9,7 +9,7 @@
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_video.h>
 
-DEAD_Game::DEAD_Game(DEAD_Player* player) {
+DEAD_Game::DEAD_Game(DEAD_ControllablePlayer* player) {
   
   SDL_Log("Game Init");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
@@ -57,6 +57,8 @@ void DEAD_Game::eventHandle() {
   switch (event.type) {
   case SDL_QUIT:
     this->running = false;
+  default:
+    this->player->playerEvents(event);
   }
 }
 

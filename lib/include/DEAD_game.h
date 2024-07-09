@@ -5,10 +5,11 @@
 #include "DEAD_map.h"
 #include "DEAD_renderer.h"
 #include "DEAD_player.h"
+#include "DEAD_controllable_player.h"
 
 class DEAD_Game {
 public:
-  DEAD_Game(DEAD_Player* player);
+  DEAD_Game(DEAD_ControllablePlayer* player);
   ~DEAD_Game();
   void tick();
   void run();
@@ -19,7 +20,7 @@ public:
 private:
   SDL_Window* window;
   DEAD_Map* map;
-  DEAD_Player* player;
+  DEAD_ControllablePlayer* player;
   void eventHandle();
   bool running = true;
   DEAD_Renderer* renderer;
