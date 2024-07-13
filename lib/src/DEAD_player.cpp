@@ -4,7 +4,7 @@
 #include <memory>
 
 DEAD_Player::DEAD_Player(DEAD_Player::Position* pos)
-: speed(3), position(pos), weapon(nullptr){
+: speed(3), position(pos), weapon(nullptr), rotation(0){
 }
 
 DEAD_Player::~DEAD_Player() {}
@@ -21,6 +21,11 @@ void DEAD_Player::setPos(double x, double y) {
 void DEAD_Player::setSpeed(int speed) {
   this->speed = speed;
 }
+
+void DEAD_Player::setRotation(double rotation) {
+  this->rotation = rotation;
+}
+
 
 int DEAD_Player::getSpeed() {
   return this->speed;
@@ -42,5 +47,15 @@ SDL_Rect DEAD_Player::getPlayerTextureRect() {
   return this->weapon->getTextureRect();
 }
 
- 
+double DEAD_Player::getRotation() {
+  return this->rotation; 
+}
+
+void DEAD_Player::setGame(DEAD_Game* game) {
+  this->game = game;
+}
+
+DEAD_Game* DEAD_Player::getGame() {
+  return this->game;
+}
 

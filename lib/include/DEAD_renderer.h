@@ -10,6 +10,11 @@ struct RenderAnchor {
     double y;
 };
 
+struct ScreenLocation {
+  int x;
+  int y;
+};
+
 class DEAD_RectLocMapObjects {
 public:
   static const SDL_Rect STONE;
@@ -22,6 +27,7 @@ public:
   DEAD_Renderer(SDL_Window* window, DEAD_Game* game);
   ~DEAD_Renderer();
   void render();
+  ScreenLocation getPlayerRenderLocation(DEAD_Player* player, bool mid);
 private:
   void renderMapObjects();
   SDL_Renderer* renderer;
@@ -33,6 +39,5 @@ private:
   SDL_Texture *mapObjectTexture;
   SDL_Texture *playerTexture;
   void renderPlayer(DEAD_Player* player);
-
 
 };

@@ -15,6 +15,7 @@ public:
   void run();
   DEAD_Map* getMap();
   DEAD_Player* getPlayer();
+  DEAD_Renderer* getRenderer();
   const int SCREEN_WIDTH = 720;
   const int SCREEN_HEIGHT = 480;
 private:

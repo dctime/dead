@@ -3,6 +3,8 @@
 #include "DEAD_shotgun.h"
 #include <memory>
 
+class DEAD_Game;
+
 class DEAD_Player {
 public:
   struct Position {
@@ -17,8 +19,14 @@ public:
   int getSpeed();
   void pickupWeapon(std::shared_ptr<DEAD_Weapon> weapon);
   SDL_Rect getPlayerTextureRect();
+  double getRotation();
+  void setRotation(double degree);
+  void setGame(DEAD_Game* game);
+  DEAD_Game* getGame();
 private:
   Position *position;
   int speed;
   std::shared_ptr<DEAD_Weapon> weapon;
+  double rotation;
+  DEAD_Game* game;
 };

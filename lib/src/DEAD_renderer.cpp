@@ -107,13 +107,22 @@ void DEAD_Renderer::renderPlayer(DEAD_Player* player) {
   SDL_Rect rect = player->getPlayerTextureRect();
 
 
-  float windowWidthMid = this->game->SCREEN_WIDTH / 2.0;
-  float windowHeightMid = this->game->SCREEN_HEIGHT / 2.0;
-
-  int renderRectX = (pos->x - this->renderAnchor.x) * this->renderBlockSize - this->entitySize / 2.0 + windowWidthMid;
-  int renderRectY = (pos->y - this->renderAnchor.y) * this->renderBlockSize - this->entitySize / 2.0 + windowHeightMid;
+  int renderRectX = this->getPlayerRenderLocation(player, false).x;
+  int renderRectY = this->getPlayerRenderLocation(player, false).y;
   SDL_Rect renderRect = {.x=renderRectX, .y=renderRectY, .w=this->entitySize, .h=entitySize};
-  SDL_RenderCopy(this->renderer, this->playerTexture, &rect, &renderRect);
+  SDL_RenderCopyEx(this->renderer, this->playerTexture, &rect, &renderRect, player->getRotation(), NULL, SDL_FLIP_NONE);
+}
+
+ScreenLocation DEAD_Renderer::getPlayerRenderLocation(DEAD_Player* player, bool mid) {
+  ScreenLocation loc;
+  loc.x = (player->getPos()->x - renderAnchor.x) * this->renderBlockSize - this->entitySize / 2.0 + this->game->SCREEN_WIDTH / 2.0;
+  loc.y = (player->getPos()->y - renderAnchor.y) * this->renderBlockSize - this->entitySize / 2.0 + this->game->SCREEN_HEIGHT / 2.0;
+
+  if (mid) {
+    loc.x = loc.x + this->entitySize / 2.0;
+    loc.y = loc.y + this->entitySize / 2.0;
+  }
+  return loc;
 }
 
 

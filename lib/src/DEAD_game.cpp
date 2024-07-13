@@ -34,6 +34,7 @@ DEAD_Game::DEAD_Game(DEAD_ControllablePlayer* player) {
   this->map = new DEAD_Map();
   this->renderer = new DEAD_Renderer(this->window, this);
   this->player = player;
+  this->player->setGame(this);
 }
 
 DEAD_Game::~DEAD_Game() {
@@ -46,7 +47,9 @@ DEAD_Game::~DEAD_Game() {
 }
 
 void DEAD_Game::tick() {
+  this->player->handlePlayerRotation();
   this->eventHandle();
+  this->player->handleKeyState();
   this->renderer->render();
 }
 
@@ -57,6 +60,7 @@ void DEAD_Game::eventHandle() {
   switch (event.type) {
   case SDL_QUIT:
     this->running = false;
+    break;
   default:
     this->player->playerEvents(event);
   }
@@ -75,6 +79,10 @@ DEAD_Map* DEAD_Game::getMap() {
 
 DEAD_Player* DEAD_Game::getPlayer() {
   return this->player;
+}
+
+DEAD_Renderer* DEAD_Game::getRenderer() {
+  return this->renderer;
 }
 
 
