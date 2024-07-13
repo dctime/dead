@@ -10,6 +10,9 @@ public:
   ~DEAD_Player();
   Position *getPos();
   void setPos(double x, double y);
+  void setSpeed(int speed);
+  int getSpeed();
 private:
   Position *position;
+  int speed = 1;
 };

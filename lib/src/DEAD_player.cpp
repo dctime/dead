@@ -13,4 +13,12 @@ DEAD_Player::Position* DEAD_Player::getPos() {
 void DEAD_Player::setPos(double x, double y) {
   this->position->x = x;
   this->position->y = y;
-} 
+}
+
+void DEAD_Player::setSpeed(int speed) {
+  this->speed = speed;
+}
+
+int DEAD_Player::getSpeed() {
+  return this->speed;
+}

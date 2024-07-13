@@ -9,6 +9,7 @@
 int main() {
   DEAD_Player::Position playerPos = {.x=3, .y=3};
   DEAD_ControllablePlayer player = DEAD_ControllablePlayer(&playerPos);
+  player.setSpeed(5);
   DEAD_Game game = DEAD_Game(&player);
   game.run();
   return 0;

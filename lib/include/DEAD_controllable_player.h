@@ -8,4 +8,5 @@ public:
   void playerEvents(SDL_Event event);
 private:
   void handleKeyState(const Uint8* state);
+  double baseSpeed = 0.0001;
 };  
