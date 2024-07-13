@@ -1,7 +1,7 @@
 #pragma once
-#include "DEAD_pistol.h"
-#include "DEAD_shotgun.h"
+
 #include <memory>
+#include "DEAD_weapon.h"
 
 class DEAD_Game;
 
