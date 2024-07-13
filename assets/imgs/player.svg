@@ -14,6 +14,7 @@
    sodipodi:docname="player.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
@@ -26,9 +27,9 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:document-units="mm"
-     inkscape:zoom="4.0466586"
-     inkscape:cx="85.6262"
-     inkscape:cy="71.540505"
+     inkscape:zoom="2.8614197"
+     inkscape:cx="128.78222"
+     inkscape:cy="74.263834"
      inkscape:window-width="1920"
      inkscape:window-height="1012"
      inkscape:window-x="0"
@@ -42,16 +43,35 @@
      inkscape:groupmode="layer"
      id="layer1">
     <circle
-       style="fill:#cccccc;stroke-width:0.132865"
+       style="fill:#cccccc;stroke-width:0.212583"
        id="path1"
-       cx="6.6145835"
-       cy="6.6145835"
-       r="6.6145835" />
+       cx="13.229166"
+       cy="13.229166"
+       r="10.583333" />
     <circle
-       style="fill:#e6e6e6;stroke-width:0.106292"
+       style="fill:#e6e6e6;stroke-width:0.159439"
        id="path1-5"
-       cx="6.614583"
-       cy="6.614583"
-       r="5.2916665" />
+       cx="13.229167"
+       cy="13.229167"
+       r="7.9375" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1"
+       id="use1"
+       transform="translate(26.458344)" />
+    <rect
+       style="fill:#666666;stroke-width:0.276569"
+       id="use2"
+       width="9.260417"
+       height="3.96875"
+       x="26.458344"
+       y="11.244792" />
+    <use
+       x="0"
+       y="0"
+       xlink:href="#path1-5"
+       id="use3"
+       transform="translate(26.458344)" />
   </g>
 </svg>
