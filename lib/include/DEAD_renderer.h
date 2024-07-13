@@ -39,5 +39,4 @@ private:
   SDL_Texture *mapObjectTexture;
   SDL_Texture *playerTexture;
   void renderPlayer(DEAD_Player* player);
-
 };
