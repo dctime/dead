@@ -104,7 +104,8 @@ void DEAD_Renderer::renderMapObjects() {
 
 void DEAD_Renderer::renderPlayer(DEAD_Player* player) {
   DEAD_Player::Position* pos = player->getPos();
-  SDL_Rect rect = {.x=0, .y=0, .w=100, .h=100};
+  SDL_Rect rect = player->getPlayerTextureRect();
+
 
   float windowWidthMid = this->game->SCREEN_WIDTH / 2.0;
   float windowHeightMid = this->game->SCREEN_HEIGHT / 2.0;

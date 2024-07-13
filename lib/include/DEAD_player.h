@@ -16,6 +16,7 @@ public:
   void setSpeed(int speed);
   int getSpeed();
   void pickupWeapon(std::shared_ptr<DEAD_Weapon> weapon);
+  SDL_Rect getPlayerTextureRect();
 private:
   Position *position;
   int speed;
