@@ -18,7 +18,8 @@ const SDL_Rect DEAD_RectLocMapObjects::WOOD = {
 
 DEAD_Renderer::DEAD_Renderer() {}
 
-DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game) {
+DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
+: entitySize(50) {
 
 
   if (window == NULL) {
@@ -103,7 +104,7 @@ void DEAD_Renderer::renderMapObjects() {
 
 void DEAD_Renderer::renderPlayer(DEAD_Player* player) {
   DEAD_Player::Position* pos = player->getPos();
-  SDL_Rect rect = {.x=0, .y=0, .w=50, .h=50};
+  SDL_Rect rect = {.x=0, .y=0, .w=100, .h=100};
 
   float windowWidthMid = this->game->SCREEN_WIDTH / 2.0;
   float windowHeightMid = this->game->SCREEN_HEIGHT / 2.0;

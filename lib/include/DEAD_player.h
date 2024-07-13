@@ -14,5 +14,5 @@ public:
   int getSpeed();
 private:
   Position *position;
-  int speed = 1;
+  int speed;
 };
