@@ -23,6 +23,8 @@ public:
   void setRotation(double degree);
   void setGame(DEAD_Game* game);
   DEAD_Game* getGame();
+protected:
+  void attack();
 private:
   Position *position;
   int speed;

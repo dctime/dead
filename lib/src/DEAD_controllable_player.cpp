@@ -9,6 +9,7 @@
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_scancode.h>
 #include <cmath>
+#include <iostream>
 
 DEAD_ControllablePlayer::DEAD_ControllablePlayer(DEAD_Player::Position *pos)
     : DEAD_Player::DEAD_Player(pos) {}
@@ -27,6 +28,10 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
       break;
     }
     break;
+  case SDL_MOUSEBUTTONDOWN:
+    if (event.button.button == SDL_BUTTON_LEFT) {
+      this->attack();
+    }
   }
 }
 

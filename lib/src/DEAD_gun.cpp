@@ -8,6 +8,3 @@ DEAD_Gun::DEAD_Gun()
 DEAD_Gun::DEAD_Gun(DEAD_Player* player)
   : DEAD_Weapon(player) {}
 
-void DEAD_Gun::shoot() {
-  DEAD_NormalBullet bullet(this->getPlayer()); 
-}

@@ -1,6 +1,7 @@
 #include "DEAD_weapon.h"
 #include <DEAD_player.h>
 #include <SDL2/SDL_log.h>
+#include <iostream>
 #include <memory>
 
 DEAD_Player::DEAD_Player(DEAD_Player::Position* pos)
@@ -57,5 +58,12 @@ void DEAD_Player::setGame(DEAD_Game* game) {
 
 DEAD_Game* DEAD_Player::getGame() {
   return this->game;
+}
+
+void DEAD_Player::attack() {
+  if (weapon == nullptr) {
+    return;
+  }
+  this->weapon->attack();
 }
 

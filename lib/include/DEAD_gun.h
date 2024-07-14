@@ -7,5 +7,5 @@ public:
   DEAD_Gun();
   DEAD_Gun(DEAD_Player* player);
   virtual SDL_Rect getTextureRect() override = 0;
-  virtual void shoot();
+  virtual void attack() override = 0;
 };
