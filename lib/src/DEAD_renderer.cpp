@@ -20,7 +20,7 @@ const SDL_Rect DEAD_RectLocMapObjects::WOOD = {
 DEAD_Renderer::DEAD_Renderer() {}
 
 DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
-: entitySize(50) {
+: entitySize(40), renderBlockSize(50) {
 
 
   if (window == NULL) {

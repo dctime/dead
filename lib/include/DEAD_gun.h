@@ -8,4 +8,5 @@ public:
   DEAD_Gun(DEAD_Player* player);
   virtual SDL_Rect getTextureRect() override = 0;
   virtual void attack() override = 0;
+  virtual double getBarrelLength() = 0;
 };

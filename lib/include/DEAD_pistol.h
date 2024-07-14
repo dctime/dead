@@ -6,4 +6,5 @@ public:
   DEAD_Pistol(DEAD_Player* player);
   SDL_Rect getTextureRect() override;
   void attack() override;
+  double getBarrelLength() override; 
 };

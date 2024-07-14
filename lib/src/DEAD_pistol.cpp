@@ -14,6 +14,10 @@ SDL_Rect DEAD_Pistol::getTextureRect() {
 }
 
 void DEAD_Pistol::attack() {
-  DEAD_Bullet* bullet = new DEAD_NormalBullet(this->getPlayer());
+  DEAD_Bullet* bullet = new DEAD_NormalBullet(this->getPlayer(), this);
   std::cout << this->getPlayer()->getGame()->getBulletDirector()->bulletCount() << std::endl;
+}
+
+double DEAD_Pistol::getBarrelLength() {
+  return 0.4;
 }
