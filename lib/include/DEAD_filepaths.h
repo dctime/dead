@@ -7,4 +7,5 @@ public:
   static const std::string MAP_FILE_PATH;
   static const std::string MAP_OBJECT_PNG_FILE_PATH;
   static const std::string PLAYER_TEXTURE_PNG;
+  static const std::string BULLET_TEXTURE_PNG;
 };

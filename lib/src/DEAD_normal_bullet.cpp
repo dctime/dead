@@ -13,3 +13,7 @@ void DEAD_NormalBullet::registerBullet() {
   this->getOwner()->getGame()->getBulletDirector()->registerBullet(this);
 }
 
+double DEAD_NormalBullet::getBulletSize() {
+  return 0.3;
+}
+

@@ -10,3 +10,14 @@ int DEAD_BulletDirector::bulletCount() {
   return this->bullets.size();
 }
 
+DEAD_BulletDirector::~DEAD_BulletDirector() {
+  for (DEAD_Bullet* bullet : this->bullets) {
+    delete bullet;
+  }
+  this->bullets.clear();
+}
+
+std::set<DEAD_Bullet*> DEAD_BulletDirector::getBullets() {
+  return this->bullets;
+}
+

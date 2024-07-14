@@ -8,6 +8,7 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_log.h>
 #include <SDL2/SDL_render.h>
+#include <SDL2/SDL_surface.h>
 #include <iostream>
 #include <vector>
 
@@ -47,6 +48,11 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
       SDL_CreateTextureFromSurface(this->renderer, playerTextureSurface);
   SDL_FreeSurface(playerTextureSurface);
 
+  SDL_Surface *bulletTextureSurface = 
+    IMG_Load(DEAD_FilePaths::BULLET_TEXTURE_PNG.c_str());
+  this->bulletTexture =
+    SDL_CreateTextureFromSurface(this->renderer, bulletTextureSurface);
+  SDL_FreeSurface(bulletTextureSurface);
 
   this->game = game;
 }
@@ -62,6 +68,7 @@ void DEAD_Renderer::render() {
   SDL_RenderClear(this->renderer);
 
   this->renderMapObjects();
+  this->renderBullets();
   this->renderPlayer(this->game->getPlayer());
 
   SDL_RenderPresent(this->renderer);
@@ -103,7 +110,7 @@ void DEAD_Renderer::renderMapObjects() {
 }
 
 void DEAD_Renderer::renderPlayer(DEAD_Player* player) {
-  DEAD_Player::Position* pos = player->getPos();
+  DEAD_Map::MapLocation* pos = player->getPos();
   SDL_Rect rect = player->getPlayerTextureRect();
 
 
@@ -122,6 +129,26 @@ ScreenLocation DEAD_Renderer::getPlayerRenderLocation(DEAD_Player* player, bool 
     loc.x = loc.x + this->entitySize / 2.0;
     loc.y = loc.y + this->entitySize / 2.0;
   }
+  return loc;
+}
+
+void DEAD_Renderer::renderBullets() {
+  DEAD_BulletDirector* director = this->game->getBulletDirector();
+  std::set<DEAD_Bullet*> bullets = director->getBullets();
+
+  for (DEAD_Bullet* bullet : bullets) {
+    SDL_Rect textureRect = bullet->getBulletTextureRect();
+    SDL_Rect renderRect = {.x=this->getBulletRenderLocation(bullet).x, .y=this->getBulletRenderLocation(bullet).y
+      , .w=(int)(bullet->getBulletSize() * this->renderBlockSize), .h=(int)(bullet->getBulletSize() * this->renderBlockSize)};
+    SDL_RenderCopy(this->renderer, this->bulletTexture, &textureRect, &renderRect);
+  }
+}
+
+ScreenLocation DEAD_Renderer::getBulletRenderLocation(DEAD_Bullet* bullet) {  
+  ScreenLocation loc;
+  loc.x = (bullet->getMapLocation().x - renderAnchor.x) * this->renderBlockSize - bullet->getBulletSize() * this->renderBlockSize / 2.0 + this->game->SCREEN_WIDTH / 2.0;
+  loc.y = (bullet->getMapLocation().y - renderAnchor.x) * this->renderBlockSize - bullet->getBulletSize() * this->renderBlockSize / 2.0 + this->game->SCREEN_HEIGHT / 2.0;
+  
   return loc;
 }
 

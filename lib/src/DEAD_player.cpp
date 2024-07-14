@@ -4,13 +4,13 @@
 #include <iostream>
 #include <memory>
 
-DEAD_Player::DEAD_Player(DEAD_Player::Position* pos)
+DEAD_Player::DEAD_Player(DEAD_Map::MapLocation* pos)
 : speed(3), position(pos), weapon(nullptr), rotation(0){
 }
 
 DEAD_Player::~DEAD_Player() {}
 
-DEAD_Player::Position* DEAD_Player::getPos() {
+DEAD_Map::MapLocation* DEAD_Player::getPos() {
   return this->position;
 }
 

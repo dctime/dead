@@ -4,6 +4,7 @@
 
 class DEAD_Game;
 class DEAD_Player;
+class DEAD_Bullet;
 
 struct RenderAnchor {
     double x;
@@ -28,6 +29,7 @@ public:
   ~DEAD_Renderer();
   void render();
   ScreenLocation getPlayerRenderLocation(DEAD_Player* player, bool mid);
+  ScreenLocation getBulletRenderLocation(DEAD_Bullet* bullet);
 private:
   void renderMapObjects();
   SDL_Renderer* renderer;
@@ -38,5 +40,7 @@ private:
   SDL_Rect renderRect = {.x=0, .y=0, .w=renderBlockSize, .h=renderBlockSize};
   SDL_Texture *mapObjectTexture;
   SDL_Texture *playerTexture;
+  SDL_Texture *bulletTexture;
   void renderPlayer(DEAD_Player* player);
+  void renderBullets();
 };

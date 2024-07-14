@@ -11,4 +11,8 @@ DEAD_Player* DEAD_Bullet::getOwner() {
   return this->owner;
 }
 
+DEAD_Bullet::~DEAD_Bullet() {}
+DEAD_Map::MapLocation DEAD_Bullet::getMapLocation() {
+  return this->pos;
+}
 

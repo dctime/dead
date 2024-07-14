@@ -2,18 +2,14 @@
 
 #include <memory>
 #include "DEAD_weapon.h"
-
+#include "DEAD_map.h"
 class DEAD_Game;
 
 class DEAD_Player {
 public:
-  struct Position {
-    double x;
-    double y;
-  };
-  DEAD_Player(DEAD_Player::Position *pos);
+  DEAD_Player(DEAD_Map::MapLocation *pos);
   ~DEAD_Player();
-  Position *getPos();
+  DEAD_Map::MapLocation *getPos();
   void setPos(double x, double y);
   void setSpeed(int speed);
   int getSpeed();
@@ -26,7 +22,7 @@ public:
 protected:
   void attack();
 private:
-  Position *position;
+  DEAD_Map::MapLocation *position;
   int speed;
   std::shared_ptr<DEAD_Weapon> weapon;
   double rotation;

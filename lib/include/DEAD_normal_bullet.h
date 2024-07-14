@@ -5,4 +5,5 @@ public:
   DEAD_NormalBullet(DEAD_Player* owner);
   SDL_Rect getBulletTextureRect() override; 
   void registerBullet() override;
+  double getBulletSize() override;
 };
