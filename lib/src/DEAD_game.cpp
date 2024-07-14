@@ -51,6 +51,7 @@ void DEAD_Game::tick() {
   this->player->handlePlayerRotation();
   this->eventHandle();
   this->player->handleKeyState();
+  this->bulletDirector->tickBullets();
   this->renderer->render();
 }
 

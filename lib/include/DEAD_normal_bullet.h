@@ -6,4 +6,7 @@ public:
   SDL_Rect getBulletTextureRect() override; 
   void registerBullet() override;
   double getBulletSize() override;
+  void tickBullet() override;
+private:
+  
 };

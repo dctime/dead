@@ -1,5 +1,6 @@
 #include <DEAD_bullet_director.h>
 #include <SDL2/SDL_log.h>
+#include <iostream>
 
 void DEAD_BulletDirector::registerBullet(DEAD_Bullet* bullet) {
   this->bullets.insert(bullet);
@@ -19,5 +20,11 @@ DEAD_BulletDirector::~DEAD_BulletDirector() {
 
 std::set<DEAD_Bullet*> DEAD_BulletDirector::getBullets() {
   return this->bullets;
+}
+
+void DEAD_BulletDirector::tickBullets() {
+  for (DEAD_Bullet* bullet : this->bullets) {
+    bullet->tickBullet();
+  }
 }
 
