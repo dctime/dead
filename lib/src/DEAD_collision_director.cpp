@@ -1,3 +1,4 @@
+#include "hitbox/DEAD_circle_hitbox.h"
 #include "map_objects/DEAD_map_object_base.h"
 #include <DEAD_collision_director.h>
 #include <SDL2/SDL.h>
@@ -37,12 +38,14 @@ std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(DEAD_
       continue;
     }
    
+    DEAD_Map::MapLocation futureLoc = *player->getPos();
+    futureLoc.x += moveXDelta;
+    futureLoc.y += moveYDelta;
 
-    if (object->getHitBox()->isCollideWithCircle(player->getHitbox())) {
+    if (object->getHitBox()->isCollideWithCircle(futureLoc, player->getHitbox()->getRadius())) {
       collideObjects.insert(object);
     }
   }
   
-  if (collideObjects.size() > 0) std::cout << "Collide!!!!" << std::endl;
   return collideObjects;
 }

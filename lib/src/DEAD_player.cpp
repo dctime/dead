@@ -72,8 +72,11 @@ void DEAD_Player::attack() {
 }
 
 void DEAD_Player::move(double x, double y) {
-  this->setPos(this->getPos()->x+x, this->getPos()->y+y);
-  this->getGame()->getCollisionDirector()->playerCheckCollision(this, x, y);
+  if (this->getGame()->getCollisionDirector()->playerCheckCollision(this, x*100, y*100).size() != 0) {
+    return;
+  } else {
+    this->setPos(this->getPos()->x+x, this->getPos()->y+y);
+  }
 }
 
 double DEAD_Player::getSize() { return this->size; }
