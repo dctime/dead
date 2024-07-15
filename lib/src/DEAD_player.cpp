@@ -70,8 +70,7 @@ void DEAD_Player::attack() {
 
 void DEAD_Player::move(double x, double y) {
   this->setPos(this->getPos()->x+x, this->getPos()->y+y);
-  std::cout << "Send Request to collision director" << std::endl;
-  this->getGame()->getCollisionDirector();
+  this->getGame()->getCollisionDirector()->playerCheckCollision(this);
 }
 
 

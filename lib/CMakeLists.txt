@@ -2,7 +2,11 @@ cmake_minimum_required(VERSION 3.22.1)
 
 project(DEAD_lib)
 
-file(GLOB SOURCES "src/*.cpp" "src/map_objects/*.cpp")
+file(GLOB SOURCES 
+  "src/*.cpp"
+  "src/map_objects/*.cpp"
+  "src/hitbox/*.cpp"  
+)
 
 add_library(${PROJECT_NAME} ${SOURCES})
 
