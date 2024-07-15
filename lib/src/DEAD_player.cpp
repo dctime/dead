@@ -1,13 +1,14 @@
+#include "hitbox/DEAD_circle_hitbox.h"
 #include <DEAD_weapon.h>
 #include <DEAD_game.h>
 #include <DEAD_player.h>
 #include <SDL2/SDL_log.h>
-#include <iostream>
 #include <memory>
 
 DEAD_Player::DEAD_Player(DEAD_Map::MapLocation* pos)
 : speed(3), position(pos), weapon(nullptr), rotation(0),
   size(0.8) {
+  this->hitbox = new DEAD_CircleHitbox(this->getSize() / 2 * 0.8, *pos);
 }
 
 DEAD_Player::~DEAD_Player() {}
@@ -19,6 +20,7 @@ DEAD_Map::MapLocation* DEAD_Player::getPos() {
 void DEAD_Player::setPos(double x, double y) {
   this->position->x = x;
   this->position->y = y;
+  this->hitbox->setLoc(*(this->position));
 }
 
 void DEAD_Player::setSpeed(int speed) {
@@ -71,11 +73,11 @@ void DEAD_Player::attack() {
 
 void DEAD_Player::move(double x, double y) {
   this->setPos(this->getPos()->x+x, this->getPos()->y+y);
-  this->getGame()->getCollisionDirector()->playerCheckCollision(this);
+  this->getGame()->getCollisionDirector()->playerCheckCollision(this, x, y);
 }
 
 double DEAD_Player::getSize() { return this->size; }
-
+DEAD_CircleHitbox* DEAD_Player::getHitbox() { return this->hitbox; }
 
 
 

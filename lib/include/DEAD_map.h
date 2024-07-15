@@ -20,7 +20,7 @@ public:
   ~DEAD_Map();
   void mapUpdateSizeAndInfo(); 
   std::vector<std::vector<DEAD_MapObjectBase*>> getMapObjects();
-
+  MapSize getMapSize();
 private:
   std::vector<std::vector<DEAD_MapObjectBase*>> mapObjects;
   void loadMap();

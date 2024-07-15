@@ -9,6 +9,7 @@ public:
   virtual char getChar() = 0;
   DEAD_RectHitbox* getHitBox();
   DEAD_Map::MapLocation getLeftUpLoc();
+  virtual bool isPlayerCollidable() = 0;
 private:
   DEAD_Map::MapLocation leftUpLoc;
   DEAD_RectHitbox* hitbox;  

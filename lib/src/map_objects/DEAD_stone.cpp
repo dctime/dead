@@ -5,3 +5,5 @@
 DEAD_Stone::DEAD_Stone(DEAD_Map::MapLocation loc) :
   DEAD_MapObjectBase(loc){}
 char DEAD_Stone::getChar() { return 's'; }
+bool DEAD_Stone::isPlayerCollidable() { return true; }
+

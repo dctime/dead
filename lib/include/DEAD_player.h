@@ -3,6 +3,7 @@
 #include <memory>
 #include "DEAD_weapon.h"
 #include "DEAD_map.h"
+#include "hitbox/DEAD_circle_hitbox.h"
 class DEAD_Game;
 
 class DEAD_Player {
@@ -21,6 +22,7 @@ public:
   void setGame(DEAD_Game* game);
   DEAD_Game* getGame();
   double getSize();
+  DEAD_CircleHitbox* getHitbox();
 protected:
   void attack();
 private:
@@ -30,4 +32,5 @@ private:
   double rotation;
   DEAD_Game* game;
   double size;
+  DEAD_CircleHitbox* hitbox;
 };

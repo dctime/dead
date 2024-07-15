@@ -8,3 +8,6 @@ DEAD_Wood::DEAD_Wood(DEAD_Map::MapLocation loc)
 }
 
 char DEAD_Wood::getChar() { return 'w'; }
+bool DEAD_Wood::isPlayerCollidable() { return true; }
+
+

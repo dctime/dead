@@ -61,7 +61,7 @@ void DEAD_Map::loadMap() {
 }
 
 void DEAD_Map::mapUpdateSizeAndInfo() {
-  this->mapSize.width = -1;
+  this->mapSize.width = 0;
   for (std::vector<DEAD_MapObjectBase*> v : this->mapObjects) {
     if (this->mapSize.width < (int) v.size()) { this->mapSize.width = v.size(); }
     for (DEAD_MapObjectBase* c : v) {
@@ -80,3 +80,8 @@ void DEAD_Map::mapUpdateSizeAndInfo() {
 std::vector<std::vector<DEAD_MapObjectBase*>> DEAD_Map::getMapObjects() {
   return this->mapObjects;
 }
+
+MapSize DEAD_Map::getMapSize() { return this->mapSize; }
+
+
+
