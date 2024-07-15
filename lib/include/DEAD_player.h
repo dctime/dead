@@ -20,6 +20,7 @@ public:
   void setRotation(double degree);
   void setGame(DEAD_Game* game);
   DEAD_Game* getGame();
+  double getSize();
 protected:
   void attack();
 private:
@@ -28,4 +29,5 @@ private:
   std::shared_ptr<DEAD_Weapon> weapon;
   double rotation;
   DEAD_Game* game;
+  double size;
 };

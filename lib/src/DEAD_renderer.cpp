@@ -21,7 +21,7 @@ const SDL_Rect DEAD_RectLocMapObjects::WOOD = {
 DEAD_Renderer::DEAD_Renderer() {}
 
 DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
-: entitySize(40), renderBlockSize(50) {
+: renderBlockSize(50) {
 
 
   if (window == NULL) {
@@ -117,18 +117,20 @@ void DEAD_Renderer::renderPlayer(DEAD_Player* player) {
 
   int renderRectX = this->getPlayerRenderLocation(player, false).x;
   int renderRectY = this->getPlayerRenderLocation(player, false).y;
-  SDL_Rect renderRect = {.x=renderRectX, .y=renderRectY, .w=this->entitySize, .h=entitySize};
+  SDL_Rect renderRect = {.x=renderRectX, .y=renderRectY,
+    .w=(int)(player->getSize() * this->renderBlockSize),
+    .h=(int)(player->getSize() * this->renderBlockSize)};
   SDL_RenderCopyEx(this->renderer, this->playerTexture, &rect, &renderRect, player->getRotation(), NULL, SDL_FLIP_NONE);
 }
 
 ScreenLocation DEAD_Renderer::getPlayerRenderLocation(DEAD_Player* player, bool mid) {
   ScreenLocation loc;
-  loc.x = (player->getPos()->x - renderAnchor.x) * this->renderBlockSize - this->entitySize / 2.0 + this->game->SCREEN_WIDTH / 2.0;
-  loc.y = (player->getPos()->y - renderAnchor.y) * this->renderBlockSize - this->entitySize / 2.0 + this->game->SCREEN_HEIGHT / 2.0;
+  loc.x = (player->getPos()->x - renderAnchor.x) * this->renderBlockSize - (player->getSize() * this->renderBlockSize) / 2.0 + this->game->SCREEN_WIDTH / 2.0;
+  loc.y = (player->getPos()->y - renderAnchor.y) * this->renderBlockSize - (player->getSize() * this->renderBlockSize) / 2.0 + this->game->SCREEN_HEIGHT / 2.0;
 
   if (mid) {
-    loc.x = loc.x + this->entitySize / 2.0;
-    loc.y = loc.y + this->entitySize / 2.0;
+    loc.x = loc.x + (player->getSize() * this->renderBlockSize) / 2.0;
+    loc.y = loc.y + (player->getSize() * this->renderBlockSize) / 2.0;
   }
   return loc;
 }

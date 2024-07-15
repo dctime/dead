@@ -6,7 +6,8 @@
 #include <memory>
 
 DEAD_Player::DEAD_Player(DEAD_Map::MapLocation* pos)
-: speed(3), position(pos), weapon(nullptr), rotation(0){
+: speed(3), position(pos), weapon(nullptr), rotation(0),
+  size(0.8) {
 }
 
 DEAD_Player::~DEAD_Player() {}
@@ -73,7 +74,7 @@ void DEAD_Player::move(double x, double y) {
   this->getGame()->getCollisionDirector()->playerCheckCollision(this);
 }
 
-
+double DEAD_Player::getSize() { return this->size; }
 
 
 

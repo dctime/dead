@@ -17,7 +17,7 @@ DEAD_Game::DEAD_Game(DEAD_ControllablePlayer *player)
       map(new DEAD_Map()),
       renderer(new DEAD_Renderer(this->window, this)), player(player),
       bulletDirector(new DEAD_BulletDirector()),
-      collisionDirector(new DEAD_CollisionDirector()){
+      collisionDirector(new DEAD_CollisionDirector(this)){
 
   SDL_Log("Game Init");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
