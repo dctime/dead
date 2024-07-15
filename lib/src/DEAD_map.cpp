@@ -26,20 +26,25 @@ void DEAD_Map::loadMap() {
   const char* inputFilePath = DEAD_FilePaths::MAP_FILE_PATH.c_str();
   std::ifstream inputFile(inputFilePath);
   std::string line;
-
+  
+  int x = -1;
+  int y = -1;
   while (getline(inputFile, line)) {
+    y += 1;
     std::vector<DEAD_MapObjectBase*> temp;
     DEAD_MapObjectBase* obj;
     for (char c : line) {
+      x += 1;
+      DEAD_Map::MapLocation loc = {.x=(double)x, .y=(double)y};
       switch (c) {
         case 'w':
-          obj = new DEAD_Wood();
+          obj = new DEAD_Wood(loc);
           break;
         case 's':
-          obj = new DEAD_Stone();
+          obj = new DEAD_Stone(loc);
           break;
         case ' ':
-          obj = new DEAD_Air();
+          obj = new DEAD_Air(loc);
           break;
         default:
           SDL_LogWarn(SDL_LOG_CATEGORY_ERROR, "Unknown Symbol in Map File");
@@ -48,7 +53,7 @@ void DEAD_Map::loadMap() {
       temp.push_back(obj);
     }
     this->mapObjects.push_back(temp);
-
+    x = -1;
   }
   
   inputFile.close();

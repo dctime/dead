@@ -1,9 +1,9 @@
 #pragma once
 
-#include "DEAD_map.h"
-#include "map_objects/DEAD_map_object_base.h"
 #include <map>
 #include <vector>
+
+class DEAD_MapObjectBase;
 
 struct MapSize {
   int width;

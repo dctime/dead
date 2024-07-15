@@ -2,6 +2,6 @@
 
 class DEAD_Wood : public DEAD_MapObjectBase {
 public:
-  DEAD_Wood(); 
+  DEAD_Wood(DEAD_Map::MapLocation loc); 
   char getChar() override;
 };
