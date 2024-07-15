@@ -1,3 +1,4 @@
+#include "map_objects/DEAD_map_object_base.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_log.h>
 #include <cstdio>
@@ -6,6 +7,9 @@
 #include <iostream>
 #include <DEAD_map.h>
 #include <DEAD_filepaths.h>
+#include <map_objects/DEAD_wood.h>
+#include <map_objects/DEAD_stone.h>
+#include <map_objects/DEAD_air.h>
 #include <vector>
 
 DEAD_Map::DEAD_Map() {
@@ -24,9 +28,24 @@ void DEAD_Map::loadMap() {
   std::string line;
 
   while (getline(inputFile, line)) {
-    std::vector<char> temp;
+    std::vector<DEAD_MapObjectBase*> temp;
+    DEAD_MapObjectBase* obj;
     for (char c : line) {
-      temp.push_back(c);
+      switch (c) {
+        case 'w':
+          obj = new DEAD_Wood();
+          break;
+        case 's':
+          obj = new DEAD_Stone();
+          break;
+        case ' ':
+          obj = new DEAD_Air();
+          break;
+        default:
+          SDL_LogWarn(SDL_LOG_CATEGORY_ERROR, "Unknown Symbol in Map File");
+          obj = nullptr;
+      }
+      temp.push_back(obj);
     }
     this->mapObjects.push_back(temp);
 
@@ -38,10 +57,10 @@ void DEAD_Map::loadMap() {
 
 void DEAD_Map::mapUpdateSizeAndInfo() {
   this->mapSize.width = -1;
-  for (std::vector<char> v : this->mapObjects) {
+  for (std::vector<DEAD_MapObjectBase*> v : this->mapObjects) {
     if (this->mapSize.width < (int) v.size()) { this->mapSize.width = v.size(); }
-    for (char c : v) {
-      std::cout << c;
+    for (DEAD_MapObjectBase* c : v) {
+      std::cout << c->getChar();
     }
     std::cout << std::endl;
   }
@@ -53,6 +72,6 @@ void DEAD_Map::mapUpdateSizeAndInfo() {
   SDL_Log("%s", sizeMessage.c_str());
 }
 
-std::vector<std::vector<char>> DEAD_Map::getMapObjects() {
-  return this->mapObjects;  
+std::vector<std::vector<DEAD_MapObjectBase*>> DEAD_Map::getMapObjects() {
+  return this->mapObjects;
 }

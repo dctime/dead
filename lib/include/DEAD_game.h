@@ -7,6 +7,7 @@
 #include "DEAD_player.h"
 #include "DEAD_controllable_player.h"
 #include "DEAD_bullet_director.h"
+#include "DEAD_collision_director.h"
 
 class DEAD_Game {
 public:
@@ -18,6 +19,7 @@ public:
   DEAD_Player* getPlayer();
   DEAD_Renderer* getRenderer();
   DEAD_BulletDirector* getBulletDirector();
+  DEAD_CollisionDirector* getCollisionDirector();
   const int SCREEN_WIDTH = 720;
   const int SCREEN_HEIGHT = 480;
 private:
@@ -28,4 +30,5 @@ private:
   bool running = true;
   DEAD_Renderer* renderer;
   DEAD_BulletDirector* bulletDirector;
+  DEAD_CollisionDirector* collisionDirector;
 };

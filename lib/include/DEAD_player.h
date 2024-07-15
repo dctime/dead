@@ -10,6 +10,7 @@ public:
   DEAD_Player(DEAD_Map::MapLocation *pos);
   ~DEAD_Player();
   DEAD_Map::MapLocation *getPos();
+  void move(double x, double y);
   void setPos(double x, double y);
   void setSpeed(int speed);
   int getSpeed();

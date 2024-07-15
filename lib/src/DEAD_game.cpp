@@ -16,7 +16,8 @@ DEAD_Game::DEAD_Game(DEAD_ControllablePlayer *player)
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
       map(new DEAD_Map()),
       renderer(new DEAD_Renderer(this->window, this)), player(player),
-      bulletDirector(new DEAD_BulletDirector()) {
+      bulletDirector(new DEAD_BulletDirector()),
+      collisionDirector(new DEAD_CollisionDirector()){
 
   SDL_Log("Game Init");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
@@ -45,6 +46,8 @@ DEAD_Game::~DEAD_Game() {
   SDL_Log("Game Destroyed");
   delete this->renderer;
   delete this->map;
+  delete this->bulletDirector;
+  delete this->collisionDirector;
 }
 
 void DEAD_Game::tick() {
@@ -83,3 +86,11 @@ DEAD_Renderer *DEAD_Game::getRenderer() { return this->renderer; }
 DEAD_BulletDirector *DEAD_Game::getBulletDirector() {
   return this->bulletDirector;
 }
+
+DEAD_CollisionDirector* DEAD_Game::getCollisionDirector() { return this->collisionDirector; }
+
+
+
+
+
+

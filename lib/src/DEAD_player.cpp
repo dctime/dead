@@ -1,4 +1,5 @@
-#include "DEAD_weapon.h"
+#include <DEAD_weapon.h>
+#include <DEAD_game.h>
 #include <DEAD_player.h>
 #include <SDL2/SDL_log.h>
 #include <iostream>
@@ -66,5 +67,15 @@ void DEAD_Player::attack() {
   }
   this->weapon->attack();
 }
+
+void DEAD_Player::move(double x, double y) {
+  this->setPos(this->getPos()->x+x, this->getPos()->y+y);
+  std::cout << "Send Request to collision director" << std::endl;
+  this->getGame()->getCollisionDirector();
+}
+
+
+
+
 
 

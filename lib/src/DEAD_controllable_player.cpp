@@ -64,19 +64,20 @@ void DEAD_ControllablePlayer::handlePlayerRotation() {
 void DEAD_ControllablePlayer::handleKeyState() {
   const Uint8 *state = SDL_GetKeyboardState(NULL);
   double moveTickDistance = this->baseSpeed * this->getSpeed();
+
   if (state[SDL_SCANCODE_W]) {
-    this->setPos(this->getPos()->x, this->getPos()->y - moveTickDistance);
+    this->move(0, -moveTickDistance);
   }
 
   if (state[SDL_SCANCODE_S]) {
-    this->setPos(this->getPos()->x, this->getPos()->y + moveTickDistance);
+    this->move(0, moveTickDistance);
   }
 
   if (state[SDL_SCANCODE_A]) {
-    this->setPos(this->getPos()->x - moveTickDistance, this->getPos()->y);
+    this->move(-moveTickDistance, 0);
   }
 
   if (state[SDL_SCANCODE_D]) {
-    this->setPos(this->getPos()->x + moveTickDistance, this->getPos()->y);
+    this->move(moveTickDistance, 0);
   }
 }

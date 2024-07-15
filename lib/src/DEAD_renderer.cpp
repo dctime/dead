@@ -1,3 +1,4 @@
+#include "map_objects/DEAD_map_object_base.h"
 #include <DEAD_filepaths.h>
 #include <DEAD_game.h>
 #include <DEAD_map.h>
@@ -80,7 +81,7 @@ void DEAD_Renderer::renderMapObjects() {
   float windowWidthMid = this->game->SCREEN_WIDTH / 2.0;
   float windowHeightMid = this->game->SCREEN_HEIGHT / 2.0;
 
-  std::vector<std::vector<char>> mapObjects = map->getMapObjects();
+  std::vector<std::vector<DEAD_MapObjectBase*>> mapObjects = map->getMapObjects();
 
   for (int i = 0; i < mapObjects.size(); ++i) {
     this->renderRect.y =
@@ -91,7 +92,7 @@ void DEAD_Renderer::renderMapObjects() {
 
       const SDL_Rect *locationRect;
       bool isAir = false;
-      switch (mapObjects[i][j]) {
+      switch (mapObjects[i][j]->getChar()) {
       case 's':
         locationRect = &DEAD_RectLocMapObjects::STONE;
         break;
