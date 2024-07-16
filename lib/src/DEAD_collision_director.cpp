@@ -1,3 +1,4 @@
+#include "DEAD_player.h"
 #include "hitbox/DEAD_circle_hitbox.h"
 #include "map_objects/DEAD_map_object_base.h"
 #include <DEAD_collision_director.h>
@@ -11,18 +12,11 @@ DEAD_CollisionDirector::DEAD_CollisionDirector(DEAD_Game* game)
   SDL_Log("collision init");
 }
 
-std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(DEAD_Player* player, double moveXDelta, double moveYDelta) {
-  std::set<DEAD_MapObjectBase*> collideObjects;
-  collideObjects.clear();
-
-  DEAD_Map::MapLocation playerLoc = *(player->getPos());
-
-  double targetX = player->getPos()->x + moveXDelta;
-  double targetY = player->getPos()->y + moveYDelta;
-  double playerSize = player->getSize();
-
+std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(double targetX, double targetY, DEAD_Player* player) {
   std::vector<std::vector<int>> checkSequence = {{0, 0}, {1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, -1}, {-1, 1}};
 
+  std::set<DEAD_MapObjectBase*> collideObjects;
+  collideObjects.clear();
 
   for (std::vector<int> v : checkSequence) {
     int objectX = v[0] + (int)(targetX);
@@ -37,10 +31,8 @@ std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(DEAD_
     if (!object->isPlayerCollidable()) {
       continue;
     }
-   
-    DEAD_Map::MapLocation futureLoc = *player->getPos();
-    futureLoc.x += moveXDelta;
-    futureLoc.y += moveYDelta;
+
+    DEAD_Map::MapLocation futureLoc = {.x=targetX, .y=targetY};
 
     if (object->getHitBox()->isCollideWithCircle(futureLoc, player->getHitbox()->getRadius())) {
       collideObjects.insert(object);
@@ -49,3 +41,26 @@ std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(DEAD_
   
   return collideObjects;
 }
+
+std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(DEAD_Player* player, DEAD_Map::MapLocation targetLoc) {
+  return playerCheckCollision(targetLoc.x, targetLoc.y, player);
+}
+
+std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(DEAD_Player* player, double moveXDelta, double moveYDelta) {
+
+  DEAD_Map::MapLocation playerLoc = *(player->getPos());
+
+  double targetX = player->getPos()->x + moveXDelta;
+  double targetY = player->getPos()->y + moveYDelta;
+
+  DEAD_Map::MapLocation futureLoc = *player->getPos();
+  futureLoc.x += moveXDelta;
+  futureLoc.y += moveYDelta;
+
+  return playerCheckCollision(player, futureLoc);
+}
+
+
+
+
+
