@@ -48,12 +48,12 @@ std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(DEAD_
 
 std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(DEAD_Player* player, double moveXDelta, double moveYDelta) {
 
-  DEAD_Map::MapLocation playerLoc = *(player->getPos());
+  DEAD_Map::MapLocation playerLoc = player->getPos();
 
-  double targetX = player->getPos()->x + moveXDelta;
-  double targetY = player->getPos()->y + moveYDelta;
+  double targetX = player->getPos().x + moveXDelta;
+  double targetY = player->getPos().y + moveYDelta;
 
-  DEAD_Map::MapLocation futureLoc = *player->getPos();
+  DEAD_Map::MapLocation futureLoc = player->getPos();
   futureLoc.x += moveXDelta;
   futureLoc.y += moveYDelta;
 

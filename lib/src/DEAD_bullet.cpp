@@ -6,8 +6,8 @@
 DEAD_Bullet::DEAD_Bullet(DEAD_Player* owner, DEAD_Gun* gun, double speed)
 : owner(owner), gun(gun), rotation(owner->getRotation()), speed(speed) {
   double rad = owner->getRotation() * (M_PI / (180.0));
-  double bulletX = (owner->getPos())->x + cos(rad) * gun->getBarrelLength();
-  double bulletY = (owner->getPos())->y + sin(rad) * gun->getBarrelLength();
+  double bulletX = (owner->getPos()).x + cos(rad) * gun->getBarrelLength();
+  double bulletY = (owner->getPos()).y + sin(rad) * gun->getBarrelLength();
   this->pos.x = bulletX;
   this->pos.y = bulletY;
   SDL_Log("[Bullet] init a bullet");

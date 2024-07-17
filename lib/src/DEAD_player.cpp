@@ -5,22 +5,22 @@
 #include <SDL2/SDL_log.h>
 #include <memory>
 
-DEAD_Player::DEAD_Player(DEAD_Map::MapLocation* pos)
-: speed(3), position(pos), weapon(nullptr), rotation(0),
+DEAD_Player::DEAD_Player()
+: speed(3), position({.x=0, .y=0}), weapon(nullptr), rotation(0),
   size(0.8) {
-  this->hitbox = new DEAD_CircleHitbox(this->getSize() / 2 * 0.8, *pos);
+  this->hitbox = new DEAD_CircleHitbox(this->getSize() / 2 * 0.8, this->position);
 }
 
 DEAD_Player::~DEAD_Player() {}
 
-DEAD_Map::MapLocation* DEAD_Player::getPos() {
+DEAD_Map::MapLocation DEAD_Player::getPos() {
   return this->position;
 }
 
 void DEAD_Player::setPos(double x, double y) {
-  this->position->x = x;
-  this->position->y = y;
-  this->hitbox->setLoc(*(this->position));
+  this->position.x = x;
+  this->position.y = y;
+  this->hitbox->setLoc(this->position);
 }
 
 void DEAD_Player::setSpeed(int speed) {
@@ -75,7 +75,7 @@ void DEAD_Player::move(double x, double y) {
   if (this->getGame()->getCollisionDirector()->playerCheckCollision(this, x*100, y*100).size() != 0) {
     return;
   } else {
-    this->setPos(this->getPos()->x+x, this->getPos()->y+y);
+    this->setPos(this->getPos().x+x, this->getPos().y+y);
   }
 }
 

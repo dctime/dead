@@ -1,6 +1,7 @@
 #pragma once
 #include "../DEAD_map.h"
 #include "../hitbox/DEAD_rect_hitbox.h"
+#include <SDL2/SDL_rect.h>
 
 class DEAD_MapObjectBase {
 public:
@@ -10,6 +11,7 @@ public:
   DEAD_RectHitbox* getHitBox();
   DEAD_Map::MapLocation getLeftUpLoc();
   virtual bool isPlayerCollidable() = 0;
+  virtual SDL_Rect getTextureRect();
 private:
   DEAD_Map::MapLocation leftUpLoc;
   DEAD_RectHitbox* hitbox;  

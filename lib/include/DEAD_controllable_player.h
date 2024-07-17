@@ -3,7 +3,7 @@
 
 class DEAD_ControllablePlayer : public DEAD_Player {
 public:
-  DEAD_ControllablePlayer(DEAD_Map::MapLocation* pos);
+  DEAD_ControllablePlayer();
   ~DEAD_ControllablePlayer();
   void playerEvents(SDL_Event event);
   void handleKeyState();

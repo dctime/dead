@@ -5,4 +5,5 @@ public:
   DEAD_Stone(DEAD_Map::MapLocation loc);
   char getChar() override;
   bool isPlayerCollidable() override;
+  SDL_Rect getTextureRect() override;
 };

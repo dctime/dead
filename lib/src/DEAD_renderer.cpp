@@ -2,8 +2,8 @@
 #include <DEAD_filepaths.h>
 #include <DEAD_game.h>
 #include <DEAD_map.h>
-#include <DEAD_renderer.h>
 #include <DEAD_player.h>
+#include <DEAD_renderer.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_image.h>
@@ -13,14 +13,8 @@
 #include <iostream>
 #include <vector>
 
-const SDL_Rect DEAD_RectLocMapObjects::STONE = {
-    .x = 0, .y = 0, .w = 100, .h = 100};
-const SDL_Rect DEAD_RectLocMapObjects::WOOD = {
-    .x = 100, .y = 0, .w = 100, .h = 100};
-
 DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
-: renderBlockSize(50), renderAnchor({.x=0, .y=0}) {
-
+    : renderBlockSize(50), renderAnchor({.x = 0, .y = 0}) {
 
   if (window == NULL) {
     SDL_LogError(SDL_LOG_CATEGORY_VIDEO, "[Renderer] Window is null");
@@ -47,10 +41,10 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
       SDL_CreateTextureFromSurface(this->renderer, playerTextureSurface);
   SDL_FreeSurface(playerTextureSurface);
 
-  SDL_Surface *bulletTextureSurface = 
-    IMG_Load(DEAD_FilePaths::BULLET_TEXTURE_PNG.c_str());
+  SDL_Surface *bulletTextureSurface =
+      IMG_Load(DEAD_FilePaths::BULLET_TEXTURE_PNG.c_str());
   this->bulletTexture =
-    SDL_CreateTextureFromSurface(this->renderer, bulletTextureSurface);
+      SDL_CreateTextureFromSurface(this->renderer, bulletTextureSurface);
   SDL_FreeSurface(bulletTextureSurface);
 
   this->game = game;
@@ -71,11 +65,12 @@ void DEAD_Renderer::render() {
 
 void DEAD_Renderer::renderMapObjects() {
   DEAD_Map *map = this->game->getMap();
-  
+
   float windowWidthMid = this->game->SCREEN_WIDTH / 2.0;
   float windowHeightMid = this->game->SCREEN_HEIGHT / 2.0;
 
-  std::vector<std::vector<DEAD_MapObjectBase*>> mapObjects = map->getMapObjects();
+  std::vector<std::vector<DEAD_MapObjectBase *>> mapObjects =
+      map->getMapObjects();
 
   for (int i = 0; i < mapObjects.size(); ++i) {
     this->renderRect.y =
@@ -86,41 +81,43 @@ void DEAD_Renderer::renderMapObjects() {
 
       const SDL_Rect *locationRect;
       bool isAir = false;
-      switch (mapObjects[i][j]->getChar()) {
-      case 's':
-        locationRect = &DEAD_RectLocMapObjects::STONE;
-        break;
-      case 'w':
-        locationRect = &DEAD_RectLocMapObjects::WOOD;
-        break;
-      default:
-        isAir = true;
-      }
-      if (!isAir)
-        SDL_RenderCopy(this->renderer, this->mapObjectTexture, locationRect,
-  &renderRect);
 
+      SDL_Rect objectTextureRect = mapObjects[i][j]->getTextureRect();
+      if (objectTextureRect.w == 0 && objectTextureRect.h == 0)
+        isAir = true;
+
+      if (!isAir) {
+
+        SDL_RenderCopy(this->renderer, this->mapObjectTexture,
+                       &objectTextureRect, &renderRect);
+      }
     }
   }
 }
 
-void DEAD_Renderer::renderPlayer(DEAD_Player* player) {
-  DEAD_Map::MapLocation* pos = player->getPos();
+void DEAD_Renderer::renderPlayer(DEAD_Player *player) {
+  DEAD_Map::MapLocation pos = player->getPos();
   SDL_Rect rect = player->getPlayerTextureRect();
-
 
   int renderRectX = this->getPlayerRenderLocation(player, false).x;
   int renderRectY = this->getPlayerRenderLocation(player, false).y;
-  SDL_Rect renderRect = {.x=renderRectX, .y=renderRectY,
-    .w=(int)(player->getSize() * this->renderBlockSize),
-    .h=(int)(player->getSize() * this->renderBlockSize)};
-  SDL_RenderCopyEx(this->renderer, this->playerTexture, &rect, &renderRect, player->getRotation(), NULL, SDL_FLIP_NONE);
+  SDL_Rect renderRect = {.x = renderRectX,
+                         .y = renderRectY,
+                         .w = (int)(player->getSize() * this->renderBlockSize),
+                         .h = (int)(player->getSize() * this->renderBlockSize)};
+  SDL_RenderCopyEx(this->renderer, this->playerTexture, &rect, &renderRect,
+                   player->getRotation(), NULL, SDL_FLIP_NONE);
 }
 
-ScreenLocation DEAD_Renderer::getPlayerRenderLocation(DEAD_Player* player, bool mid) {
+ScreenLocation DEAD_Renderer::getPlayerRenderLocation(DEAD_Player *player,
+                                                      bool mid) {
   ScreenLocation loc;
-  loc.x = (player->getPos()->x - renderAnchor.x) * this->renderBlockSize - (player->getSize() * this->renderBlockSize) / 2.0 + this->game->SCREEN_WIDTH / 2.0;
-  loc.y = (player->getPos()->y - renderAnchor.y) * this->renderBlockSize - (player->getSize() * this->renderBlockSize) / 2.0 + this->game->SCREEN_HEIGHT / 2.0;
+  loc.x = (player->getPos().x - renderAnchor.x) * this->renderBlockSize -
+          (player->getSize() * this->renderBlockSize) / 2.0 +
+          this->game->SCREEN_WIDTH / 2.0;
+  loc.y = (player->getPos().y - renderAnchor.y) * this->renderBlockSize -
+          (player->getSize() * this->renderBlockSize) / 2.0 +
+          this->game->SCREEN_HEIGHT / 2.0;
 
   if (mid) {
     loc.x = loc.x + (player->getSize() * this->renderBlockSize) / 2.0;
@@ -130,33 +127,36 @@ ScreenLocation DEAD_Renderer::getPlayerRenderLocation(DEAD_Player* player, bool 
 }
 
 void DEAD_Renderer::renderBullets() {
-  DEAD_BulletDirector* director = this->game->getBulletDirector();
-  std::set<DEAD_Bullet*> bullets = director->getBullets();
+  DEAD_BulletDirector *director = this->game->getBulletDirector();
+  std::set<DEAD_Bullet *> bullets = director->getBullets();
 
-  for (DEAD_Bullet* bullet : bullets) {
+  for (DEAD_Bullet *bullet : bullets) {
     SDL_Rect textureRect = bullet->getBulletTextureRect();
-    SDL_Rect renderRect = {.x=this->getBulletRenderLocation(bullet).x, .y=this->getBulletRenderLocation(bullet).y
-      , .w=(int)(bullet->getBulletSize() * this->renderBlockSize), .h=(int)(bullet->getBulletSize() * this->renderBlockSize)};
-    SDL_RenderCopy(this->renderer, this->bulletTexture, &textureRect, &renderRect);
+    SDL_Rect renderRect = {
+        .x = this->getBulletRenderLocation(bullet).x,
+        .y = this->getBulletRenderLocation(bullet).y,
+        .w = (int)(bullet->getBulletSize() * this->renderBlockSize),
+        .h = (int)(bullet->getBulletSize() * this->renderBlockSize)};
+    SDL_RenderCopy(this->renderer, this->bulletTexture, &textureRect,
+                   &renderRect);
   }
 }
 
-ScreenLocation DEAD_Renderer::getBulletRenderLocation(DEAD_Bullet* bullet) {  
+ScreenLocation DEAD_Renderer::getBulletRenderLocation(DEAD_Bullet *bullet) {
   ScreenLocation loc;
-  loc.x = (bullet->getMapLocation().x - renderAnchor.x) * this->renderBlockSize - bullet->getBulletSize() * this->renderBlockSize / 2.0 + this->game->SCREEN_WIDTH / 2.0;
-  loc.y = (bullet->getMapLocation().y - renderAnchor.y) * this->renderBlockSize - bullet->getBulletSize() * this->renderBlockSize / 2.0 + this->game->SCREEN_HEIGHT / 2.0;
-  
+  loc.x =
+      (bullet->getMapLocation().x - renderAnchor.x) * this->renderBlockSize -
+      bullet->getBulletSize() * this->renderBlockSize / 2.0 +
+      this->game->SCREEN_WIDTH / 2.0;
+  loc.y =
+      (bullet->getMapLocation().y - renderAnchor.y) * this->renderBlockSize -
+      bullet->getBulletSize() * this->renderBlockSize / 2.0 +
+      this->game->SCREEN_HEIGHT / 2.0;
+
   return loc;
 }
 
 void DEAD_Renderer::moveRenderAnchor(double x, double y) {
-  RenderAnchor anchor = {.x=x, .y=y};
+  RenderAnchor anchor = {.x = x, .y = y};
   this->renderAnchor = anchor;
 }
-
-
-
-
-
-
-

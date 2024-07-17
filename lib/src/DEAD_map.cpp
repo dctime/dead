@@ -10,6 +10,7 @@
 #include <map_objects/DEAD_wood.h>
 #include <map_objects/DEAD_stone.h>
 #include <map_objects/DEAD_air.h>
+#include <map_objects/DEAD_point.h>
 #include <vector>
 
 DEAD_Map::DEAD_Map() {
@@ -36,6 +37,7 @@ void DEAD_Map::loadMap() {
     for (char c : line) {
       x += 1;
       DEAD_Map::MapLocation loc = {.x=(double)x, .y=(double)y};
+      DEAD_Map::MapLocation insertRect = {.x=loc.x+0.5 ,.y=loc.y+0.5};
       switch (c) {
         case 'w':
           obj = new DEAD_Wood(loc);
@@ -46,6 +48,10 @@ void DEAD_Map::loadMap() {
         case ' ':
           obj = new DEAD_Air(loc);
           break;
+        case 'p':
+          obj = new DEAD_Point(loc);
+          this->playerPointLocs.push_back(insertRect);
+          break;
         default:
           SDL_Log("Unknown Symbol in Map File");
           obj = nullptr;
@@ -53,6 +59,9 @@ void DEAD_Map::loadMap() {
       temp.push_back(obj);
     }
     this->mapObjects.push_back(temp);
+    if (this->playerPointLocs.size() > 1) {
+      SDL_Log("There should only be a Point 'p' on a map");
+    }
     x = -1;
   }
   
@@ -103,5 +112,7 @@ std::vector<std::vector<DEAD_MapObjectBase*>> DEAD_Map::getMapObjects() {
 
 MapSize DEAD_Map::getMapSize() { return this->mapSize; }
 
-
+std::vector<DEAD_Map::MapLocation> DEAD_Map::getPlayerPointLocs() {
+  return this->playerPointLocs;
+}
 

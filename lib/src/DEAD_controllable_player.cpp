@@ -11,8 +11,8 @@
 #include <cmath>
 #include <iostream>
 
-DEAD_ControllablePlayer::DEAD_ControllablePlayer(DEAD_Map::MapLocation *pos)
-    : DEAD_Player::DEAD_Player(pos) {}
+DEAD_ControllablePlayer::DEAD_ControllablePlayer()
+    : DEAD_Player::DEAD_Player() {}
 
 DEAD_ControllablePlayer::~DEAD_ControllablePlayer() {}
 

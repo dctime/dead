@@ -5,4 +5,5 @@ public:
   DEAD_Wood(DEAD_Map::MapLocation loc); 
   char getChar() override;
   bool isPlayerCollidable() override;
+  SDL_Rect getTextureRect() override;
 };

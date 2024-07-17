@@ -1,6 +1,7 @@
 #pragma once
 
 #include <map>
+#include <set>
 #include <vector>
 
 class DEAD_MapObjectBase;
@@ -21,10 +22,12 @@ public:
   void mapUpdateSizeAndInfo(); 
   std::vector<std::vector<DEAD_MapObjectBase*>> getMapObjects();
   MapSize getMapSize();
+  std::vector<DEAD_Map::MapLocation> getPlayerPointLocs();
 private:
   std::vector<std::vector<DEAD_MapObjectBase*>> mapObjects;
   void loadMap();
   bool isSquare();
   MapSize mapSize;
+  std::vector<DEAD_Map::MapLocation> playerPointLocs;
   
 };

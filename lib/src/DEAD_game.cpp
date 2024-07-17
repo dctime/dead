@@ -8,16 +8,16 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_video.h>
+#include <map>
 
 DEAD_Game::DEAD_Game(DEAD_ControllablePlayer *player)
     : SCREEN_WIDTH(720), SCREEN_HEIGHT(480),
       window(SDL_CreateWindow("DEAD", SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED, this->SCREEN_WIDTH,
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
-      map(new DEAD_Map()),
-      renderer(new DEAD_Renderer(this->window, this)), player(player),
-      bulletDirector(new DEAD_BulletDirector(this)),
-      collisionDirector(new DEAD_CollisionDirector(this)){
+      map(new DEAD_Map()), renderer(new DEAD_Renderer(this->window, this)),
+      player(player), bulletDirector(new DEAD_BulletDirector(this)),
+      collisionDirector(new DEAD_CollisionDirector(this)) {
 
   SDL_Log("Game Init");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
@@ -36,6 +36,13 @@ DEAD_Game::DEAD_Game(DEAD_ControllablePlayer *player)
   if (window == NULL) {
     SDL_Log("Unable to init window: %s", SDL_GetError());
   }
+
+  std::vector<DEAD_Map::MapLocation> locs = this->map->getPlayerPointLocs();
+  if (locs.size() > 0) {
+    // set the first player point
+  this->player->setPos(locs[0].x, locs[0].y);
+  }
+
   this->player->setGame(this);
 }
 
@@ -55,7 +62,8 @@ void DEAD_Game::tick() {
   this->eventHandle();
   this->player->handleKeyState();
   this->bulletDirector->tickBullets();
-  this->renderer->moveRenderAnchor(this->player->getPos()->x, this->player->getPos()->y);
+  this->renderer->moveRenderAnchor(this->player->getPos().x,
+                                   this->player->getPos().y);
   this->renderer->render();
 }
 
@@ -88,10 +96,6 @@ DEAD_BulletDirector *DEAD_Game::getBulletDirector() {
   return this->bulletDirector;
 }
 
-DEAD_CollisionDirector* DEAD_Game::getCollisionDirector() { return this->collisionDirector; }
-
-
-
-
-
-
+DEAD_CollisionDirector *DEAD_Game::getCollisionDirector() {
+  return this->collisionDirector;
+}
