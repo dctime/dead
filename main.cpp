@@ -11,5 +11,7 @@ int main() {
   DEAD_ControllablePlayer player = DEAD_ControllablePlayer(&playerPos);
   DEAD_Game game = DEAD_Game(&player);
   game.run();
-  return 0;
+  
+
+
 }

@@ -31,6 +31,7 @@ DEAD_Map::MapLocation DEAD_Bullet::getLoc() { return this->pos; }
 
 void DEAD_Bullet::setLoc(DEAD_Map::MapLocation loc) { this->pos = loc; }
 void DEAD_Bullet::move(double x, double y) {
+  
   this->pos.x += x;
   this->pos.y += y;
 }

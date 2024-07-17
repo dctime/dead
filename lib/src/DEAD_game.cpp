@@ -16,7 +16,7 @@ DEAD_Game::DEAD_Game(DEAD_ControllablePlayer *player)
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
       map(new DEAD_Map()),
       renderer(new DEAD_Renderer(this->window, this)), player(player),
-      bulletDirector(new DEAD_BulletDirector()),
+      bulletDirector(new DEAD_BulletDirector(this)),
       collisionDirector(new DEAD_CollisionDirector(this)){
 
   SDL_Log("Game Init");

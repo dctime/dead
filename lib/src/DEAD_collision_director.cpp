@@ -60,6 +60,34 @@ std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(DEAD_
   return playerCheckCollision(player, futureLoc);
 }
 
+std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::bulletCheckCollision(DEAD_Bullet* bullet) {
+  std::vector<std::vector<int>> checkSequence = {{0, 0}, {1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, -1}, {-1, 1}};
+
+  std::set<DEAD_MapObjectBase*> collideObjects;
+  collideObjects.clear();
+
+  for (std::vector<int> v : checkSequence) {
+    int objectX = v[0] + (int)(bullet->getLoc().x);
+    int objectY = v[1] + (int)(bullet->getLoc().y);
+
+    
+    if (objectX < 0 || objectX >= this->game->getMap()->getMapSize().width) continue;
+    if (objectY < 0 || objectY >= this->game->getMap()->getMapSize().height) continue;
+
+
+    DEAD_MapObjectBase* object = this->game->getMap()->getMapObjects()[objectY][objectX];
+    if (!object->isPlayerCollidable()) {
+      continue;
+    }
+
+    if (object->getHitBox()->isCollideWithCircle(bullet->getLoc(), bullet->getBulletSize() / 2)) {
+      collideObjects.insert(object);
+    }
+  }
+  
+  return collideObjects;
+}
+
 
 
 
