@@ -12,7 +12,7 @@ DEAD_CollisionDirector::DEAD_CollisionDirector(DEAD_Game* game)
   SDL_Log("collision init");
 }
 
-std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(double targetX, double targetY, DEAD_Player* player) {
+std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::entityCheckCollision(double targetX, double targetY, DEAD_Entity* entity) {
   std::vector<std::vector<int>> checkSequence = {{0, 0}, {1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, -1}, {-1, 1}};
 
   std::set<DEAD_MapObjectBase*> collideObjects;
@@ -34,7 +34,7 @@ std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(doubl
 
     DEAD_Map::MapLocation futureLoc = {.x=targetX, .y=targetY};
 
-    if (object->getHitBox()->isCollideWithCircle(futureLoc, player->getHitbox()->getRadius())) {
+    if (object->getHitBox()->isCollideWithCircle(futureLoc, entity->getHitbox()->getRadius())) {
       collideObjects.insert(object);
     }
   }
@@ -42,11 +42,12 @@ std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(doubl
   return collideObjects;
 }
 
-std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(DEAD_Player* player, DEAD_Map::MapLocation targetLoc) {
-  return playerCheckCollision(targetLoc.x, targetLoc.y, player);
+std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::entityCheckCollision(DEAD_Entity* entity, DEAD_Map::MapLocation targetLoc) {
+  return entityCheckCollision(targetLoc.x, targetLoc.y, entity);
 }
 
-std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(DEAD_Player* player, double moveXDelta, double moveYDelta) {
+
+std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::entityCheckCollision(DEAD_Entity* player, double moveXDelta, double moveYDelta) {
 
   DEAD_Map::MapLocation playerLoc = player->getPos();
 
@@ -57,7 +58,7 @@ std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::playerCheckCollision(DEAD_
   futureLoc.x += moveXDelta;
   futureLoc.y += moveYDelta;
 
-  return playerCheckCollision(player, futureLoc);
+  return entityCheckCollision(player, futureLoc);
 }
 
 std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::bulletCheckCollision(DEAD_Bullet* bullet) {

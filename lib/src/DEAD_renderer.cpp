@@ -14,7 +14,7 @@
 #include <vector>
 
 DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
-    : renderBlockSize(50), renderAnchor({.x = 0, .y = 0}) {
+    : renderBlockSize(25), renderAnchor({.x = 0, .y = 0}) {
 
   if (window == NULL) {
     SDL_LogError(SDL_LOG_CATEGORY_VIDEO, "[Renderer] Window is null");
