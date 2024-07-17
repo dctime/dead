@@ -22,7 +22,6 @@ DEAD_Map::~DEAD_Map() {
 }
 
 void DEAD_Map::loadMap() {
-  // FIXME: check if map is the same size
   this->mapObjects.clear();
   const char* inputFilePath = DEAD_FilePaths::MAP_FILE_PATH.c_str();
   std::ifstream inputFile(inputFilePath);
@@ -48,7 +47,7 @@ void DEAD_Map::loadMap() {
           obj = new DEAD_Air(loc);
           break;
         default:
-          SDL_LogWarn(SDL_LOG_CATEGORY_ERROR, "Unknown Symbol in Map File");
+          SDL_Log("Unknown Symbol in Map File");
           obj = nullptr;
       }
       temp.push_back(obj);
@@ -59,6 +58,14 @@ void DEAD_Map::loadMap() {
   
   inputFile.close();
   this->mapUpdateSizeAndInfo();
+
+  if (!this->isSquare()) {
+    this->mapObjects.clear();
+    this->mapSize.width = 0;
+    this->mapSize.height = 0;
+    SDL_Log("Map File Not Square");
+  }
+
 }
 
 void DEAD_Map::mapUpdateSizeAndInfo() {
@@ -76,6 +83,18 @@ void DEAD_Map::mapUpdateSizeAndInfo() {
     ("Map Size: " + std::to_string(this->mapSize.width) + "*" + std::to_string(this->mapSize.height)).c_str();
   std::cout << sizeMessage << std::endl;
   SDL_Log("%s", sizeMessage.c_str());
+}
+
+bool DEAD_Map::isSquare() {
+  if (this->mapSize.height <= 0) return true;
+
+  for (std::vector<DEAD_MapObjectBase*> v : this->mapObjects) {
+    std::cout << "v.size(): " << v.size() << std::endl;
+    if (v.size() != this->mapSize.width) return false;
+  }
+
+  
+  return true;
 }
 
 std::vector<std::vector<DEAD_MapObjectBase*>> DEAD_Map::getMapObjects() {

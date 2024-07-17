@@ -24,6 +24,7 @@ public:
 private:
   std::vector<std::vector<DEAD_MapObjectBase*>> mapObjects;
   void loadMap();
+  bool isSquare();
   MapSize mapSize;
   
 };
