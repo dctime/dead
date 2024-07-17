@@ -27,6 +27,7 @@ public:
   DEAD_Renderer(SDL_Window* window, DEAD_Game* game);
   ~DEAD_Renderer();
   void render();
+  void moveRenderAnchor(double x, double y);
   ScreenLocation getPlayerRenderLocation(DEAD_Player* player, bool mid);
   ScreenLocation getBulletRenderLocation(DEAD_Bullet* bullet);
 private:

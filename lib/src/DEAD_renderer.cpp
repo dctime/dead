@@ -144,12 +144,15 @@ void DEAD_Renderer::renderBullets() {
 ScreenLocation DEAD_Renderer::getBulletRenderLocation(DEAD_Bullet* bullet) {  
   ScreenLocation loc;
   loc.x = (bullet->getMapLocation().x - renderAnchor.x) * this->renderBlockSize - bullet->getBulletSize() * this->renderBlockSize / 2.0 + this->game->SCREEN_WIDTH / 2.0;
-  loc.y = (bullet->getMapLocation().y - renderAnchor.x) * this->renderBlockSize - bullet->getBulletSize() * this->renderBlockSize / 2.0 + this->game->SCREEN_HEIGHT / 2.0;
+  loc.y = (bullet->getMapLocation().y - renderAnchor.y) * this->renderBlockSize - bullet->getBulletSize() * this->renderBlockSize / 2.0 + this->game->SCREEN_HEIGHT / 2.0;
   
   return loc;
 }
 
-
+void DEAD_Renderer::moveRenderAnchor(double x, double y) {
+  RenderAnchor anchor = {.x=x, .y=y};
+  this->renderAnchor = anchor;
+}
 
 
 

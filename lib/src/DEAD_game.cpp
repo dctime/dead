@@ -55,6 +55,7 @@ void DEAD_Game::tick() {
   this->eventHandle();
   this->player->handleKeyState();
   this->bulletDirector->tickBullets();
+  this->renderer->moveRenderAnchor(this->player->getPos()->x, this->player->getPos()->y);
   this->renderer->render();
 }
 
