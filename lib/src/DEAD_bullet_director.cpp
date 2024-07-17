@@ -30,8 +30,10 @@ std::set<DEAD_Bullet*> DEAD_BulletDirector::getBullets() {
 }
 
 void DEAD_BulletDirector::tickBullets() {
-  while (this->removeACollisionBullet()) {
-    std::cout << "Removing A Collision Bullet" << std::endl;
+  std::vector<DEAD_Bullet*> removingBullets;
+  this->getCollisionBullets(removingBullets);
+  for (int i = 0; i < removingBullets.size(); i++) {
+    this->bullets.erase(removingBullets.at(i));
   }
 
   for (DEAD_Bullet* bullet : this->bullets) {
@@ -39,25 +41,12 @@ void DEAD_BulletDirector::tickBullets() {
   }
 }
 
-bool DEAD_BulletDirector::removeACollisionBullet() {
-  bool hasCollision = false;
-  DEAD_Bullet* collisionBullet = nullptr;
-  
+void DEAD_BulletDirector::getCollisionBullets(std::vector<DEAD_Bullet*>& bullets) {
 
   for (DEAD_Bullet* bullet : this->bullets) {
     if (this->game->getCollisionDirector()->bulletCheckCollision(bullet).size() != 0) {
-      collisionBullet = bullet;
-      hasCollision = true;
+      bullets.push_back(bullet);
     }
-
-    if (hasCollision) break;
   }
-
-  if (hasCollision) {
-    std::cout << "Delete items: " << collisionBullet << " Erases:"  << this->bullets.erase(collisionBullet) << std::endl;
-    delete collisionBullet;
-  }
-
-  return hasCollision;
 }
 
