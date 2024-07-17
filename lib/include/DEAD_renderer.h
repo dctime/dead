@@ -24,7 +24,6 @@ public:
 
 class DEAD_Renderer {
 public:
-  DEAD_Renderer();
   DEAD_Renderer(SDL_Window* window, DEAD_Game* game);
   ~DEAD_Renderer();
   void render();

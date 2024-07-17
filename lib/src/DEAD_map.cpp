@@ -22,6 +22,7 @@ DEAD_Map::~DEAD_Map() {
 }
 
 void DEAD_Map::loadMap() {
+  // FIXME: check if map is the same size
   this->mapObjects.clear();
   const char* inputFilePath = DEAD_FilePaths::MAP_FILE_PATH.c_str();
   std::ifstream inputFile(inputFilePath);

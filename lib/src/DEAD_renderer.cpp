@@ -18,10 +18,8 @@ const SDL_Rect DEAD_RectLocMapObjects::STONE = {
 const SDL_Rect DEAD_RectLocMapObjects::WOOD = {
     .x = 100, .y = 0, .w = 100, .h = 100};
 
-DEAD_Renderer::DEAD_Renderer() {}
-
 DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
-: renderBlockSize(50) {
+: renderBlockSize(50), renderAnchor({.x=0, .y=0}) {
 
 
   if (window == NULL) {
@@ -61,10 +59,6 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
 DEAD_Renderer::~DEAD_Renderer() { SDL_DestroyRenderer(this->renderer); }
 
 void DEAD_Renderer::render() {
-  this->renderAnchor.x = 0;
-  this->renderAnchor.y = 0;
-
-
   SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);
   SDL_RenderClear(this->renderer);
 

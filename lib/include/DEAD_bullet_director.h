@@ -13,6 +13,7 @@ public:
   std::set<DEAD_Bullet*> getBullets();
   void tickBullets();
 private:
+  bool removeACollisionBullet();
   std::set<DEAD_Bullet*> bullets; 
   DEAD_Game* game;
 };
