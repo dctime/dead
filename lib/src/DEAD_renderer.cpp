@@ -1,3 +1,4 @@
+#include "DEAD_item_drop.h"
 #include "map_objects/DEAD_map_object_base.h"
 #include <DEAD_filepaths.h>
 #include <DEAD_game.h>
@@ -11,7 +12,16 @@
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
 #include <iostream>
+#include <memory>
+#include <string>
 #include <vector>
+
+void DEAD_Renderer::getTextureFromSurface(SDL_Texture *&texture,
+                                          std::string filePath) {
+  SDL_Surface *textureSurface = IMG_Load(filePath.c_str());
+  texture = SDL_CreateTextureFromSurface(this->renderer, textureSurface);
+  SDL_FreeSurface(textureSurface);
+}
 
 DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
     : renderBlockSize(25), renderAnchor({.x = 0, .y = 0}) {
@@ -19,33 +29,19 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
   if (window == NULL) {
     SDL_LogError(SDL_LOG_CATEGORY_VIDEO, "[Renderer] Window is null");
   }
-  this->renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED);
 
+  this->renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED);
   if (this->renderer == NULL) {
     SDL_LogError(SDL_LOG_CATEGORY_RENDER, "[Renderer] %s", SDL_GetError());
   }
 
-  SDL_Surface *mapObjectSurface =
-      IMG_Load(DEAD_FilePaths::MAP_OBJECT_PNG_FILE_PATH.c_str());
-  if (mapObjectSurface == NULL) {
-    SDL_LogError(SDL_LOG_CATEGORY_VIDEO,
-                 "[Renderer] Cant Find map_objects.png");
-  }
-  this->mapObjectTexture =
-      SDL_CreateTextureFromSurface(this->renderer, mapObjectSurface);
-  SDL_FreeSurface(mapObjectSurface);
-
-  SDL_Surface *playerTextureSurface =
-      IMG_Load(DEAD_FilePaths::PLAYER_TEXTURE_PNG.c_str());
-  this->playerTexture =
-      SDL_CreateTextureFromSurface(this->renderer, playerTextureSurface);
-  SDL_FreeSurface(playerTextureSurface);
-
-  SDL_Surface *bulletTextureSurface =
-      IMG_Load(DEAD_FilePaths::BULLET_TEXTURE_PNG.c_str());
-  this->bulletTexture =
-      SDL_CreateTextureFromSurface(this->renderer, bulletTextureSurface);
-  SDL_FreeSurface(bulletTextureSurface);
+  getTextureFromSurface(this->itemTexture, DEAD_FilePaths::ITEM_TEXTURE_PNG);
+  getTextureFromSurface(this->mapObjectTexture,
+                        DEAD_FilePaths::MAP_OBJECT_PNG_FILE_PATH);
+  getTextureFromSurface(this->playerTexture,
+                        DEAD_FilePaths::PLAYER_TEXTURE_PNG);
+  getTextureFromSurface(this->bulletTexture,
+                        DEAD_FilePaths::BULLET_TEXTURE_PNG);
 
   this->game = game;
 }
@@ -57,6 +53,7 @@ void DEAD_Renderer::render() {
   SDL_RenderClear(this->renderer);
 
   this->renderMapObjects();
+  this->renderItemDropLayer();
   this->renderBullets();
   this->renderPlayer(this->game->getPlayer());
 
@@ -152,6 +149,37 @@ ScreenLocation DEAD_Renderer::getBulletRenderLocation(DEAD_Bullet *bullet) {
       (bullet->getMapLocation().y - renderAnchor.y) * this->renderBlockSize -
       bullet->getBulletSize() * this->renderBlockSize / 2.0 +
       this->game->SCREEN_HEIGHT / 2.0;
+
+  return loc;
+}
+
+void DEAD_Renderer::renderItemDropLayer() {
+  std::shared_ptr<DEAD_ItemDropLayer> itemDropLayer = this->game->getItemDropLayer();
+  std::set<std::shared_ptr<DEAD_ItemDrop>> itemDrops =
+      itemDropLayer->getItemDrops();
+
+  for (std::shared_ptr<DEAD_ItemDrop> itemDrop : itemDrops) {
+    SDL_Rect textureRect = itemDrop->getItem()->getItemTextureRect();
+    SDL_Rect renderRect = {
+        .x = this->getItemDropRenderLocation(itemDrop).x,
+        .y = this->getItemDropRenderLocation(itemDrop).y,
+        .w = (int)(itemDrop->getSize() * this->renderBlockSize),
+        .h = (int)(itemDrop->getSize() * this->renderBlockSize)};
+    SDL_RenderCopy(this->renderer, this->itemTexture, &textureRect,
+                   &renderRect);
+    // TODO: Add Return texture item drop from item
+  }
+}
+
+ScreenLocation DEAD_Renderer::getItemDropRenderLocation(
+    std::shared_ptr<DEAD_ItemDrop> itemDrop) {
+  ScreenLocation loc;
+  loc.x = (itemDrop->getLoc().x - renderAnchor.x) * this->renderBlockSize -
+          itemDrop->getSize() * this->renderBlockSize / 2.0 +
+          this->game->SCREEN_WIDTH / 2.0;
+  loc.y = (itemDrop->getLoc().y - renderAnchor.y) * this->renderBlockSize -
+          itemDrop->getSize() * this->renderBlockSize / 2.0 +
+          this->game->SCREEN_HEIGHT / 2.0;
 
   return loc;
 }

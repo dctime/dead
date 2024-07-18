@@ -14,6 +14,7 @@ public:
   DEAD_Player* getPlayer();
   virtual void attack() = 0;
   virtual std::shared_ptr<DEAD_ItemDrop> getItemDrop() override = 0;
+  virtual SDL_Rect getItemTextureRect() override = 0;
 private:
   DEAD_Player* owner;
 };

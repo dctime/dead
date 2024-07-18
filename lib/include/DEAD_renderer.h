@@ -1,6 +1,9 @@
 #pragma once
 
+#include "DEAD_item_drop.h"
 #include <SDL2/SDL_render.h>
+#include <memory>
+#include <string>
 
 class DEAD_Game;
 class DEAD_Player;
@@ -40,7 +43,10 @@ private:
   SDL_Texture *mapObjectTexture;
   SDL_Texture *playerTexture;
   SDL_Texture *bulletTexture;
+  SDL_Texture* itemTexture;
   void renderPlayer(DEAD_Player* player);
   void renderItemDropLayer();
   void renderBullets();
+  void getTextureFromSurface(SDL_Texture*& texture, std::string filePath);
+  ScreenLocation getItemDropRenderLocation(std::shared_ptr<DEAD_ItemDrop> itemDrop);
 };
