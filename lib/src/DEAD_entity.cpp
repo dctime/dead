@@ -1,4 +1,7 @@
+#include "DEAD_entity.h"
 #include <DEAD_game.h>
+#include <guns/DEAD_pistol.h>
+#include <memory>
 
 DEAD_Entity::DEAD_Entity()
 : speed(3), position({.x=0, .y=0}), rotation(0), size(0.8) {
@@ -56,4 +59,6 @@ void DEAD_Entity::move(double x, double y) {
 double DEAD_Entity::getSize() { return this->size; }
 DEAD_CircleHitbox* DEAD_Entity::getHitbox() { return this->hitbox; }
 
-
+double DEAD_Entity::getPickItemRadius() {
+  return 1;
+}

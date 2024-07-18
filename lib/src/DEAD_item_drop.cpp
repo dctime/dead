@@ -18,3 +18,4 @@ double DEAD_ItemDrop::getSize() {
 std::shared_ptr<DEAD_Item> DEAD_ItemDrop::getItem() {
   return this->item;
 }
+

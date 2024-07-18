@@ -20,10 +20,11 @@ public:
   void setGame(DEAD_Game* game);
   DEAD_Game* getGame();
   double getSize();
+  double getPickItemRadius();
   DEAD_CircleHitbox* getHitbox();
 protected:
   virtual void attack() = 0;
-
+  std::shared_ptr<DEAD_Item> holdItem;
 private:
   DEAD_Map::MapLocation position;
   int speed;

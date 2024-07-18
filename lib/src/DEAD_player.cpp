@@ -1,3 +1,4 @@
+#include "DEAD_item_drop.h"
 #include <DEAD_game.h>
 #include <DEAD_player.h>
 #include <DEAD_weapon.h>
@@ -5,7 +6,9 @@
 #include <SDL2/SDL_log.h>
 #include <memory>
 
-DEAD_Player::DEAD_Player() : DEAD_Entity::DEAD_Entity(), holdItem(nullptr) {}
+DEAD_Player::DEAD_Player() : DEAD_Entity::DEAD_Entity() {
+  this->holdItem = std::make_shared<DEAD_Pistol>(this);
+}
 
 DEAD_Player::~DEAD_Player() {}
 
@@ -24,9 +27,10 @@ void DEAD_Player::dropWeapon() {
 }
 
 void DEAD_Player::pickupWeapon() {
-  std::shared_ptr<DEAD_Weapon> weapon = std::make_shared<DEAD_Pistol>(this);
-  this->holdItem = weapon;
+  this->getGame()->getItemDropLayer()->getNearItemDrop(this->getPos(), this->getPickItemRadius(), this->holdItem);
   SDL_Log("Picked Up Weapon");
+  if (this->holdItem == nullptr) return;
+  this->holdItem->unbindItemDrop();
 }
 
 SDL_Rect DEAD_Player::getPlayerTextureRect() {

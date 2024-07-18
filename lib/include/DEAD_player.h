@@ -19,6 +19,6 @@ protected:
 private:
   void pickupWeapon();
   void dropWeapon(); 
-  std::shared_ptr<DEAD_Item> holdItem;
+  
   
 };
