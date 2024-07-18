@@ -41,5 +41,6 @@ private:
   SDL_Texture *playerTexture;
   SDL_Texture *bulletTexture;
   void renderPlayer(DEAD_Player* player);
+  void renderItemDropLayer();
   void renderBullets();
 };

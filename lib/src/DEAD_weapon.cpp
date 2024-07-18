@@ -1,8 +1,10 @@
 #include "DEAD_player.h"
 #include <DEAD_weapon.h>
-#include <iostream>
 
-DEAD_Weapon::DEAD_Weapon(DEAD_Player* player) {
+DEAD_Weapon::~DEAD_Weapon() {}
+
+DEAD_Weapon::DEAD_Weapon(DEAD_Player* player)
+  : DEAD_Item() {
   this->owner = player;
 }
 

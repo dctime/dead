@@ -11,13 +11,13 @@ class DEAD_Player : public DEAD_Entity {
 public:
   DEAD_Player();
   ~DEAD_Player();
-  
-  void pickupWeapon(std::shared_ptr<DEAD_Weapon> weapon);
   SDL_Rect getPlayerTextureRect();
+  void pickupOrDrop();
 protected:
   void attack() override;
 private:
-  
+  void pickupWeapon();
+  void dropWeapon(); 
   std::shared_ptr<DEAD_Weapon> weapon;
   
 };

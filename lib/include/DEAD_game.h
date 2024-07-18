@@ -2,6 +2,7 @@
 
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_render.h>
+#include <memory>
 #include "DEAD_map.h"
 #include "DEAD_renderer.h"
 #include "DEAD_entity.h"
@@ -9,6 +10,7 @@
 #include "DEAD_controllable_player.h"
 #include "DEAD_bullet_director.h"
 #include "DEAD_collision_director.h"
+#include "DEAD_item_drop_layer.h"
 
 class DEAD_Game {
 public:
@@ -21,6 +23,7 @@ public:
   DEAD_Renderer* getRenderer();
   DEAD_BulletDirector* getBulletDirector();
   DEAD_CollisionDirector* getCollisionDirector();
+  std::shared_ptr<DEAD_ItemDropLayer> getItemDropLayer();
   const int SCREEN_WIDTH = 720;
   const int SCREEN_HEIGHT = 480;
 private:
@@ -32,4 +35,5 @@ private:
   DEAD_Renderer* renderer;
   DEAD_BulletDirector* bulletDirector;
   DEAD_CollisionDirector* collisionDirector;
+  std::shared_ptr<DEAD_ItemDropLayer> itemDropLayer;
 };

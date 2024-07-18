@@ -2,9 +2,6 @@
 #include <guns/DEAD_gun.h>
 #include <bullets/DEAD_normal_bullet.h>
 
-DEAD_Gun::DEAD_Gun()
-: DEAD_Weapon(nullptr) {}
-
 DEAD_Gun::DEAD_Gun(DEAD_Player* player)
   : DEAD_Weapon(player) {}
 

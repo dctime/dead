@@ -9,6 +9,7 @@
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_video.h>
 #include <map>
+#include <memory>
 
 DEAD_Game::DEAD_Game(DEAD_ControllablePlayer *player)
     : SCREEN_WIDTH(720), SCREEN_HEIGHT(480),
@@ -17,7 +18,9 @@ DEAD_Game::DEAD_Game(DEAD_ControllablePlayer *player)
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
       map(new DEAD_Map()), renderer(new DEAD_Renderer(this->window, this)),
       player(player), bulletDirector(new DEAD_BulletDirector(this)),
-      collisionDirector(new DEAD_CollisionDirector(this)) {
+      collisionDirector(new DEAD_CollisionDirector(this)),
+      itemDropLayer(std::make_shared<DEAD_ItemDropLayer>()){
+
 
   SDL_Log("Game Init");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
@@ -99,3 +102,8 @@ DEAD_BulletDirector *DEAD_Game::getBulletDirector() {
 DEAD_CollisionDirector *DEAD_Game::getCollisionDirector() {
   return this->collisionDirector;
 }
+
+std::shared_ptr<DEAD_ItemDropLayer> DEAD_Game::getItemDropLayer() {
+  return this->itemDropLayer;
+}
+

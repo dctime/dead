@@ -9,7 +9,6 @@
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_scancode.h>
 #include <cmath>
-#include <iostream>
 
 DEAD_ControllablePlayer::DEAD_ControllablePlayer()
     : DEAD_Player::DEAD_Player() {}
@@ -23,8 +22,7 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
     switch (event.key.keysym.sym) {
     case SDLK_f:
       SDL_Log("[Controllable Player] use");
-      std::shared_ptr<DEAD_Weapon> pistol = std::make_shared<DEAD_Pistol>(this);
-      this->pickupWeapon(pistol);
+      this->pickupOrDrop();
       break;
     }
     break;
