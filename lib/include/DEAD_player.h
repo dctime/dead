@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include "DEAD_item.h"
 #include "DEAD_weapon.h"
 #include "DEAD_map.h"
 #include "hitbox/DEAD_circle_hitbox.h"
@@ -18,6 +19,6 @@ protected:
 private:
   void pickupWeapon();
   void dropWeapon(); 
-  std::shared_ptr<DEAD_Weapon> weapon;
+  std::shared_ptr<DEAD_Item> holdItem;
   
 };

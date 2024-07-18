@@ -5,12 +5,12 @@
 #include <SDL2/SDL_log.h>
 #include <memory>
 
-DEAD_Player::DEAD_Player() : DEAD_Entity::DEAD_Entity(), weapon(nullptr) {}
+DEAD_Player::DEAD_Player() : DEAD_Entity::DEAD_Entity(), holdItem(nullptr) {}
 
 DEAD_Player::~DEAD_Player() {}
 
 void DEAD_Player::pickupOrDrop() {
-  if (this->weapon != nullptr) {
+  if (this->holdItem != nullptr) {
     this->dropWeapon();
   } else {
     this->pickupWeapon();
@@ -18,29 +18,31 @@ void DEAD_Player::pickupOrDrop() {
 
 }
 void DEAD_Player::dropWeapon() {
-  this->getGame()->getItemDropLayer()->drop(this->weapon->getItemDrop());
-  this->weapon = nullptr;
+  this->getGame()->getItemDropLayer()->drop(this->holdItem->getItemDrop());
+  this->holdItem = nullptr;
   SDL_Log("Dropped Weapons Count: %d", this->getGame()->getItemDropLayer()->getDropsCount()); 
 }
 
 void DEAD_Player::pickupWeapon() {
   std::shared_ptr<DEAD_Weapon> weapon = std::make_shared<DEAD_Pistol>(this);
-  this->weapon = weapon;
+  this->holdItem = weapon;
   SDL_Log("Picked Up Weapon");
 }
 
 SDL_Rect DEAD_Player::getPlayerTextureRect() {
-  if (this->weapon == nullptr) {
+  std::shared_ptr<DEAD_Weapon> weapon = std::dynamic_pointer_cast<DEAD_Weapon>(this->holdItem);
+  if (weapon == nullptr) {
     SDL_Rect rect = {.x = 0, .y = 0, .w = 100, .h = 100};
     return rect;
   }
-
-  return this->weapon->getTextureRect();
+  
+  return weapon->getTextureRect();
 }
 
 void DEAD_Player::attack() {
+  std::shared_ptr<DEAD_Weapon> weapon = std::dynamic_pointer_cast<DEAD_Weapon>(this->holdItem);
   if (weapon == nullptr) {
     return;
   }
-  this->weapon->attack();
+  weapon->attack();
 }
