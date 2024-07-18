@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DEAD_weapon.h"
+#include "../DEAD_weapon.h"
 
 class DEAD_Gun : public DEAD_Weapon {
 public:

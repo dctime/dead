@@ -3,7 +3,7 @@
 
 #include "DEAD_player.h"
 #include "map_objects/DEAD_map_object_base.h"
-#include "DEAD_bullet.h" 
+#include "bullets/DEAD_bullet.h" 
 #include <set>
 
 

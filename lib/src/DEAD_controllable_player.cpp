@@ -1,6 +1,6 @@
 #include <DEAD_game.h>
 #include <DEAD_player.h>
-#include <DEAD_pistol.h> 
+#include <guns/DEAD_pistol.h> 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_events.h>

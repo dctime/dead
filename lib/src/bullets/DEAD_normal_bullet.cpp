@@ -1,4 +1,4 @@
-#include <DEAD_normal_bullet.h>
+#include <bullets/DEAD_normal_bullet.h>
 #include <DEAD_game.h>
 DEAD_NormalBullet::DEAD_NormalBullet(DEAD_Player* owner, DEAD_Gun* gun) : DEAD_Bullet(owner, gun, 0.002) {
   this->registerBullet();

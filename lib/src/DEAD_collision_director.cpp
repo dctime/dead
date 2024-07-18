@@ -1,6 +1,6 @@
-#include "DEAD_player.h"
-#include "hitbox/DEAD_circle_hitbox.h"
-#include "map_objects/DEAD_map_object_base.h"
+#include <DEAD_player.h>
+#include <hitbox/DEAD_circle_hitbox.h>
+#include <map_objects/DEAD_map_object_base.h>
 #include <DEAD_collision_director.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_log.h>

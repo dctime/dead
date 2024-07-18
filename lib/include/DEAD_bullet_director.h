@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DEAD_bullet.h"
+#include "bullets/DEAD_bullet.h"
 #include <memory>
 #include <set>
 

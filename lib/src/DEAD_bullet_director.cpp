@@ -1,4 +1,4 @@
-#include "DEAD_bullet.h"
+#include <bullets/DEAD_bullet.h>
 #include <DEAD_bullet_director.h>
 #include <DEAD_game.h>
 #include <SDL2/SDL_log.h>
