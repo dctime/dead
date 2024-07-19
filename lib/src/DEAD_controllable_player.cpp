@@ -9,6 +9,7 @@
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_scancode.h>
 #include <cmath>
+#include <memory>
 
 DEAD_ControllablePlayer::DEAD_ControllablePlayer()
     : DEAD_Player::DEAD_Player() {}
@@ -25,6 +26,10 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
       this->pickupOrDrop();
       break;
     }
+    case SDLK_g:
+      SDL_Log("Summon Pistol");
+      this->summonPistol();
+      break;
     break;
   case SDL_MOUSEBUTTONDOWN:
     if (event.button.button == SDL_BUTTON_LEFT) {
@@ -37,8 +42,9 @@ void DEAD_ControllablePlayer::handlePlayerRotation() {
   int mouseX;
   int mouseY;
   SDL_GetMouseState(&mouseX, &mouseY);
-  int playerScreenX = this->getGame()->getRenderer()->getPlayerRenderLocation(this, true).x;
-  int playerScreenY = this->getGame()->getRenderer()->getPlayerRenderLocation(this, true).y;
+  std::shared_ptr<DEAD_ControllablePlayer> shared_from_this = std::static_pointer_cast<DEAD_ControllablePlayer>(DEAD_Entity::shared_from_this());
+  int playerScreenX = this->getGame()->getRenderer()->getPlayerRenderLocation(shared_from_this, true).x;
+  int playerScreenY = this->getGame()->getRenderer()->getPlayerRenderLocation(shared_from_this, true).y;
   double relX = mouseX - playerScreenX;
   double relY = mouseY - playerScreenY;
   

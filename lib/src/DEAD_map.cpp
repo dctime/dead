@@ -3,6 +3,7 @@
 #include <SDL2/SDL_log.h>
 #include <cstdio>
 #include <fstream>
+#include <memory>
 #include <string>
 #include <iostream>
 #include <DEAD_map.h>
@@ -32,24 +33,24 @@ void DEAD_Map::loadMap() {
   int y = -1;
   while (getline(inputFile, line)) {
     y += 1;
-    std::vector<DEAD_MapObjectBase*> temp;
-    DEAD_MapObjectBase* obj;
+    std::vector<std::shared_ptr<DEAD_MapObjectBase>> temp;
+    std::shared_ptr<DEAD_MapObjectBase> obj;
     for (char c : line) {
       x += 1;
       DEAD_Map::MapLocation loc = {.x=(double)x, .y=(double)y};
       DEAD_Map::MapLocation insertRect = {.x=loc.x+0.5 ,.y=loc.y+0.5};
       switch (c) {
         case 'w':
-          obj = new DEAD_Wood(loc);
+          obj = std::make_shared<DEAD_Wood>(loc);
           break;
         case 's':
-          obj = new DEAD_Stone(loc);
+          obj = std::make_shared<DEAD_Stone>(loc);
           break;
         case ' ':
-          obj = new DEAD_Air(loc);
+          obj = std::make_shared<DEAD_Air>(loc);
           break;
         case 'p':
-          obj = new DEAD_Point(loc);
+          obj = std::make_shared<DEAD_Point>(loc);
           this->playerPointLocs.push_back(insertRect);
           break;
         default:
@@ -79,9 +80,9 @@ void DEAD_Map::loadMap() {
 
 void DEAD_Map::mapUpdateSizeAndInfo() {
   this->mapSize.width = 0;
-  for (std::vector<DEAD_MapObjectBase*> v : this->mapObjects) {
+  for (std::vector<std::shared_ptr<DEAD_MapObjectBase>> v : this->mapObjects) {
     if (this->mapSize.width < (int) v.size()) { this->mapSize.width = v.size(); }
-    for (DEAD_MapObjectBase* c : v) {
+    for (std::shared_ptr<DEAD_MapObjectBase> c : v) {
       std::cout << c->getChar();
     }
     std::cout << std::endl;
@@ -97,7 +98,7 @@ void DEAD_Map::mapUpdateSizeAndInfo() {
 bool DEAD_Map::isSquare() {
   if (this->mapSize.height <= 0) return true;
 
-  for (std::vector<DEAD_MapObjectBase*> v : this->mapObjects) {
+  for (std::vector<std::shared_ptr<DEAD_MapObjectBase>> v : this->mapObjects) {
     std::cout << "v.size(): " << v.size() << std::endl;
     if (v.size() != this->mapSize.width) return false;
   }
@@ -106,7 +107,7 @@ bool DEAD_Map::isSquare() {
   return true;
 }
 
-std::vector<std::vector<DEAD_MapObjectBase*>> DEAD_Map::getMapObjects() {
+std::vector<std::vector<std::shared_ptr<DEAD_MapObjectBase>>> DEAD_Map::getMapObjects() {
   return this->mapObjects;
 }
 

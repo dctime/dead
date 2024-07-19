@@ -1,6 +1,9 @@
+#include "bullets/DEAD_bullet.h"
 #include <bullets/DEAD_normal_bullet.h>
 #include <DEAD_game.h>
-DEAD_NormalBullet::DEAD_NormalBullet(DEAD_Player* owner, DEAD_Gun* gun) : DEAD_Bullet(owner, gun, 0.002) {
+#include <memory>
+DEAD_NormalBullet::DEAD_NormalBullet(std::shared_ptr<DEAD_Player> owner, std::shared_ptr<DEAD_Gun> gun) 
+  : DEAD_Bullet(owner, gun, 0.002) {
   this->registerBullet();
 }
 
@@ -10,7 +13,8 @@ SDL_Rect DEAD_NormalBullet::getBulletTextureRect() {
 } 
 
 void DEAD_NormalBullet::registerBullet() {
-  this->getOwner()->getGame()->getBulletDirector()->registerBullet(this);
+  std::shared_ptr<DEAD_NormalBullet> shared_from_this = std::static_pointer_cast<DEAD_NormalBullet>(DEAD_Bullet::shared_from_this());
+  this->getOwner()->getGame()->getBulletDirector()->registerBullet(shared_from_this);
 }
 
 double DEAD_NormalBullet::getBulletSize() {

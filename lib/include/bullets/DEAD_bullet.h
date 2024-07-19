@@ -29,14 +29,14 @@
 Note that this is an abstract base class, meaning it cannot be instantiated on its own and must be inherited by derived classes to provide implementation for the pure virtual functions.
 */
 
-class DEAD_Bullet {
+class DEAD_Bullet : public std::enable_shared_from_this<DEAD_Bullet> {
 public:
-  DEAD_Bullet(DEAD_Player* owner, DEAD_Gun* gun, double speed);
+  DEAD_Bullet(std::shared_ptr<DEAD_Player> owner, std::shared_ptr<DEAD_Gun> gun, double speed);
   virtual SDL_Rect getBulletTextureRect() = 0;
-  DEAD_Player* getOwner();
+  std::shared_ptr<DEAD_Player> getOwner();
   virtual double getBulletSize() = 0;
   DEAD_Map::MapLocation getMapLocation();
-  DEAD_Gun* getGun();
+  std::shared_ptr<DEAD_Gun> getGun();
   double getRotation();
   DEAD_Map::MapLocation getLoc();
   void setLoc(DEAD_Map::MapLocation loc);
@@ -46,10 +46,10 @@ public:
   virtual void tickBullet() = 0;
   virtual ~DEAD_Bullet();
 private:
-  DEAD_Player* owner;
+  std::shared_ptr<DEAD_Player> owner;
   DEAD_Map::MapLocation pos;
-  DEAD_Gun* gun;
-  DEAD_Game* game;
+  std::shared_ptr<DEAD_Gun> gun;
+  std::shared_ptr<DEAD_Game> game;
   double rotation;
   double speed;
 };

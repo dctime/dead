@@ -6,16 +6,17 @@
 #include <SDL2/SDL_log.h>
 #include <DEAD_game.h>
 #include <iostream>
+#include <memory>
 #include <vector>
-DEAD_CollisionDirector::DEAD_CollisionDirector(DEAD_Game* game) 
+DEAD_CollisionDirector::DEAD_CollisionDirector(std::shared_ptr<DEAD_Game> game) 
   : game(game) {
   SDL_Log("collision init");
 }
 
-std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::entityCheckCollision(double targetX, double targetY, DEAD_Entity* entity) {
+std::set<std::shared_ptr<DEAD_MapObjectBase>> DEAD_CollisionDirector::entityCheckCollision(double targetX, double targetY, std::shared_ptr<DEAD_Entity> entity) {
   std::vector<std::vector<int>> checkSequence = {{0, 0}, {1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, -1}, {-1, 1}};
 
-  std::set<DEAD_MapObjectBase*> collideObjects;
+  std::set<std::shared_ptr<DEAD_MapObjectBase>> collideObjects;
   collideObjects.clear();
 
   for (std::vector<int> v : checkSequence) {
@@ -27,7 +28,7 @@ std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::entityCheckCollision(doubl
     if (objectY < 0 || objectY >= this->game->getMap()->getMapSize().height) continue;
 
 
-    DEAD_MapObjectBase* object = this->game->getMap()->getMapObjects()[objectY][objectX];
+  std:;std::shared_ptr<DEAD_MapObjectBase> object = this->game->getMap()->getMapObjects()[objectY][objectX];
     if (!object->isPlayerCollidable()) {
       continue;
     }
@@ -42,12 +43,12 @@ std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::entityCheckCollision(doubl
   return collideObjects;
 }
 
-std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::entityCheckCollision(DEAD_Entity* entity, DEAD_Map::MapLocation targetLoc) {
+std::set<std::shared_ptr<DEAD_MapObjectBase>> DEAD_CollisionDirector::entityCheckCollision(std::shared_ptr<DEAD_Entity> entity, DEAD_Map::MapLocation targetLoc) {
   return entityCheckCollision(targetLoc.x, targetLoc.y, entity);
 }
 
 
-std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::entityCheckCollision(DEAD_Entity* player, double moveXDelta, double moveYDelta) {
+std::set<std::shared_ptr<DEAD_MapObjectBase>> DEAD_CollisionDirector::entityCheckCollision(std::shared_ptr<DEAD_Entity> player, double moveXDelta, double moveYDelta) {
 
   DEAD_Map::MapLocation playerLoc = player->getPos();
 
@@ -61,10 +62,10 @@ std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::entityCheckCollision(DEAD_
   return entityCheckCollision(player, futureLoc);
 }
 
-std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::bulletCheckCollision(DEAD_Bullet* bullet) {
+std::set<std::shared_ptr<DEAD_MapObjectBase>> DEAD_CollisionDirector::bulletCheckCollision(std::shared_ptr<DEAD_Bullet> bullet) {
   std::vector<std::vector<int>> checkSequence = {{0, 0}, {1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, -1}, {-1, 1}};
 
-  std::set<DEAD_MapObjectBase*> collideObjects;
+  std::set<std::shared_ptr<DEAD_MapObjectBase>> collideObjects;
   collideObjects.clear();
 
   for (std::vector<int> v : checkSequence) {
@@ -76,7 +77,7 @@ std::set<DEAD_MapObjectBase*> DEAD_CollisionDirector::bulletCheckCollision(DEAD_
     if (objectY < 0 || objectY >= this->game->getMap()->getMapSize().height) continue;
 
 
-    DEAD_MapObjectBase* object = this->game->getMap()->getMapObjects()[objectY][objectX];
+    std::shared_ptr<DEAD_MapObjectBase> object = this->game->getMap()->getMapObjects()[objectY][objectX];
     if (!object->isPlayerCollidable()) {
       continue;
     }

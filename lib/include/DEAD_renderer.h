@@ -27,24 +27,24 @@ public:
 
 class DEAD_Renderer {
 public:
-  DEAD_Renderer(SDL_Window* window, DEAD_Game* game);
+  DEAD_Renderer(SDL_Window* window, std::shared_ptr<DEAD_Game> game);
   ~DEAD_Renderer();
   void render();
   void moveRenderAnchor(double x, double y);
-  ScreenLocation getPlayerRenderLocation(DEAD_Player* player, bool mid);
-  ScreenLocation getBulletRenderLocation(DEAD_Bullet* bullet);
+  ScreenLocation getPlayerRenderLocation(std::shared_ptr<DEAD_Player> player, bool mid);
+  ScreenLocation getBulletRenderLocation(std::shared_ptr<DEAD_Bullet> bullet);
 private:
   void renderMapObjects();
   SDL_Renderer* renderer;
   int renderBlockSize;
-  DEAD_Game* game;
+  std::shared_ptr<DEAD_Game> game;
   RenderAnchor renderAnchor = {.x=0, .y=0};
   SDL_Rect renderRect = {.x=0, .y=0, .w=renderBlockSize, .h=renderBlockSize};
   SDL_Texture *mapObjectTexture;
   SDL_Texture *playerTexture;
   SDL_Texture *bulletTexture;
   SDL_Texture* itemTexture;
-  void renderPlayer(DEAD_Player* player);
+  void renderPlayer(std::shared_ptr<DEAD_Player> player);
   void renderItemDropLayer();
   void renderBullets();
   void getTextureFromSurface(SDL_Texture*& texture, std::string filePath);

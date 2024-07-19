@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <memory>
 
-class DEAD_Item {
+class DEAD_Item : public std::enable_shared_from_this<DEAD_Item>{
 public:
   DEAD_Item();
   virtual ~DEAD_Item();

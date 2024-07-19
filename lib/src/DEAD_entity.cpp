@@ -5,11 +5,10 @@
 
 DEAD_Entity::DEAD_Entity()
 : speed(3), position({.x=0, .y=0}), rotation(0), size(0.8) {
-  this->hitbox = new DEAD_CircleHitbox(this->getSize() / 2 * 0.8, this->position);
+  this->hitbox = std::make_shared<DEAD_CircleHitbox>(this->getSize() / 2 * 0.8, this->position);
 }
 
 DEAD_Entity::~DEAD_Entity() {
-  delete this->hitbox;
   SDL_Log("Entity Destoryed");
 }
 
@@ -40,16 +39,16 @@ double DEAD_Entity::getRotation() {
   return this->rotation; 
 }
 
-void DEAD_Entity::setGame(DEAD_Game* game) {
+void DEAD_Entity::setGame(std::shared_ptr<DEAD_Game> game) {
   this->game = game;
 }
 
-DEAD_Game* DEAD_Entity::getGame() {
+std::shared_ptr<DEAD_Game> DEAD_Entity::getGame() {
   return this->game;
 }
 
 void DEAD_Entity::move(double x, double y) {
-  if (this->getGame()->getCollisionDirector()->entityCheckCollision(this, x*100, y*100).size() != 0) {
+  if (this->getGame()->getCollisionDirector()->entityCheckCollision(shared_from_this(), x*100, y*100).size() != 0) {
     return;
   } else {
     this->setPos(this->getPos().x+x, this->getPos().y+y);
@@ -57,7 +56,7 @@ void DEAD_Entity::move(double x, double y) {
 }
 
 double DEAD_Entity::getSize() { return this->size; }
-DEAD_CircleHitbox* DEAD_Entity::getHitbox() { return this->hitbox; }
+std::shared_ptr<DEAD_CircleHitbox> DEAD_Entity::getHitbox() { return this->hitbox; }
 
 double DEAD_Entity::getPickItemRadius() {
   return 1;

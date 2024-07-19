@@ -5,11 +5,14 @@
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_log.h>
 #include <SDL2/SDL_video.h>
+#include <memory>
 
 int main() {
-  DEAD_ControllablePlayer player = DEAD_ControllablePlayer();
-  DEAD_Game game = DEAD_Game(&player);
-  game.run();
+
+
+  std::shared_ptr<DEAD_ControllablePlayer> player = std::make_shared<DEAD_ControllablePlayer>();
+  std::shared_ptr<DEAD_Game> game = std::make_shared<DEAD_Game>(player);
+  game->run();
   
 
 

@@ -23,7 +23,7 @@ void DEAD_Renderer::getTextureFromSurface(SDL_Texture *&texture,
   SDL_FreeSurface(textureSurface);
 }
 
-DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
+DEAD_Renderer::DEAD_Renderer(SDL_Window *window, std::shared_ptr<DEAD_Game> game)
     : renderBlockSize(25), renderAnchor({.x = 0, .y = 0}) {
 
   if (window == NULL) {
@@ -61,12 +61,12 @@ void DEAD_Renderer::render() {
 }
 
 void DEAD_Renderer::renderMapObjects() {
-  DEAD_Map *map = this->game->getMap();
+  std::shared_ptr<DEAD_Map> map = this->game->getMap();
 
   float windowWidthMid = this->game->SCREEN_WIDTH / 2.0;
   float windowHeightMid = this->game->SCREEN_HEIGHT / 2.0;
 
-  std::vector<std::vector<DEAD_MapObjectBase *>> mapObjects =
+  std::vector<std::vector<std::shared_ptr<DEAD_MapObjectBase>>> mapObjects =
       map->getMapObjects();
 
   for (int i = 0; i < mapObjects.size(); ++i) {
@@ -92,7 +92,7 @@ void DEAD_Renderer::renderMapObjects() {
   }
 }
 
-void DEAD_Renderer::renderPlayer(DEAD_Player *player) {
+void DEAD_Renderer::renderPlayer(std::shared_ptr<DEAD_Player> player) {
   DEAD_Map::MapLocation pos = player->getPos();
   SDL_Rect rect = player->getPlayerTextureRect();
 
@@ -106,7 +106,7 @@ void DEAD_Renderer::renderPlayer(DEAD_Player *player) {
                    player->getRotation(), NULL, SDL_FLIP_NONE);
 }
 
-ScreenLocation DEAD_Renderer::getPlayerRenderLocation(DEAD_Player *player,
+ScreenLocation DEAD_Renderer::getPlayerRenderLocation(std::shared_ptr<DEAD_Player> player,
                                                       bool mid) {
   ScreenLocation loc;
   loc.x = (player->getPos().x - renderAnchor.x) * this->renderBlockSize -
@@ -124,10 +124,10 @@ ScreenLocation DEAD_Renderer::getPlayerRenderLocation(DEAD_Player *player,
 }
 
 void DEAD_Renderer::renderBullets() {
-  DEAD_BulletDirector *director = this->game->getBulletDirector();
-  std::set<DEAD_Bullet *> bullets = director->getBullets();
+  std::shared_ptr<DEAD_BulletDirector> director = this->game->getBulletDirector();
+  std::set<std::shared_ptr<DEAD_Bullet>> bullets = director->getBullets();
 
-  for (DEAD_Bullet *bullet : bullets) {
+  for (std::shared_ptr<DEAD_Bullet> bullet : bullets) {
     SDL_Rect textureRect = bullet->getBulletTextureRect();
     SDL_Rect renderRect = {
         .x = this->getBulletRenderLocation(bullet).x,
@@ -139,7 +139,7 @@ void DEAD_Renderer::renderBullets() {
   }
 }
 
-ScreenLocation DEAD_Renderer::getBulletRenderLocation(DEAD_Bullet *bullet) {
+ScreenLocation DEAD_Renderer::getBulletRenderLocation(std::shared_ptr<DEAD_Bullet> bullet) {
   ScreenLocation loc;
   loc.x =
       (bullet->getMapLocation().x - renderAnchor.x) * this->renderBlockSize -

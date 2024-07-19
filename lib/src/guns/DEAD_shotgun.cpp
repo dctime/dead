@@ -2,8 +2,9 @@
 #include "guns/DEAD_gun.h"
 #include <SDL2/SDL_rect.h>
 #include <guns/DEAD_shotgun.h>
+#include <memory>
 
-DEAD_Shotgun::DEAD_Shotgun(DEAD_Player* player)
+DEAD_Shotgun::DEAD_Shotgun(std::shared_ptr<DEAD_Player> player)
   : DEAD_Gun(player) {
 
 }
@@ -15,7 +16,7 @@ SDL_Rect DEAD_Shotgun::getTextureRect() {
 
 std::shared_ptr<DEAD_ItemDrop> DEAD_Shotgun::getItemDrop() {
   if (this->itemDrop == nullptr) {
-    this->itemDrop = std::make_shared<DEAD_ItemDrop>(shared_from_this(), this->getPlayer()->getPos());
+    this->itemDrop = std::make_shared<DEAD_ItemDrop>(std::static_pointer_cast<DEAD_Shotgun>(DEAD_Item::shared_from_this()), this->getPlayer()->getPos());
   }
 
   return this->itemDrop;

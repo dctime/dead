@@ -2,8 +2,9 @@
 #include <DEAD_game.h>
 #include <SDL2/SDL_log.h>
 #include <cmath>
+#include <memory>
 
-DEAD_Bullet::DEAD_Bullet(DEAD_Player* owner, DEAD_Gun* gun, double speed)
+DEAD_Bullet::DEAD_Bullet(std::shared_ptr<DEAD_Player> owner, std::shared_ptr<DEAD_Gun> gun, double speed)
 : owner(owner), gun(gun), rotation(owner->getRotation()), speed(speed) {
   double rad = owner->getRotation() * (M_PI / (180.0));
   double bulletX = (owner->getPos()).x + cos(rad) * gun->getBarrelLength();
@@ -13,7 +14,7 @@ DEAD_Bullet::DEAD_Bullet(DEAD_Player* owner, DEAD_Gun* gun, double speed)
   SDL_Log("[Bullet] init a bullet");
 }
 
-DEAD_Player* DEAD_Bullet::getOwner() {
+std::shared_ptr<DEAD_Player> DEAD_Bullet::getOwner() {
   return this->owner;
 }
 
@@ -22,7 +23,7 @@ DEAD_Map::MapLocation DEAD_Bullet::getMapLocation() {
   return this->pos;
 }
 
-DEAD_Gun* DEAD_Bullet::getGun() {
+std::shared_ptr<DEAD_Gun> DEAD_Bullet::getGun() {
   return this->gun; 
 }
 

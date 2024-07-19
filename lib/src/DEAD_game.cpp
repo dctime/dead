@@ -11,16 +11,17 @@
 #include <map>
 #include <memory>
 
-DEAD_Game::DEAD_Game(DEAD_ControllablePlayer *player)
+DEAD_Game::DEAD_Game(std::shared_ptr<DEAD_ControllablePlayer> player)
     : SCREEN_WIDTH(720), SCREEN_HEIGHT(480),
       window(SDL_CreateWindow("DEAD", SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED, this->SCREEN_WIDTH,
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
-      map(new DEAD_Map()), renderer(new DEAD_Renderer(this->window, this)),
-      player(player), bulletDirector(new DEAD_BulletDirector(this)),
-      collisionDirector(new DEAD_CollisionDirector(this)),
-      itemDropLayer(std::make_shared<DEAD_ItemDropLayer>()){
-
+      map(std::make_shared<DEAD_Map>()),
+      renderer(std::make_shared<DEAD_Renderer>(this->window, shared_from_this())),
+      player(player),
+      bulletDirector(std::make_shared<DEAD_BulletDirector>(shared_from_this())),
+      collisionDirector(std::make_shared<DEAD_CollisionDirector>(shared_from_this())),
+      itemDropLayer(std::make_shared<DEAD_ItemDropLayer>()) {
 
   SDL_Log("Game Init");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
@@ -43,10 +44,10 @@ DEAD_Game::DEAD_Game(DEAD_ControllablePlayer *player)
   std::vector<DEAD_Map::MapLocation> locs = this->map->getPlayerPointLocs();
   if (locs.size() > 0) {
     // set the first player point
-  this->player->setPos(locs[0].x, locs[0].y);
+    this->player->setPos(locs[0].x, locs[0].y);
   }
 
-  this->player->setGame(this);
+  this->player->setGame(shared_from_this());
 }
 
 DEAD_Game::~DEAD_Game() {
@@ -54,10 +55,6 @@ DEAD_Game::~DEAD_Game() {
   IMG_Quit();
   SDL_Quit();
   SDL_Log("Game Destroyed");
-  delete this->renderer;
-  delete this->map;
-  delete this->bulletDirector;
-  delete this->collisionDirector;
 }
 
 void DEAD_Game::tick() {
@@ -89,21 +86,22 @@ void DEAD_Game::run() {
   }
 }
 
-DEAD_Map *DEAD_Game::getMap() { return this->map; }
+std::shared_ptr<DEAD_Map> DEAD_Game::getMap() { return this->map; }
 
-DEAD_Player *DEAD_Game::getPlayer() { return this->player; }
+std::shared_ptr<DEAD_Player> DEAD_Game::getPlayer() { return this->player; }
 
-DEAD_Renderer *DEAD_Game::getRenderer() { return this->renderer; }
+std::shared_ptr<DEAD_Renderer> DEAD_Game::getRenderer() {
+  return this->renderer;
+}
 
-DEAD_BulletDirector *DEAD_Game::getBulletDirector() {
+std::shared_ptr<DEAD_BulletDirector> DEAD_Game::getBulletDirector() {
   return this->bulletDirector;
 }
 
-DEAD_CollisionDirector *DEAD_Game::getCollisionDirector() {
+std::shared_ptr<DEAD_CollisionDirector> DEAD_Game::getCollisionDirector() {
   return this->collisionDirector;
 }
 
 std::shared_ptr<DEAD_ItemDropLayer> DEAD_Game::getItemDropLayer() {
   return this->itemDropLayer;
 }
-

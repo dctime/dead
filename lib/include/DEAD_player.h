@@ -14,6 +14,7 @@ public:
   ~DEAD_Player();
   SDL_Rect getPlayerTextureRect();
   void pickupOrDrop();
+  void summonPistol();
 protected:
   void attack() override;
 private:

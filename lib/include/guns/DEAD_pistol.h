@@ -2,9 +2,9 @@
 #include "../DEAD_player.h"
 #include <memory>
 
-class DEAD_Pistol : public DEAD_Gun, public std::enable_shared_from_this<DEAD_Pistol> {
+class DEAD_Pistol : public DEAD_Gun {
 public:
-  DEAD_Pistol(DEAD_Player* player);
+  DEAD_Pistol(std::shared_ptr<DEAD_Player> player);
   ~DEAD_Pistol();
   SDL_Rect getTextureRect() override;
   void attack() override;

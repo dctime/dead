@@ -12,28 +12,29 @@
 #include "DEAD_collision_director.h"
 #include "DEAD_item_drop_layer.h"
 
-class DEAD_Game {
+class DEAD_Game
+  : public std::enable_shared_from_this<DEAD_Game> {
 public:
-  DEAD_Game(DEAD_ControllablePlayer* player);
+  DEAD_Game(std::shared_ptr<DEAD_ControllablePlayer> player);
   ~DEAD_Game();
   void tick();
   void run();
-  DEAD_Map* getMap();
-  DEAD_Player* getPlayer();
-  DEAD_Renderer* getRenderer();
-  DEAD_BulletDirector* getBulletDirector();
-  DEAD_CollisionDirector* getCollisionDirector();
+  std::shared_ptr<DEAD_Map> getMap();
+  std::shared_ptr<DEAD_Player> getPlayer();
+  std::shared_ptr<DEAD_Renderer> getRenderer();
+  std::shared_ptr<DEAD_BulletDirector> getBulletDirector();
+  std::shared_ptr<DEAD_CollisionDirector> getCollisionDirector();
   std::shared_ptr<DEAD_ItemDropLayer> getItemDropLayer();
   const int SCREEN_WIDTH = 720;
   const int SCREEN_HEIGHT = 480;
 private:
   SDL_Window* window;
-  DEAD_Map* map;
-  DEAD_ControllablePlayer* player;
+  std::shared_ptr<DEAD_Map> map;
+  std::shared_ptr<DEAD_ControllablePlayer> player;
   void eventHandle();
   bool running = true;
-  DEAD_Renderer* renderer;
-  DEAD_BulletDirector* bulletDirector;
-  DEAD_CollisionDirector* collisionDirector;
+  std::shared_ptr<DEAD_Renderer> renderer;
+  std::shared_ptr<DEAD_BulletDirector> bulletDirector;
+  std::shared_ptr<DEAD_CollisionDirector> collisionDirector;
   std::shared_ptr<DEAD_ItemDropLayer> itemDropLayer;
 };
