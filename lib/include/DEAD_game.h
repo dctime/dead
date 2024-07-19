@@ -37,4 +37,7 @@ private:
   std::shared_ptr<DEAD_BulletDirector> bulletDirector;
   std::shared_ptr<DEAD_CollisionDirector> collisionDirector;
   std::shared_ptr<DEAD_ItemDropLayer> itemDropLayer;
+  void initObjectThatHasSharedFromThis();
+  
+  friend class DEAD_GameBuilder;
 };

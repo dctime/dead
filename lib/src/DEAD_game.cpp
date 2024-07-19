@@ -17,10 +17,8 @@ DEAD_Game::DEAD_Game(std::shared_ptr<DEAD_ControllablePlayer> player)
                               SDL_WINDOWPOS_CENTERED, this->SCREEN_WIDTH,
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
       map(std::make_shared<DEAD_Map>()),
-      renderer(std::make_shared<DEAD_Renderer>(this->window, shared_from_this())),
       player(player),
-      bulletDirector(std::make_shared<DEAD_BulletDirector>(shared_from_this())),
-      collisionDirector(std::make_shared<DEAD_CollisionDirector>(shared_from_this())),
+      
       itemDropLayer(std::make_shared<DEAD_ItemDropLayer>()) {
 
   SDL_Log("Game Init");
@@ -46,6 +44,14 @@ DEAD_Game::DEAD_Game(std::shared_ptr<DEAD_ControllablePlayer> player)
     // set the first player point
     this->player->setPos(locs[0].x, locs[0].y);
   }
+
+}
+
+void DEAD_Game::initObjectThatHasSharedFromThis() {
+  this->renderer = 
+      std::make_shared<DEAD_Renderer>(this->window, shared_from_this());
+  this->bulletDirector = std::make_shared<DEAD_BulletDirector>(shared_from_this());
+  this->collisionDirector = std::make_shared<DEAD_CollisionDirector>(shared_from_this());
 
   this->player->setGame(shared_from_this());
 }

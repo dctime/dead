@@ -42,9 +42,9 @@ public:
   void setLoc(DEAD_Map::MapLocation loc);
   void move(double x, double y);
   void tickFly();
-  virtual void registerBullet() = 0;
   virtual void tickBullet() = 0;
   virtual ~DEAD_Bullet();
+  virtual void registerBullet() = 0;
 private:
   std::shared_ptr<DEAD_Player> owner;
   DEAD_Map::MapLocation pos;
