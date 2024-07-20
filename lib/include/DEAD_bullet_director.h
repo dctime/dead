@@ -12,6 +12,7 @@ public:
   int bulletCount();
   std::set<std::shared_ptr<DEAD_Bullet>> getBullets();
   void tickBullets();
+  void checkAndDeleteCollisionBullets();
 private:
   void getCollisionBullets(std::vector<std::shared_ptr<DEAD_Bullet>>& bullets);
   std::set<std::shared_ptr<DEAD_Bullet>> bullets; 

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
 #include <SDL2/SDL_render.h>
 #include <memory>
@@ -38,6 +39,10 @@ private:
   std::shared_ptr<DEAD_CollisionDirector> collisionDirector;
   std::shared_ptr<DEAD_ItemDropLayer> itemDropLayer;
   void initObjectThatHasSharedFromThis();
+  SDL_TimerID bulletCollisionID;
+  int getSecretNumber();
+  static Uint32 bulletCheckCollisionCallback(Uint32 interval, void *param);
+  static void checkAndDeleteCollisionBullets(DEAD_Game* game);
   
   friend class DEAD_GameBuilder;
 };

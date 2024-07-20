@@ -24,15 +24,16 @@ std::set<std::shared_ptr<DEAD_Bullet>> DEAD_BulletDirector::getBullets() {
 }
 
 void DEAD_BulletDirector::tickBullets() {
-  
+  for (std::shared_ptr<DEAD_Bullet> bullet : this->bullets) {
+    bullet->tickBullet();
+  }
+}
+
+void DEAD_BulletDirector::checkAndDeleteCollisionBullets() {
   std::vector<std::shared_ptr<DEAD_Bullet>> removingBullets;
   this->getCollisionBullets(removingBullets);
   for (int i = 0; i < removingBullets.size(); i++) {
     this->bullets.erase(removingBullets.at(i));
-  }
-
-  for (std::shared_ptr<DEAD_Bullet> bullet : this->bullets) {
-    bullet->tickBullet();
   }
 }
 

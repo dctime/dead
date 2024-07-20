@@ -7,8 +7,10 @@
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
+#include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
-#include <map>
+#include <functional>
+#include <iostream>
 #include <memory>
 
 DEAD_Game::DEAD_Game(std::shared_ptr<DEAD_ControllablePlayer> player)
@@ -16,13 +18,12 @@ DEAD_Game::DEAD_Game(std::shared_ptr<DEAD_ControllablePlayer> player)
       window(SDL_CreateWindow("DEAD", SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED, this->SCREEN_WIDTH,
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
-      map(std::make_shared<DEAD_Map>()),
-      player(player),
+      map(std::make_shared<DEAD_Map>()), player(player),
       
       itemDropLayer(std::make_shared<DEAD_ItemDropLayer>()) {
 
   SDL_Log("Game Init");
-  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) != 0) {
+  if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
     SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
   }
 
@@ -44,16 +45,19 @@ DEAD_Game::DEAD_Game(std::shared_ptr<DEAD_ControllablePlayer> player)
     // set the first player point
     this->player->setPos(locs[0].x, locs[0].y);
   }
-
 }
 
 void DEAD_Game::initObjectThatHasSharedFromThis() {
-  this->renderer = 
+  this->renderer =
       std::make_shared<DEAD_Renderer>(this->window, shared_from_this());
-  this->bulletDirector = std::make_shared<DEAD_BulletDirector>(shared_from_this());
-  this->collisionDirector = std::make_shared<DEAD_CollisionDirector>(shared_from_this());
+  this->bulletDirector =
+      std::make_shared<DEAD_BulletDirector>(shared_from_this());
+  this->collisionDirector =
+      std::make_shared<DEAD_CollisionDirector>(shared_from_this());
 
   this->player->setGame(shared_from_this());
+  this->bulletCollisionID = (SDL_AddTimer(
+    1000.0 / 60, this->bulletCheckCollisionCallback, shared_from_this().get()));
 }
 
 DEAD_Game::~DEAD_Game() {
@@ -65,9 +69,9 @@ DEAD_Game::~DEAD_Game() {
 
 void DEAD_Game::tick() {
   this->player->handlePlayerRotation();
-  this->eventHandle();
   this->player->handleKeyState();
   this->bulletDirector->tickBullets();
+  this->eventHandle();
   this->renderer->moveRenderAnchor(this->player->getPos().x,
                                    this->player->getPos().y);
   this->renderer->render();
@@ -77,7 +81,13 @@ void DEAD_Game::eventHandle() {
   SDL_Event event;
   SDL_PollEvent(&event);
 
+  
+  std::function<void(void*)> p; 
   switch (event.type) {
+  case SDL_USEREVENT: 
+    p = (void(*)(void*))event.user.data1;
+    p((DEAD_Game*)event.user.data2);
+    break;
   case SDL_QUIT:
     this->running = false;
     break;
@@ -110,4 +120,25 @@ std::shared_ptr<DEAD_CollisionDirector> DEAD_Game::getCollisionDirector() {
 
 std::shared_ptr<DEAD_ItemDropLayer> DEAD_Game::getItemDropLayer() {
   return this->itemDropLayer;
+}
+
+Uint32 DEAD_Game::bulletCheckCollisionCallback(Uint32 interval, void *param) {
+  SDL_Event event;
+  SDL_UserEvent userEvent;
+
+  userEvent.type = SDL_USEREVENT;
+  userEvent.code = 0;
+  userEvent.data1 = (void*)&DEAD_Game::checkAndDeleteCollisionBullets;
+  userEvent.data2 = param;
+
+  event.type = SDL_USEREVENT;
+  event.user = userEvent;
+
+  SDL_PushEvent(&event);
+  return interval;
+}
+int DEAD_Game::getSecretNumber() { return 7; }
+void DEAD_Game::checkAndDeleteCollisionBullets(DEAD_Game* game) {
+  std::cout << "Check Collision!" << std::endl;
+  game->bulletDirector->checkAndDeleteCollisionBullets();
 }
