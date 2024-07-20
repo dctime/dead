@@ -9,4 +9,5 @@ public:
   static const std::string PLAYER_TEXTURE_PNG;
   static const std::string BULLET_TEXTURE_PNG;
   static const std::string ITEM_TEXTURE_PNG;
+  static const std::string ZOMBIES_TEXTURE_PNG;
 };

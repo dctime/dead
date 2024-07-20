@@ -4,6 +4,8 @@
 #include <SDL2/SDL_render.h>
 #include <memory>
 #include <string>
+#include "DEAD_entity.h"
+#include "DEAD_zombie_director.h"
 
 class DEAD_Game;
 class DEAD_Player;
@@ -31,7 +33,7 @@ public:
   ~DEAD_Renderer();
   void render();
   void moveRenderAnchor(double x, double y);
-  ScreenLocation getPlayerRenderLocation(std::shared_ptr<DEAD_Player> player, bool mid);
+  ScreenLocation getEntityRenderLocation(std::shared_ptr<DEAD_Entity> entity, bool mid);
   ScreenLocation getBulletRenderLocation(std::shared_ptr<DEAD_Bullet> bullet);
 private:
   void renderMapObjects();
@@ -44,7 +46,10 @@ private:
   SDL_Texture *playerTexture;
   SDL_Texture *bulletTexture;
   SDL_Texture* itemTexture;
+  SDL_Texture* zombiesTexture;
   void renderPlayer(std::shared_ptr<DEAD_Player> player);
+  void renderZombies(const std::shared_ptr<DEAD_ZombieDirector>& zombieDirector);
+  void renderEntity(std::shared_ptr<DEAD_Entity> entity, SDL_Texture* texture);
   void renderItemDropLayer();
   void renderBullets();
   void getTextureFromSurface(SDL_Texture*& texture, std::string filePath);

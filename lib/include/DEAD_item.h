@@ -8,6 +8,7 @@ public:
   DEAD_Item();
   virtual ~DEAD_Item();
   virtual std::shared_ptr<DEAD_ItemDrop> getItemDrop() = 0;
+  virtual SDL_Rect getTextureRect() = 0;
   virtual SDL_Rect getItemTextureRect() = 0;
   void unbindItemDrop();
 protected:

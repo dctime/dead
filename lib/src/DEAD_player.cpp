@@ -36,14 +36,14 @@ void DEAD_Player::pickupWeapon() {
   this->holdItem->unbindItemDrop();
 }
 
-SDL_Rect DEAD_Player::getPlayerTextureRect() {
-  std::shared_ptr<DEAD_Weapon> weapon = std::dynamic_pointer_cast<DEAD_Weapon>(this->holdItem);
-  if (weapon == nullptr) {
+SDL_Rect DEAD_Player::getTextureRect() {
+  std::shared_ptr<DEAD_Item> item = std::dynamic_pointer_cast<DEAD_Item>(this->holdItem);
+  if (item == nullptr) {
     SDL_Rect rect = {.x = 0, .y = 0, .w = 100, .h = 100};
     return rect;
   }
   
-  return weapon->getTextureRect();
+  return item->getTextureRect();
 }
 
 void DEAD_Player::attack() {

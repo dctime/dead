@@ -1,5 +1,6 @@
 #include "DEAD_item_drop.h"
 #include "map_objects/DEAD_map_object_base.h"
+#include "zombies/DEAD_zombie.h"
 #include <DEAD_filepaths.h>
 #include <DEAD_game.h>
 #include <DEAD_map.h>
@@ -13,6 +14,7 @@
 #include <SDL2/SDL_surface.h>
 #include <iostream>
 #include <memory>
+#include <set>
 #include <string>
 #include <vector>
 
@@ -42,7 +44,8 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window, std::shared_ptr<DEAD_Game> game
                         DEAD_FilePaths::PLAYER_TEXTURE_PNG);
   getTextureFromSurface(this->bulletTexture,
                         DEAD_FilePaths::BULLET_TEXTURE_PNG);
-
+  getTextureFromSurface(this->zombiesTexture,
+                        DEAD_FilePaths::ZOMBIES_TEXTURE_PNG);
   this->game = game;
 }
 
@@ -56,6 +59,7 @@ void DEAD_Renderer::render() {
   this->renderItemDropLayer();
   this->renderBullets();
   this->renderPlayer(this->game->getPlayer());
+  this->renderZombies(this->game->getZombieDirector());
 
   SDL_RenderPresent(this->renderer);
 }
@@ -93,32 +97,42 @@ void DEAD_Renderer::renderMapObjects() {
 }
 
 void DEAD_Renderer::renderPlayer(std::shared_ptr<DEAD_Player> player) {
-  DEAD_Map::MapLocation pos = player->getPos();
-  SDL_Rect rect = player->getPlayerTextureRect();
-
-  int renderRectX = this->getPlayerRenderLocation(player, false).x;
-  int renderRectY = this->getPlayerRenderLocation(player, false).y;
-  SDL_Rect renderRect = {.x = renderRectX,
-                         .y = renderRectY,
-                         .w = (int)(player->getSize() * this->renderBlockSize),
-                         .h = (int)(player->getSize() * this->renderBlockSize)};
-  SDL_RenderCopyEx(this->renderer, this->playerTexture, &rect, &renderRect,
-                   player->getRotation(), NULL, SDL_FLIP_NONE);
+  this->renderEntity(player, this->playerTexture);
 }
 
-ScreenLocation DEAD_Renderer::getPlayerRenderLocation(std::shared_ptr<DEAD_Player> player,
+void DEAD_Renderer::renderEntity(std::shared_ptr<DEAD_Entity> entity, SDL_Texture* texture) {
+  DEAD_Map::MapLocation pos = entity->getPos();
+  SDL_Rect rect = entity->getTextureRect();
+
+  int renderRectX = this->getEntityRenderLocation(entity, false).x;
+  int renderRectY = this->getEntityRenderLocation(entity, false).y;
+  SDL_Rect renderRect = {.x = renderRectX,
+                         .y = renderRectY,
+                         .w = (int)(entity->getSize() * this->renderBlockSize),
+                         .h = (int)(entity->getSize() * this->renderBlockSize)};
+  SDL_RenderCopyEx(this->renderer, texture, &rect, &renderRect,
+                   entity->getRotation(), NULL, SDL_FLIP_NONE);
+}
+
+void DEAD_Renderer::renderZombies(const std::shared_ptr<DEAD_ZombieDirector>& zombieDirector) {
+  for (std::shared_ptr<DEAD_Zombie> zombie : zombieDirector->getZombies()) {
+    renderEntity(zombie, this->zombiesTexture);
+  } 
+}
+
+ScreenLocation DEAD_Renderer::getEntityRenderLocation(std::shared_ptr<DEAD_Entity> entity,
                                                       bool mid) {
   ScreenLocation loc;
-  loc.x = (player->getPos().x - renderAnchor.x) * this->renderBlockSize -
-          (player->getSize() * this->renderBlockSize) / 2.0 +
+  loc.x = (entity->getPos().x - renderAnchor.x) * this->renderBlockSize -
+          (entity->getSize() * this->renderBlockSize) / 2.0 +
           this->game->SCREEN_WIDTH / 2.0;
-  loc.y = (player->getPos().y - renderAnchor.y) * this->renderBlockSize -
-          (player->getSize() * this->renderBlockSize) / 2.0 +
+  loc.y = (entity->getPos().y - renderAnchor.y) * this->renderBlockSize -
+          (entity->getSize() * this->renderBlockSize) / 2.0 +
           this->game->SCREEN_HEIGHT / 2.0;
 
   if (mid) {
-    loc.x = loc.x + (player->getSize() * this->renderBlockSize) / 2.0;
-    loc.y = loc.y + (player->getSize() * this->renderBlockSize) / 2.0;
+    loc.x = loc.x + (entity->getSize() * this->renderBlockSize) / 2.0;
+    loc.y = loc.y + (entity->getSize() * this->renderBlockSize) / 2.0;
   }
   return loc;
 }
@@ -168,7 +182,6 @@ void DEAD_Renderer::renderItemDropLayer() {
         .h = (int)(itemDrop->getSize() * this->renderBlockSize)};
     SDL_RenderCopy(this->renderer, this->itemTexture, &textureRect,
                    &renderRect);
-    // TODO: Add Return texture item drop from item
   }
 }
 

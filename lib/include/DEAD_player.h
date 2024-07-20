@@ -12,7 +12,7 @@ class DEAD_Player : public DEAD_Entity {
 public:
   DEAD_Player();
   ~DEAD_Player();
-  SDL_Rect getPlayerTextureRect();
+  SDL_Rect getTextureRect() override;
   void pickupOrDrop();
   void summonPistol();
 protected:

@@ -48,11 +48,11 @@ void DEAD_ControllablePlayer::handlePlayerRotation() {
           DEAD_Entity::shared_from_this());
   int playerScreenX = this->getGame()
                           ->getRenderer()
-                          ->getPlayerRenderLocation(shared_from_this, true)
+                          ->getEntityRenderLocation(shared_from_this, true)
                           .x;
   int playerScreenY = this->getGame()
                           ->getRenderer()
-                          ->getPlayerRenderLocation(shared_from_this, true)
+                          ->getEntityRenderLocation(shared_from_this, true)
                           .y;
   double relX = mouseX - playerScreenX;
   double relY = mouseY - playerScreenY;
