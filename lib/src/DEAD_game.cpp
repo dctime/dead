@@ -12,6 +12,10 @@
 #include <functional>
 #include <iostream>
 #include <memory>
+#include <DEAD_controllable_player.h>
+
+const int DEAD_Game::BULLET_COLLISION_DELAY = 1000.0 / 60;
+const int DEAD_Game::PLAYER_MOVEMENT_DELAY = 10;
 
 DEAD_Game::DEAD_Game(std::shared_ptr<DEAD_ControllablePlayer> player)
     : SCREEN_WIDTH(720), SCREEN_HEIGHT(480),
@@ -57,10 +61,14 @@ void DEAD_Game::initObjectThatHasSharedFromThis() {
 
   this->player->setGame(shared_from_this());
   this->bulletCollisionID = (SDL_AddTimer(
-    1000.0 / 60, this->bulletCheckCollisionCallback, shared_from_this().get()));
+    DEAD_Game::BULLET_COLLISION_DELAY, this->bulletCheckCollisionCallback, shared_from_this().get()));
+  this->playerMovementID = SDL_AddTimer(DEAD_Game::PLAYER_MOVEMENT_DELAY, this->playerMovementCallback, shared_from_this().get()); 
+
 }
 
 DEAD_Game::~DEAD_Game() {
+  SDL_RemoveTimer(this->bulletCollisionID);
+  SDL_RemoveTimer(this->playerMovementID);
   SDL_DestroyWindow(this->window);
   IMG_Quit();
   SDL_Quit();
@@ -69,7 +77,6 @@ DEAD_Game::~DEAD_Game() {
 
 void DEAD_Game::tick() {
   this->player->handlePlayerRotation();
-  this->player->handleKeyState();
   this->bulletDirector->tickBullets();
   this->eventHandle();
   this->renderer->moveRenderAnchor(this->player->getPos().x,
@@ -137,8 +144,28 @@ Uint32 DEAD_Game::bulletCheckCollisionCallback(Uint32 interval, void *param) {
   SDL_PushEvent(&event);
   return interval;
 }
+
+Uint32 DEAD_Game::playerMovementCallback(Uint32 interval, void *param) {
+  SDL_Event event;
+  SDL_UserEvent userEvent;
+
+  userEvent.type = SDL_USEREVENT;
+  userEvent.code = 0;
+  userEvent.data1 = (void*)&DEAD_Game::playerMovement;
+  userEvent.data2 = param;
+
+  event.type = SDL_USEREVENT;
+  event.user = userEvent;
+
+  SDL_PushEvent(&event);
+  return interval;
+}
+
 int DEAD_Game::getSecretNumber() { return 7; }
+
+void DEAD_Game::playerMovement(DEAD_Game* game) {
+  game->player->handleKeyState();
+}
 void DEAD_Game::checkAndDeleteCollisionBullets(DEAD_Game* game) {
-  std::cout << "Check Collision!" << std::endl;
   game->bulletDirector->checkAndDeleteCollisionBullets();
 }

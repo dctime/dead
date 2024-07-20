@@ -7,6 +7,7 @@
 #include <SDL2/SDL_video.h>
 #include <memory>
 #include <DEAD_game_builder.h>
+#include <DEAD_controllable_player.h>
 int main() {
 
 

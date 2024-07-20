@@ -1,3 +1,4 @@
+#pragma once
 #include "DEAD_player.h"
 #include <SDL2/SDL_events.h>
 
@@ -9,5 +10,5 @@ public:
   void handleKeyState();
   void handlePlayerRotation();
 private:
-  double baseSpeed = 0.0001;
+  double baseSpeed;
 };  

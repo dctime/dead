@@ -48,7 +48,7 @@ std::shared_ptr<DEAD_Game> DEAD_Entity::getGame() {
 }
 
 void DEAD_Entity::move(double x, double y) {
-  if (this->getGame()->getCollisionDirector()->entityCheckCollision(shared_from_this(), x*100, y*100).size() != 0) {
+  if (this->getGame()->getCollisionDirector()->entityCheckCollision(shared_from_this(), x, y).size() != 0) {
     return;
   } else {
     this->setPos(this->getPos().x+x, this->getPos().y+y);

@@ -1,4 +1,3 @@
-#include <DEAD_game.h>
 #include <DEAD_player.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_error.h>
@@ -9,10 +8,11 @@
 #include <SDL2/SDL_scancode.h>
 #include <cmath>
 #include <guns/DEAD_pistol.h>
-#include <memory>
+#include <DEAD_controllable_player.h>
+#include <DEAD_game.h>
 
 DEAD_ControllablePlayer::DEAD_ControllablePlayer()
-    : DEAD_Player::DEAD_Player() {}
+    : DEAD_Player::DEAD_Player(), baseSpeed(0.01 * DEAD_Game::PLAYER_MOVEMENT_DELAY / 10) {}
 
 DEAD_ControllablePlayer::~DEAD_ControllablePlayer() {}
 
