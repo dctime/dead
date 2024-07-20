@@ -123,6 +123,7 @@ ScreenLocation DEAD_Renderer::getPlayerRenderLocation(std::shared_ptr<DEAD_Playe
   return loc;
 }
 
+
 void DEAD_Renderer::renderBullets() {
   std::shared_ptr<DEAD_BulletDirector> director = this->game->getBulletDirector();
   std::set<std::shared_ptr<DEAD_Bullet>> bullets = director->getBullets();

@@ -25,7 +25,6 @@ public:
   double getPickItemRadius();
   std::shared_ptr<DEAD_CircleHitbox> getHitbox();
 protected:
-  virtual void attack() = 0;
   std::shared_ptr<DEAD_Item> holdItem;
   
 private:

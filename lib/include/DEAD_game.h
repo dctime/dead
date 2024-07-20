@@ -11,6 +11,7 @@
 #include "DEAD_bullet_director.h"
 #include "DEAD_collision_director.h"
 #include "DEAD_item_drop_layer.h"
+#include "DEAD_zombie_director.h"
 
 class DEAD_ControllablePlayer;
 
@@ -27,6 +28,7 @@ public:
   std::shared_ptr<DEAD_BulletDirector> getBulletDirector();
   std::shared_ptr<DEAD_CollisionDirector> getCollisionDirector();
   std::shared_ptr<DEAD_ItemDropLayer> getItemDropLayer();
+  std::shared_ptr<DEAD_ZombieDirector> getZombieDirector();
   const int SCREEN_WIDTH = 720;
   const int SCREEN_HEIGHT = 480;
 
@@ -42,6 +44,7 @@ private:
   std::shared_ptr<DEAD_BulletDirector> bulletDirector;
   std::shared_ptr<DEAD_CollisionDirector> collisionDirector;
   std::shared_ptr<DEAD_ItemDropLayer> itemDropLayer;
+  std::shared_ptr<DEAD_ZombieDirector> zombieDirector;
   void initObjectThatHasSharedFromThis();
   SDL_TimerID bulletCollisionID;
   SDL_TimerID playerMovementID;

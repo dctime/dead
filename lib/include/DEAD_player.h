@@ -16,7 +16,7 @@ public:
   void pickupOrDrop();
   void summonPistol();
 protected:
-  void attack() override;
+  void attack();
 private:
   void pickupWeapon();
   void dropWeapon(); 

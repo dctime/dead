@@ -10,9 +10,9 @@
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
 #include <functional>
-#include <iostream>
 #include <memory>
 #include <DEAD_controllable_player.h>
+#include <zombies/DEAD_zombie.h>
 
 const int DEAD_Game::BULLET_COLLISION_DELAY = 1000.0 / 60;
 const int DEAD_Game::PLAYER_MOVEMENT_DELAY = 10;
@@ -24,7 +24,8 @@ DEAD_Game::DEAD_Game(std::shared_ptr<DEAD_ControllablePlayer> player)
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
       map(std::make_shared<DEAD_Map>()), player(player),
       
-      itemDropLayer(std::make_shared<DEAD_ItemDropLayer>()) {
+      itemDropLayer(std::make_shared<DEAD_ItemDropLayer>()),
+      zombieDirector(std::make_shared<DEAD_ZombieDirector>()) {
 
   SDL_Log("Game Init");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
@@ -49,6 +50,8 @@ DEAD_Game::DEAD_Game(std::shared_ptr<DEAD_ControllablePlayer> player)
     // set the first player point
     this->player->setPos(locs[0].x, locs[0].y);
   }
+
+  this->zombieDirector->registerZombie(std::make_shared<DEAD_Zombie>());
 }
 
 void DEAD_Game::initObjectThatHasSharedFromThis() {
@@ -127,6 +130,10 @@ std::shared_ptr<DEAD_CollisionDirector> DEAD_Game::getCollisionDirector() {
 
 std::shared_ptr<DEAD_ItemDropLayer> DEAD_Game::getItemDropLayer() {
   return this->itemDropLayer;
+}
+
+std::shared_ptr<DEAD_ZombieDirector> DEAD_Game::getZombieDirector() {
+  return this->zombieDirector;
 }
 
 Uint32 DEAD_Game::bulletCheckCollisionCallback(Uint32 interval, void *param) {
