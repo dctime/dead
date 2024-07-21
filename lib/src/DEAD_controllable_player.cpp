@@ -10,11 +10,18 @@
 #include <guns/DEAD_pistol.h>
 #include <DEAD_controllable_player.h>
 #include <DEAD_game.h>
+#include <memory>
 
-DEAD_ControllablePlayer::DEAD_ControllablePlayer()
-    : DEAD_Player::DEAD_Player(), baseSpeed(0.01 * DEAD_Game::PLAYER_MOVEMENT_DELAY / 10) {}
+DEAD_ControllablePlayer::DEAD_ControllablePlayer(std::shared_ptr<DEAD_Game> game)
+    : DEAD_Player::DEAD_Player(game), baseSpeed(0.01 * DEAD_Game::PLAYER_MOVEMENT_DELAY / 10) {
+}
 
 DEAD_ControllablePlayer::~DEAD_ControllablePlayer() {}
+
+void DEAD_ControllablePlayer::setGame(std::shared_ptr<DEAD_Game> game) {
+  this->game = game;
+  this->game->setPlayer(std::dynamic_pointer_cast<DEAD_ControllablePlayer>(shared_from_this()));
+}
 
 void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
 
@@ -28,6 +35,8 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
     case SDLK_g:
       SDL_Log("Summon Pistol");
       this->summonPistol();
+      this->getGame()->getZombieDirector()->updateHeatMapValue();
+      this->getGame()->getZombieDirector()->updateZombieMapVector();
       break;
     }
 

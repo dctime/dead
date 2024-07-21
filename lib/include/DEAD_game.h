@@ -18,12 +18,13 @@ class DEAD_ControllablePlayer;
 class DEAD_Game
   : public std::enable_shared_from_this<DEAD_Game> {
 public:
-  DEAD_Game(std::shared_ptr<DEAD_ControllablePlayer> player);
+  DEAD_Game();
   ~DEAD_Game();
   void tick();
   void run();
   std::shared_ptr<DEAD_Map> getMap();
   std::shared_ptr<DEAD_Player> getPlayer();
+  void setPlayer(std::shared_ptr<DEAD_ControllablePlayer> player);
   std::shared_ptr<DEAD_Renderer> getRenderer();
   std::shared_ptr<DEAD_BulletDirector> getBulletDirector();
   std::shared_ptr<DEAD_CollisionDirector> getCollisionDirector();

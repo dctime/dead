@@ -10,11 +10,12 @@ class DEAD_Game;
 
 class DEAD_Player : public DEAD_Entity {
 public:
-  DEAD_Player();
+  DEAD_Player(std::shared_ptr<DEAD_Game> game);
   ~DEAD_Player();
   SDL_Rect getTextureRect() override;
   void pickupOrDrop();
   void summonPistol();
+  void setGame(std::shared_ptr<DEAD_Game> game) override = 0;
 protected:
   void attack();
 private:

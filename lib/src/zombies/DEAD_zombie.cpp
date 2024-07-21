@@ -1,8 +1,9 @@
 #include <SDL2/SDL_rect.h>
 #include <iostream>
+#include <memory>
 #include <zombies/DEAD_zombie.h>
 
-DEAD_Zombie::DEAD_Zombie() {
+DEAD_Zombie::DEAD_Zombie(std::shared_ptr<DEAD_Game> game) : DEAD_Entity::DEAD_Entity(game) {
   std::cout << "Zombie Built" << std::endl;
 }
 

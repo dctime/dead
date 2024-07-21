@@ -6,7 +6,7 @@
 #include <SDL2/SDL_log.h>
 #include <memory>
 
-DEAD_Player::DEAD_Player() : DEAD_Entity::DEAD_Entity() {
+DEAD_Player::DEAD_Player(std::shared_ptr<DEAD_Game> game) : DEAD_Entity::DEAD_Entity(game) {
 }
 
 DEAD_Player::~DEAD_Player() {}

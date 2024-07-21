@@ -17,12 +17,12 @@
 const int DEAD_Game::BULLET_COLLISION_DELAY = 1000.0 / 60;
 const int DEAD_Game::PLAYER_MOVEMENT_DELAY = 10;
 
-DEAD_Game::DEAD_Game(std::shared_ptr<DEAD_ControllablePlayer> player)
+DEAD_Game::DEAD_Game()
     : SCREEN_WIDTH(720), SCREEN_HEIGHT(480),
       window(SDL_CreateWindow("DEAD", SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED, this->SCREEN_WIDTH,
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
-      map(std::make_shared<DEAD_Map>()), player(player),
+      map(std::make_shared<DEAD_Map>()),
       
       itemDropLayer(std::make_shared<DEAD_ItemDropLayer>()) {
 
@@ -44,11 +44,7 @@ DEAD_Game::DEAD_Game(std::shared_ptr<DEAD_ControllablePlayer> player)
     SDL_Log("Unable to init window: %s", SDL_GetError());
   }
 
-  std::vector<DEAD_Map::MapLocation> locs = this->map->getPlayerPointLocs();
-  if (locs.size() > 0) {
-    // set the first player point
-    this->player->setPos(locs[0].x, locs[0].y);
-  }
+  
 
 }
 
@@ -60,9 +56,10 @@ void DEAD_Game::initObjectThatHasSharedFromThis() {
   this->collisionDirector =
       std::make_shared<DEAD_CollisionDirector>(shared_from_this());
   this->zombieDirector = std::make_shared<DEAD_ZombieDirector>(shared_from_this(), this->getMap()->getMapSize().width, this->getMap()->getMapSize().height);
-  this->zombieDirector->registerZombie(std::make_shared<DEAD_Zombie>());
+  std::shared_ptr<DEAD_Zombie> zombie = std::make_shared<DEAD_Zombie>(shared_from_this());
+  zombie->setPos(1.5, 1.5);
+  this->zombieDirector->registerZombie(zombie);
 
-  this->player->setGame(shared_from_this());
   this->bulletCollisionID = (SDL_AddTimer(
     DEAD_Game::BULLET_COLLISION_DELAY, this->bulletCheckCollisionCallback, shared_from_this().get()));
   this->playerMovementID = SDL_AddTimer(DEAD_Game::PLAYER_MOVEMENT_DELAY, this->playerMovementCallback, shared_from_this().get()); 
@@ -115,6 +112,14 @@ void DEAD_Game::run() {
 std::shared_ptr<DEAD_Map> DEAD_Game::getMap() { return this->map; }
 
 std::shared_ptr<DEAD_Player> DEAD_Game::getPlayer() { return this->player; }
+void DEAD_Game::setPlayer(std::shared_ptr<DEAD_ControllablePlayer> player) {
+  this->player = player;
+  std::vector<DEAD_Map::MapLocation> locs = this->map->getPlayerPointLocs();
+  if (locs.size() > 0) {
+    // set the first player point
+    this->player->setPos(locs[0].x, locs[0].y);
+  }
+}
 
 std::shared_ptr<DEAD_Renderer> DEAD_Game::getRenderer() {
   return this->renderer;
@@ -173,6 +178,8 @@ int DEAD_Game::getSecretNumber() { return 7; }
 void DEAD_Game::playerMovement(DEAD_Game* game) {
   game->player->handleKeyState();
   // game->getZombieDirector()->updateHeatMapValue();
+  game->getZombieDirector()->tickZombies();
+
 }
 void DEAD_Game::checkAndDeleteCollisionBullets(DEAD_Game* game) {
   game->bulletDirector->checkAndDeleteCollisionBullets();
