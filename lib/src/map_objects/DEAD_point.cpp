@@ -7,4 +7,5 @@ DEAD_Point::DEAD_Point(DEAD_Map::MapLocation loc) :
 }
 char DEAD_Point::getChar() { return 'p'; }
 bool DEAD_Point::isPlayerCollidable() { return false; }
+bool DEAD_Point::isZombieCollidable() { return false; }
 

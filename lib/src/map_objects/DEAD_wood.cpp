@@ -10,6 +10,7 @@ DEAD_Wood::DEAD_Wood(DEAD_Map::MapLocation loc)
 
 char DEAD_Wood::getChar() { return 'w'; }
 bool DEAD_Wood::isPlayerCollidable() { return true; }
+bool DEAD_Wood::isZombieCollidable() { return true; }
 SDL_Rect DEAD_Wood::getTextureRect() {
   SDL_Rect rect = {.x = 100, .y = 0, .w = 100, .h = 100};
   return rect;

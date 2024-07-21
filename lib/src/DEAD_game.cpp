@@ -24,8 +24,7 @@ DEAD_Game::DEAD_Game(std::shared_ptr<DEAD_ControllablePlayer> player)
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
       map(std::make_shared<DEAD_Map>()), player(player),
       
-      itemDropLayer(std::make_shared<DEAD_ItemDropLayer>()),
-      zombieDirector(std::make_shared<DEAD_ZombieDirector>()) {
+      itemDropLayer(std::make_shared<DEAD_ItemDropLayer>()) {
 
   SDL_Log("Game Init");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
@@ -51,7 +50,6 @@ DEAD_Game::DEAD_Game(std::shared_ptr<DEAD_ControllablePlayer> player)
     this->player->setPos(locs[0].x, locs[0].y);
   }
 
-  this->zombieDirector->registerZombie(std::make_shared<DEAD_Zombie>());
 }
 
 void DEAD_Game::initObjectThatHasSharedFromThis() {
@@ -61,6 +59,8 @@ void DEAD_Game::initObjectThatHasSharedFromThis() {
       std::make_shared<DEAD_BulletDirector>(shared_from_this());
   this->collisionDirector =
       std::make_shared<DEAD_CollisionDirector>(shared_from_this());
+  this->zombieDirector = std::make_shared<DEAD_ZombieDirector>(shared_from_this(), this->getMap()->getMapSize().width, this->getMap()->getMapSize().height);
+  this->zombieDirector->registerZombie(std::make_shared<DEAD_Zombie>());
 
   this->player->setGame(shared_from_this());
   this->bulletCollisionID = (SDL_AddTimer(
@@ -172,6 +172,7 @@ int DEAD_Game::getSecretNumber() { return 7; }
 
 void DEAD_Game::playerMovement(DEAD_Game* game) {
   game->player->handleKeyState();
+  // game->getZombieDirector()->updateHeatMapValue();
 }
 void DEAD_Game::checkAndDeleteCollisionBullets(DEAD_Game* game) {
   game->bulletDirector->checkAndDeleteCollisionBullets();

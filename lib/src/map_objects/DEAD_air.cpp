@@ -8,4 +8,5 @@ DEAD_Air::DEAD_Air(DEAD_Map::MapLocation loc) :
 }
 char DEAD_Air::getChar() { return ' '; }
 bool DEAD_Air::isPlayerCollidable() { return false; }
+bool DEAD_Air::isZombieCollidable() { return false; }
 

@@ -5,4 +5,5 @@ public:
   DEAD_Air(DEAD_Map::MapLocation loc);
   char getChar() override;
   bool isPlayerCollidable() override;
+  bool isZombieCollidable() override;
 };
