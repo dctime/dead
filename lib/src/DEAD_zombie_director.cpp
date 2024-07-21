@@ -75,8 +75,8 @@ void DEAD_ZombieDirector::updateHeatMapValue() {
     currentLocationOnly.push_back(currentLoc[0]);
     currentLocationOnly.push_back(currentLoc[1]);
 
-    std::cout << "Heat Map: " << currentLoc[1] << ", " << currentLoc[0]
-              << std::endl;
+    // std::cout << "Heat Map: " << currentLoc[1] << ", " << currentLoc[0]
+    //           << std::endl;
 
     if (currentLoc[1] < 0 ||
         currentLoc[1] >= this->game->getMap()->getMapSize().width) {
@@ -91,12 +91,12 @@ void DEAD_ZombieDirector::updateHeatMapValue() {
     }
     if (this->game->getMap()
             ->getMapObjects()[(int)currentLoc[0]][(int)currentLoc[1]]
-            ->isPlayerCollidable()) {
+            ->isZombieCollidable()) {
       calQueue.pop();
       continue;
     }
     if (visited.count(currentLocationOnly)) {
-      std::cout << "Visited" << std::endl;
+      // std::cout << "Visited" << std::endl;
       if (this->zombieMovementMap[currentLoc[0]][currentLoc[1]].heatMapValue >
           currentLoc[2]) {
         this->zombieMovementMap[currentLoc[0]][currentLoc[1]].heatMapValue =
@@ -117,7 +117,7 @@ void DEAD_ZombieDirector::updateHeatMapValue() {
       pushLoc.push_back(pushSequenceSide[i][0] + currentLoc[0]);
       pushLoc.push_back(pushSequenceSide[i][1] + currentLoc[1]);
       pushLoc.push_back(currentLoc[2] + 1);
-      std::cout << "Pushing: " << pushLoc[1] << ", " << pushLoc[0] << std::endl;
+      // std::cout << "Pushing: " << pushLoc[1] << ", " << pushLoc[0] << std::endl;
 
       calQueue.push(pushLoc);
     }
@@ -250,11 +250,5 @@ void DEAD_ZombieDirector::updateZombieMapVector() {
     }
   }
 
-  for (std::vector<DEAD_ZombieDirector::ZombieMovementMapData> v :
-       this->zombieMovementMap) {
-    for (DEAD_ZombieDirector::ZombieMovementMapData d : v) {
-      std::cout << "(" << d.vector.vectorX << "," << d.vector.vectorY << ")";
-    }
-    std::cout << std::endl;
-  }
+  
 }

@@ -11,4 +11,6 @@ SDL_Rect DEAD_Zombie::getTextureRect() {
   SDL_Rect rect = {.x=0, .y=0, .w=100, .h=100};
   return rect; 
 };
+
+
   

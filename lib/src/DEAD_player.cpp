@@ -11,6 +11,14 @@ DEAD_Player::DEAD_Player(std::shared_ptr<DEAD_Game> game) : DEAD_Entity::DEAD_En
 
 DEAD_Player::~DEAD_Player() {}
 
+void DEAD_Player::move(double x, double y) {
+  if (this->getGame()->getCollisionDirector()->playerCheckCollision(std::dynamic_pointer_cast<DEAD_Player>(shared_from_this()), x, y).size() != 0) {
+    return;
+  } else {
+    this->setPos(this->getPos().x+x, this->getPos().y+y);
+  }
+}
+
 void DEAD_Player::summonPistol() {
   this->holdItem = std::make_shared<DEAD_Pistol>(std::static_pointer_cast<DEAD_Player>(DEAD_Entity::shared_from_this()));
 }

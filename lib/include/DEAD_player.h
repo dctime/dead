@@ -16,6 +16,7 @@ public:
   void pickupOrDrop();
   void summonPistol();
   void setGame(std::shared_ptr<DEAD_Game> game) override = 0;
+  void move(double x, double y) override;
 protected:
   void attack();
 private:

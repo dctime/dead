@@ -14,7 +14,7 @@ public:
   ~DEAD_Entity();
   DEAD_Map::MapLocation getPos();
   virtual SDL_Rect getTextureRect() = 0;
-  void move(double x, double y);
+  virtual void move(double x, double y);
   void setPos(double x, double y);
   void setSpeed(int speed);
   int getSpeed();
