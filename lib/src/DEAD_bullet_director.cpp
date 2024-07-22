@@ -1,3 +1,4 @@
+#include "zombies/DEAD_zombie.h"
 #include <bullets/DEAD_bullet.h>
 #include <DEAD_bullet_director.h>
 #include <DEAD_game.h>
@@ -45,6 +46,15 @@ void DEAD_BulletDirector::getCollisionBullets(
             ->bulletCheckCollision(bullet)
             .size() != 0) {
       bullets.push_back(bullet);
+      continue;
+    }
+    
+    std::shared_ptr<DEAD_Zombie> zombie = this->game->getCollisionDirector()->bulletCheckCollideZombie(bullet);
+    if (zombie != nullptr) {
+      this->game->getZombieDirector()->killZombie(zombie);
+      bullets.push_back(bullet);
+      continue;
     }
   }
 }
+

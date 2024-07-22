@@ -3,6 +3,7 @@
 #include "DEAD_player.h"
 #include "bullets/DEAD_bullet.h"
 #include "map_objects/DEAD_map_object_base.h"
+#include "zombies/DEAD_zombie.h"
 #include <memory>
 #include <set>
 
@@ -32,6 +33,8 @@ public:
                        double deltaX, double deltaY);
   std::set<std::shared_ptr<DEAD_MapObjectBase>>
   bulletCheckCollision(const std::shared_ptr<DEAD_Bullet> &bullet);
+
+  std::shared_ptr<DEAD_Zombie> bulletCheckCollideZombie(const std::shared_ptr<DEAD_Bullet> &bullet);
 
 private:
   std::shared_ptr<DEAD_Game> game;

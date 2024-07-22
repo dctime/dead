@@ -24,6 +24,7 @@ public:
 
   DEAD_ZombieDirector(std::shared_ptr<DEAD_Game> game, int mapWidth, int mapHeight);
   void registerZombie(std::shared_ptr<DEAD_Zombie> zombie);
+  void killZombie(std::shared_ptr<DEAD_Zombie> zombie);
   std::set<std::shared_ptr<DEAD_Zombie>> getZombies();
   void updateHeatMapValue();
   void updateZombieMapVector();

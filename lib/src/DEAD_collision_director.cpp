@@ -1,3 +1,4 @@
+#include "zombies/DEAD_zombie.h"
 #include <DEAD_collision_director.h>
 #include <DEAD_game.h>
 #include <DEAD_player.h>
@@ -8,6 +9,7 @@
 #include <map_objects/DEAD_map_object_base.h>
 #include <memory>
 #include <vector>
+#include <DEAD_collision_director.h>
 DEAD_CollisionDirector::DEAD_CollisionDirector(std::shared_ptr<DEAD_Game> game)
     : game(game) {
   SDL_Log("collision init");
@@ -168,4 +170,17 @@ DEAD_CollisionDirector::bulletCheckCollision(
   }
 
   return collideObjects;
+}
+
+std::shared_ptr<DEAD_Zombie>
+DEAD_CollisionDirector::bulletCheckCollideZombie(
+  const std::shared_ptr<DEAD_Bullet> &bullet) {
+  std::set<std::shared_ptr<DEAD_Zombie>> zombies = this->game->getZombieDirector()->getZombies();
+  for (std::shared_ptr<DEAD_Zombie> zombie : zombies) {
+    DEAD_Map::MapLocation bulletLoc = bullet->getLoc();
+    if (zombie->getHitbox()->iscollideWithCircle(bullet->getHitBox())) {
+      return zombie; 
+    }
+  }
+  return nullptr;
 }

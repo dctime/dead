@@ -1,3 +1,4 @@
+#include "hitbox/DEAD_circle_hitbox.h"
 #include <bullets/DEAD_bullet.h>
 #include <DEAD_game.h>
 #include <SDL2/SDL_log.h>
@@ -39,6 +40,11 @@ void DEAD_Bullet::move(double x, double y) {
 
 void DEAD_Bullet::tickFly() {
   this->move(this->speed * cos(this->rotation * ((M_PI) / 180.0)), this->speed * sin(this->rotation * (M_PI / 180.0)));
+}
+
+std::shared_ptr<DEAD_CircleHitbox> DEAD_Bullet::getHitBox() {
+  std::shared_ptr<DEAD_CircleHitbox> hitbox = std::make_shared<DEAD_CircleHitbox>(this->getBulletSize()/2.0, this->getLoc());
+  return hitbox;
 }
 
 

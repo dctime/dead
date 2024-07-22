@@ -36,6 +36,10 @@ void DEAD_ZombieDirector::registerZombie(std::shared_ptr<DEAD_Zombie> zombie) {
   this->zombies.insert(zombie);
 }
 
+void DEAD_ZombieDirector::killZombie(std::shared_ptr<DEAD_Zombie> zombie) {
+  this->zombies.erase(zombie);
+}
+
 std::set<std::shared_ptr<DEAD_Zombie>> DEAD_ZombieDirector::getZombies() {
   return this->zombies;
 }

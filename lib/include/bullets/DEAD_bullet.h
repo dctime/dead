@@ -45,6 +45,7 @@ public:
   virtual void tickBullet() = 0;
   virtual ~DEAD_Bullet();
   virtual void registerBullet() = 0;
+  std::shared_ptr<DEAD_CircleHitbox> getHitBox();
 private:
   std::shared_ptr<DEAD_Player> owner;
   DEAD_Map::MapLocation pos;
