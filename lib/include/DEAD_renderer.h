@@ -35,6 +35,7 @@ public:
   void moveRenderAnchor(double x, double y);
   ScreenLocation getEntityRenderLocation(std::shared_ptr<DEAD_Entity> entity, bool mid);
   ScreenLocation getBulletRenderLocation(std::shared_ptr<DEAD_Bullet> bullet);
+  ScreenLocation getPointRenderLocation(double x, double y);
 private:
   void renderMapObjects();
   SDL_Renderer* renderer;
@@ -52,6 +53,7 @@ private:
   void renderEntity(std::shared_ptr<DEAD_Entity> entity, SDL_Texture* texture);
   void renderItemDropLayer();
   void renderBullets();
+  void drawZombieMovementMap();
   void getTextureFromSurface(SDL_Texture*& texture, std::string filePath);
   ScreenLocation getItemDropRenderLocation(std::shared_ptr<DEAD_ItemDrop> itemDrop);
 };

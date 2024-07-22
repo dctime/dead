@@ -43,7 +43,7 @@ DEAD_CollisionDirector::entityCheckCollision(
     DEAD_Map::MapLocation futureLoc = {.x = targetX, .y = targetY};
 
     if (object->getHitBox()->isCollideWithCircle(
-            futureLoc, entity->getHitbox()->getRadius())) {
+            futureLoc, entity->getHitbox()->getRadius()*0.01)) {
       collideObjects.insert(object);
     }
   }

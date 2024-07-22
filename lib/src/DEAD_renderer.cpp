@@ -1,4 +1,5 @@
 #include "DEAD_item_drop.h"
+#include "DEAD_zombie_director.h"
 #include "map_objects/DEAD_map_object_base.h"
 #include "zombies/DEAD_zombie.h"
 #include <DEAD_filepaths.h>
@@ -60,6 +61,7 @@ void DEAD_Renderer::render() {
   this->renderBullets();
   this->renderPlayer(this->game->getPlayer());
   this->renderZombies(this->game->getZombieDirector());
+  this->drawZombieMovementMap();
 
   SDL_RenderPresent(this->renderer);
 }
@@ -193,6 +195,36 @@ ScreenLocation DEAD_Renderer::getItemDropRenderLocation(
           this->game->SCREEN_WIDTH / 2.0;
   loc.y = (itemDrop->getLoc().y - renderAnchor.y) * this->renderBlockSize -
           itemDrop->getSize() * this->renderBlockSize / 2.0 +
+          this->game->SCREEN_HEIGHT / 2.0;
+
+  return loc;
+}
+
+void DEAD_Renderer::drawZombieMovementMap() {
+  std::shared_ptr<DEAD_ZombieDirector> zombieDirector = this->game->getZombieDirector();
+  for (int y = 0; y < this->game->getMap()->getMapSize().height; y++) {
+    for (int x = 0; x < this->game->getMap()->getMapSize().width; x++) {
+      DEAD_ZombieDirector::ZombieVector drawingVector = zombieDirector->getLocMovementMapData(x, y).vector;
+      ScreenLocation startLoc = this->getPointRenderLocation(x+0.5, y+0.5);
+      ScreenLocation endLoc = this->getPointRenderLocation(x+0.5+drawingVector.vectorX, y+0.5+drawingVector.vectorY);
+      SDL_SetRenderDrawColor(this->renderer, 255, 0, 0, 0);
+      SDL_RenderDrawLine(this->renderer, startLoc.x, startLoc.y, endLoc.x, endLoc.y);
+    }
+  }
+  
+  for (std::shared_ptr<DEAD_Zombie> zombie : this->game->getZombieDirector()->getZombies()) {
+    ScreenLocation zombieLoc = this->getPointRenderLocation(zombie->getPos().x, zombie->getPos().y);
+    DEAD_ZombieDirector::ZombieVector zombieMoveVec = zombieDirector->getMovementVector(zombie->getPos().x, zombie->getPos().y);
+    ScreenLocation zombieMoveEndScreen = this->getPointRenderLocation(zombieMoveVec.vectorX+zombie->getPos().x, zombieMoveVec.vectorY+zombie->getPos().y);
+    SDL_RenderDrawLine(this->renderer, zombieLoc.x, zombieLoc.y, zombieMoveEndScreen.x, zombieMoveEndScreen.y);
+  }
+}
+
+ScreenLocation DEAD_Renderer::getPointRenderLocation(double x, double y) {
+  ScreenLocation loc;
+  loc.x = (x - renderAnchor.x) * this->renderBlockSize +
+          this->game->SCREEN_WIDTH / 2.0;
+  loc.y = (y - renderAnchor.y) * this->renderBlockSize +
           this->game->SCREEN_HEIGHT / 2.0;
 
   return loc;

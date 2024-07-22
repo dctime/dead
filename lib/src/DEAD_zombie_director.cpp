@@ -41,8 +41,10 @@ std::set<std::shared_ptr<DEAD_Zombie>> DEAD_ZombieDirector::getZombies() {
 
 void DEAD_ZombieDirector::tickZombies() {
   for (std::shared_ptr<DEAD_Zombie> zombie : this->zombies) {
-    DEAD_ZombieDirector::ZombieVector moveVector = this->getLocMovementMapData(zombie->getPos().x, zombie->getPos().y).vector;
-    zombie->move(moveVector.vectorX/10, moveVector.vectorY/10);
+    DEAD_ZombieDirector::ZombieVector moveVector = this->getMovementVector(zombie->getPos().x, zombie->getPos().y);
+    // std::cout << "Move vector: " << moveVector.vectorX << ", " << moveVector.vectorY << std::endl;
+    zombie->move(moveVector.vectorX / 10, 0);
+    zombie->move(0, moveVector.vectorY / 10);
   }
 
 }
@@ -122,16 +124,16 @@ void DEAD_ZombieDirector::updateHeatMapValue() {
       calQueue.push(pushLoc);
     }
 
-    // for (int i = 0; i < 4; i++) {
-    //   std::vector<int> pushLoc;
-    //   pushLoc.push_back(pushSequenceDia[i][0] + currentLoc[0]);
-    //   pushLoc.push_back(pushSequenceDia[i][1] + currentLoc[1]);
-    //   pushLoc.push_back(currentLoc[2]+2);
-    //   std::cout << "Pushing: " << pushLoc[1] << ", " << pushLoc[0] <<
-    //   std::endl;
-    //
-    //   calQueue.push(pushLoc);
-    // }
+    for (int i = 0; i < 4; i++) {
+      std::vector<int> pushLoc;
+      pushLoc.push_back(pushSequenceDia[i][0] + currentLoc[0]);
+      pushLoc.push_back(pushSequenceDia[i][1] + currentLoc[1]);
+      pushLoc.push_back(currentLoc[2]+1);
+      // std::cout << "Pushing: " << pushLoc[1] << ", " << pushLoc[0] <<
+      // std::endl;
+
+      calQueue.push(pushLoc);
+    }
 
     visited.insert(currentLocationOnly);
     calQueue.pop();
@@ -179,6 +181,43 @@ DEAD_ZombieDirector::getLocGradient(DEAD_ZombieDirector::ZombieMapLoc loc) {
         else
           return true;
       };
+
+  std::function<bool(int, int, std::shared_ptr<DEAD_Game>)> isNearbyWall = [check](int x, int y, std::shared_ptr<DEAD_Game> game) {
+    int checkSequence[8][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}, {1, 1}, {1, -1}, {-1, -1}, {-1, 1}};
+
+    for (int i = 0; i < 8; i++) {
+      if (!check(x+checkSequence[i][1], y+checkSequence[i][0], game)) {
+        return true;
+      }
+
+      if (check(x+checkSequence[i][1], y+checkSequence[i][0], game) && game->getMap()->getMapObjects().at(y+checkSequence[i][0]).at(x+checkSequence[i][1])->isZombieCollidable()) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  if (this->game->getMap()->getMapObjects().at(loc.y).at(loc.x)->isZombieCollidable()) {
+    returnVector.vectorX = 0;
+    returnVector.vectorY = 0;
+    return returnVector;
+  }
+
+  if (isNearbyWall(loc.x, loc.y, this->game)) {
+    int minHeatValue = INT_MAX;
+    int checkSequence[8][2] = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}, {1, 1}, {1, -1}, {-1, -1}, {-1, 1}};
+    for (int i = 0; i < 8; i++) {
+      int locHeatValue = INT_MAX;
+      if (check(loc.x+checkSequence[i][1], loc.y+checkSequence[i][0], game))
+        locHeatValue = game->getZombieDirector()->getLocMovementMapData(loc.x+checkSequence[i][1], loc.y+checkSequence[i][0]).heatMapValue;
+      if (locHeatValue < minHeatValue) {
+        minHeatValue = locHeatValue;
+        returnVector.vectorX = checkSequence[i][1];
+        returnVector.vectorY = checkSequence[i][0];
+      }
+    }
+    return returnVector;
+  }
 
   // Left
   if (check(loc.x - 1, loc.y, this->game))
@@ -236,6 +275,10 @@ DEAD_ZombieDirector::getLocGradient(DEAD_ZombieDirector::ZombieMapLoc loc) {
       func(this->getLocMovementMapData(loc.x - 1, loc.y - 1).heatMapValue) *
       -1 / sqrt(2);
   }
+
+  double vectorLength = sqrt(pow(returnVector.vectorX, 2) + pow(returnVector.vectorY, 2));
+  returnVector.vectorX = returnVector.vectorX / (vectorLength+0.00001);
+  returnVector.vectorY = returnVector.vectorY / (vectorLength+0.00001);
   return returnVector;
 }
 
@@ -252,3 +295,50 @@ void DEAD_ZombieDirector::updateZombieMapVector() {
 
   
 }
+
+
+DEAD_ZombieDirector::ZombieVector DEAD_ZombieDirector::getMovementVector(double targetX, double targetY) {
+  
+  double baseX = (int)targetX;
+  double baseY = (int)targetY;
+  
+  std::function<double(double,double,double,double)> calDistance = [](double x1, double x2, double y1, double y2) {
+    return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+  };
+
+  
+  DEAD_ZombieDirector::ZombieVector returnVector;
+  returnVector.vectorX = 0;
+  returnVector.vectorY = 0;
+  
+  std::vector<DEAD_ZombieDirector::ZombieVector> sequence;
+
+  sequence.push_back({.vectorX=baseX, .vectorY=baseY});
+  sequence.push_back({.vectorX=baseX+1, .vectorY=baseY});
+  sequence.push_back({.vectorX=baseX, .vectorY=baseY+1});
+  sequence.push_back({.vectorX=baseX-1, .vectorY=baseY});
+  sequence.push_back({.vectorX=baseX, .vectorY=baseY-1});
+  // sequence.push_back({.vectorX=baseX+1, .vectorY=baseY+1});
+  // sequence.push_back({.vectorX=baseX+1, .vectorY=baseY-1});
+  // sequence.push_back({.vectorX=baseX-1, .vectorY=baseY+1});
+  // sequence.push_back({.vectorX=baseX-1, .vectorY=baseY-1});
+
+  for (DEAD_ZombieDirector::ZombieVector step : sequence) {
+    double weight = calDistance(targetX, step.vectorX, targetY, step.vectorY);
+    returnVector.vectorX += this->getLocMovementMapData(step.vectorX, step.vectorY).vector.vectorX * weight;
+    returnVector.vectorY += this->getLocMovementMapData(step.vectorX, step.vectorY).vector.vectorY * weight;
+  }
+
+  double vectorLength = sqrt(pow(returnVector.vectorX, 2) + pow(returnVector.vectorY, 2));
+  returnVector.vectorX = returnVector.vectorX / (vectorLength + 0.000001);
+  returnVector.vectorY = returnVector.vectorY / (vectorLength + 0.000001);
+  return returnVector;
+
+}
+
+
+
+
+
+
+

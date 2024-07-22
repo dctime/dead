@@ -28,8 +28,10 @@ public:
   void updateHeatMapValue();
   void updateZombieMapVector();
   DEAD_ZombieDirector::ZombieMovementMapData getLocMovementMapData(int x, int y);
+  DEAD_ZombieDirector::ZombieVector getMovementVector(double targetX, double targetY);
   void setLocMovementMapData(int x, int y, DEAD_ZombieDirector::ZombieMovementMapData data);
   void tickZombies();
+
 private:
   std::set<std::shared_ptr<DEAD_Zombie>> zombies;
   std::shared_ptr<DEAD_Game> game;
