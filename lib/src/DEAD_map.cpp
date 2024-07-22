@@ -12,6 +12,7 @@
 #include <map_objects/DEAD_stone.h>
 #include <map_objects/DEAD_air.h>
 #include <map_objects/DEAD_point.h>
+#include <map_objects/DEAD_cursed_dirt.h>
 #include <vector>
 
 DEAD_Map::DEAD_Map() {
@@ -49,6 +50,10 @@ void DEAD_Map::loadMap() {
         case ' ':
           obj = std::make_shared<DEAD_Air>(loc);
           break;
+        case 'c':
+          obj = std::make_shared<DEAD_CursedDirt>(loc);
+          this->curseDirts.push_back(std::dynamic_pointer_cast<DEAD_CursedDirt>(obj));
+          break;
         case 'p':
           obj = std::make_shared<DEAD_Point>(loc);
           this->playerPointLocs.push_back(insertRect);
@@ -62,6 +67,10 @@ void DEAD_Map::loadMap() {
     this->mapObjects.push_back(temp);
     if (this->playerPointLocs.size() > 1) {
       SDL_Log("There should only be a Point 'p' on a map");
+    }
+
+    if (this->curseDirts.size() <= 0) {
+      SDL_Log("There should be at least one cursed dirt to spawn zombies");
     }
     x = -1;
   }

@@ -4,9 +4,8 @@
 #include <memory>
 #include <set>
 #include <vector>
-
+class DEAD_CursedDirt;
 class DEAD_MapObjectBase;
-
 struct MapSize {
   int width;
   int height;
@@ -30,5 +29,6 @@ private:
   bool isSquare();
   MapSize mapSize;
   std::vector<DEAD_Map::MapLocation> playerPointLocs;
+  std::vector<std::shared_ptr<DEAD_CursedDirt>> curseDirts;
   
 };

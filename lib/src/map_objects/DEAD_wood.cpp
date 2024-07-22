@@ -5,7 +5,6 @@
 #include <SDL2/SDL.h>
 DEAD_Wood::DEAD_Wood(DEAD_Map::MapLocation loc) 
   : DEAD_MapObjectBase(loc) {
-  SDL_Log("init wood");
 }
 
 char DEAD_Wood::getChar() { return 'w'; }
