@@ -3,6 +3,7 @@
 #include "zombies/DEAD_zombie.h"
 #include <DEAD_game.h>
 #include <DEAD_zombie_director.h>
+#include <DEAD_functions.h>
 #include <climits>
 #include <cmath>
 #include <functional>
@@ -40,11 +41,20 @@ std::set<std::shared_ptr<DEAD_Zombie>> DEAD_ZombieDirector::getZombies() {
 }
 
 void DEAD_ZombieDirector::tickZombies() {
+  DEAD_Map::MapLocation playerLoc = this->game->getPlayer()->getPos();
   for (std::shared_ptr<DEAD_Zombie> zombie : this->zombies) {
+    double distanceBetween = DEAD_Functions::calDistance(zombie->getPos().x, zombie->getPos().y, playerLoc.x, playerLoc.y);
+    if (distanceBetween < 1) {
+      double moveXVec = zombie->getPos().x - playerLoc.x;
+      double moveYVec = zombie->getPos().y - playerLoc.y;
+      zombie->move(-moveXVec / distanceBetween / 100.0, 0);
+      zombie->move(0, -moveYVec / distanceBetween / 100.0);
+      return;
+    } 
     DEAD_ZombieDirector::ZombieVector moveVector = this->getMovementVector(zombie->getPos().x, zombie->getPos().y);
     // std::cout << "Move vector: " << moveVector.vectorX << ", " << moveVector.vectorY << std::endl;
-    zombie->move(moveVector.vectorX / 10, 0);
-    zombie->move(0, moveVector.vectorY / 10);
+    zombie->move(moveVector.vectorX / 100, 0);
+    zombie->move(0, moveVector.vectorY / 100);
   }
 
 }
@@ -312,8 +322,10 @@ DEAD_ZombieDirector::ZombieVector DEAD_ZombieDirector::getMovementVector(double 
   returnVector.vectorY = 0;
   
   std::vector<DEAD_ZombieDirector::ZombieVector> sequence;
+  
+  for (int multiplyCounter = 0; multiplyCounter < 5; multiplyCounter++)
+    sequence.push_back({.vectorX=baseX, .vectorY=baseY});
 
-  sequence.push_back({.vectorX=baseX, .vectorY=baseY});
   sequence.push_back({.vectorX=baseX+1, .vectorY=baseY});
   sequence.push_back({.vectorX=baseX, .vectorY=baseY+1});
   sequence.push_back({.vectorX=baseX-1, .vectorY=baseY});
