@@ -141,20 +141,20 @@ void DEAD_ZombieDirector::updateHeatMapValue() {
     // TODO: Implement Heat Map
   }
 
-  int counter = 0;
-  for (std::vector<DEAD_ZombieDirector::ZombieMovementMapData> v :
-       this->zombieMovementMap) {
-    for (DEAD_ZombieDirector::ZombieMovementMapData d : v) {
-      if (d.heatMapValue == INT_MAX) {
-        std::cout << std::setw(3) << "X";
-        continue;
-      }
-      std::cout << std::setw(3) << d.heatMapValue;
-    }
-    std::cout << std::endl;
-  }
-
-  std::cout << counter << std::endl;
+  // int counter = 0;
+  // for (std::vector<DEAD_ZombieDirector::ZombieMovementMapData> v :
+  //      this->zombieMovementMap) {
+  //   for (DEAD_ZombieDirector::ZombieMovementMapData d : v) {
+  //     if (d.heatMapValue == INT_MAX) {
+  //       std::cout << std::setw(3) << "X";
+  //       continue;
+  //     }
+  //     std::cout << std::setw(3) << d.heatMapValue;
+  //   }
+  //   std::cout << std::endl;
+  // }
+  //
+  // std::cout << counter << std::endl;
 }
 
 DEAD_ZombieDirector::ZombieMovementMapData

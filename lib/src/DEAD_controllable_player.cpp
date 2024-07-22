@@ -10,6 +10,7 @@
 #include <guns/DEAD_pistol.h>
 #include <DEAD_controllable_player.h>
 #include <DEAD_game.h>
+#include <iostream>
 #include <memory>
 
 DEAD_ControllablePlayer::DEAD_ControllablePlayer(std::shared_ptr<DEAD_Game> game)
@@ -35,8 +36,7 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
     case SDLK_g:
       SDL_Log("Summon Pistol");
       this->summonPistol();
-      this->getGame()->getZombieDirector()->updateHeatMapValue();
-      this->getGame()->getZombieDirector()->updateZombieMapVector();
+      
       break;
     }
 
@@ -86,20 +86,43 @@ void DEAD_ControllablePlayer::handlePlayerRotation() {
 void DEAD_ControllablePlayer::handleKeyState() {
   const Uint8 *state = SDL_GetKeyboardState(NULL);
   double moveTickDistance = this->baseSpeed * this->getSpeed();
+  bool moved = false;
 
   if (state[SDL_SCANCODE_W]) {
+    if ((int)this->getPos().y != (int)(this->getPos().y-moveTickDistance)) {
+      moved = true;
+    }
+
     this->move(0, -moveTickDistance);
   }
 
   if (state[SDL_SCANCODE_S]) {
+    if ((int)this->getPos().y != (int)(this->getPos().y+moveTickDistance)) {
+      moved = true;
+    }
+
     this->move(0, moveTickDistance);
   }
 
   if (state[SDL_SCANCODE_A]) {
+    if ((int)this->getPos().x != (int)(this->getPos().x-moveTickDistance)) {
+      moved = true;
+    }
+
     this->move(-moveTickDistance, 0);
   }
 
   if (state[SDL_SCANCODE_D]) {
+    if ((int)this->getPos().x != (int)(this->getPos().x+moveTickDistance)) {
+      moved = true;
+    }
     this->move(moveTickDistance, 0);
   }
+  
+  if (moved) {
+    std::cout << "Moved Update Path finding" << std::endl;
+    this->getGame()->getZombieDirector()->updateHeatMapValue();
+    this->getGame()->getZombieDirector()->updateZombieMapVector();
+  } 
+  
 }

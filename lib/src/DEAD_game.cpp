@@ -178,6 +178,7 @@ int DEAD_Game::getSecretNumber() { return 7; }
 void DEAD_Game::playerMovement(DEAD_Game* game) {
   game->player->handleKeyState();
   // game->getZombieDirector()->updateHeatMapValue();
+  
   game->getZombieDirector()->tickZombies();
 
 }
