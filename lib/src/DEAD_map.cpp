@@ -1,3 +1,4 @@
+#include "DEAD_map_spawner.h"
 #include "map_objects/DEAD_map_object_base.h"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_log.h>
@@ -17,7 +18,7 @@
 
 DEAD_Map::DEAD_Map() {
   SDL_Log("Map Init");
-  this->loadMap();
+  this->mapSpawner = std::make_shared<DEAD_MapSpawner>();
 }
 
 DEAD_Map::~DEAD_Map() {
@@ -52,7 +53,7 @@ void DEAD_Map::loadMap() {
           break;
         case 'c':
           obj = std::make_shared<DEAD_CursedDirt>(loc);
-          this->curseDirts.push_back(std::dynamic_pointer_cast<DEAD_CursedDirt>(obj));
+          this->mapSpawner->addCurseDirt(std::dynamic_pointer_cast<DEAD_CursedDirt>(obj));
           break;
         case 'p':
           obj = std::make_shared<DEAD_Point>(loc);
@@ -69,9 +70,6 @@ void DEAD_Map::loadMap() {
       SDL_Log("There should only be a Point 'p' on a map");
     }
 
-    if (this->curseDirts.size() <= 0) {
-      SDL_Log("There should be at least one cursed dirt to spawn zombies");
-    }
     x = -1;
   }
   
@@ -86,6 +84,7 @@ void DEAD_Map::loadMap() {
   }
 
 }
+
 
 void DEAD_Map::mapUpdateSizeAndInfo() {
   this->mapSize.width = 0;
@@ -102,6 +101,7 @@ void DEAD_Map::mapUpdateSizeAndInfo() {
     ("Map Size: " + std::to_string(this->mapSize.width) + "*" + std::to_string(this->mapSize.height)).c_str();
   std::cout << sizeMessage << std::endl;
   SDL_Log("%s", sizeMessage.c_str());
+  std::cout << "Height: " << this->mapSize.height << "Width: " << this->mapSize.width << std::endl;
 }
 
 bool DEAD_Map::isSquare() {
@@ -124,5 +124,9 @@ MapSize DEAD_Map::getMapSize() { return this->mapSize; }
 
 std::vector<DEAD_Map::MapLocation> DEAD_Map::getPlayerPointLocs() {
   return this->playerPointLocs;
+}
+
+std::shared_ptr<DEAD_MapSpawner> DEAD_Map::getMapSpawner() {
+  return this->mapSpawner;
 }
 

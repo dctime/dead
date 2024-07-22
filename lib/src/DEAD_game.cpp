@@ -22,8 +22,7 @@ DEAD_Game::DEAD_Game()
       window(SDL_CreateWindow("DEAD", SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED, this->SCREEN_WIDTH,
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
-      map(std::make_shared<DEAD_Map>()),
-      
+      map(std::make_shared<DEAD_Map>()), 
       itemDropLayer(std::make_shared<DEAD_ItemDropLayer>()) {
 
   SDL_Log("Game Init");
@@ -44,11 +43,14 @@ DEAD_Game::DEAD_Game()
     SDL_Log("Unable to init window: %s", SDL_GetError());
   }
 
+  this->map->loadMap();
+
   
 
 }
 
 void DEAD_Game::initObjectThatHasSharedFromThis() {
+  this->map->getMapSpawner()->initAccess(shared_from_this()); 
   this->renderer =
       std::make_shared<DEAD_Renderer>(this->window, shared_from_this());
   this->bulletDirector =
@@ -56,14 +58,15 @@ void DEAD_Game::initObjectThatHasSharedFromThis() {
   this->collisionDirector =
       std::make_shared<DEAD_CollisionDirector>(shared_from_this());
   this->zombieDirector = std::make_shared<DEAD_ZombieDirector>(shared_from_this(), this->getMap()->getMapSize().width, this->getMap()->getMapSize().height);
-  std::shared_ptr<DEAD_Zombie> zombie = std::make_shared<DEAD_Zombie>(shared_from_this());
-  zombie->setPos(1.5, 1.5);
-  this->zombieDirector->registerZombie(zombie);
+  // std::shared_ptr<DEAD_Zombie> zombie = std::make_shared<DEAD_Zombie>(shared_from_this());
+  // zombie->setPos(1.5, 1.5);
+  // this->zombieDirector->registerZombie(zombie);
+  
 
   this->bulletCollisionID = (SDL_AddTimer(
     DEAD_Game::BULLET_COLLISION_DELAY, this->bulletCheckCollisionCallback, shared_from_this().get()));
   this->playerMovementID = SDL_AddTimer(DEAD_Game::PLAYER_MOVEMENT_DELAY, this->playerMovementCallback, shared_from_this().get()); 
-
+  
 }
 
 DEAD_Game::~DEAD_Game() {

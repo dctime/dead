@@ -36,7 +36,9 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
     case SDLK_g:
       SDL_Log("Summon Pistol");
       this->summonPistol();
-      
+      break;
+    case SDLK_v:
+      this->getGame()->getMap()->getMapSpawner()->randomSpawnAZombie();
       break;
     }
 

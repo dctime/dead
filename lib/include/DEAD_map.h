@@ -4,6 +4,8 @@
 #include <memory>
 #include <set>
 #include <vector>
+#include "DEAD_map_spawner.h"
+
 class DEAD_CursedDirt;
 class DEAD_MapObjectBase;
 struct MapSize {
@@ -11,7 +13,7 @@ struct MapSize {
   int height;
 };
 
-class DEAD_Map {
+class DEAD_Map : std::enable_shared_from_this<DEAD_Map> {
 public:
   struct MapLocation {
     double x;
@@ -23,12 +25,13 @@ public:
   std::vector<std::vector<std::shared_ptr<DEAD_MapObjectBase>>> getMapObjects();
   MapSize getMapSize();
   std::vector<DEAD_Map::MapLocation> getPlayerPointLocs();
+  std::shared_ptr<DEAD_MapSpawner> getMapSpawner();
+  void loadMap();
 private:
   std::vector<std::vector<std::shared_ptr<DEAD_MapObjectBase>>> mapObjects;
-  void loadMap();
   bool isSquare();
   MapSize mapSize;
   std::vector<DEAD_Map::MapLocation> playerPointLocs;
-  std::vector<std::shared_ptr<DEAD_CursedDirt>> curseDirts;
-  
+  std::shared_ptr<DEAD_MapSpawner> mapSpawner; 
+  void initWithThis();
 };
