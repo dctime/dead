@@ -49,11 +49,14 @@ private:
   void initObjectThatHasSharedFromThis();
   SDL_TimerID bulletCollisionID;
   SDL_TimerID playerMovementID;
+  SDL_TimerID zombieSpawnID;
   int getSecretNumber();
   static Uint32 bulletCheckCollisionCallback(Uint32 interval, void *param);
   static Uint32 playerMovementCallback(Uint32 interval, void *param);
+  static Uint32 spawnZombieCallback(Uint32 interval, void *param);
   static void checkAndDeleteCollisionBullets(DEAD_Game* game);
   static void playerMovement(DEAD_Game* game);
+  static void zombieSpawn(DEAD_Game* game);
   
   friend class DEAD_GameBuilder;
 };
