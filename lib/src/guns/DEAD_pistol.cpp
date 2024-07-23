@@ -24,6 +24,7 @@ void DEAD_Pistol::attack() {
     std::make_shared<DEAD_NormalBullet>(this->getPlayer(), std::static_pointer_cast<DEAD_Pistol>(DEAD_Pistol::shared_from_this()));
   bullet->registerBullet();
   std::cout << "Bullet Count: " << this->getPlayer()->getGame()->getBulletDirector()->bulletCount() << std::endl;
+  this->getPlayer()->getGame()->getSoundDirector()->playPistolShootSound();
 }
 
 double DEAD_Pistol::getBarrelLength() {
