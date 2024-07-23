@@ -10,6 +10,7 @@
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_video.h>
 #include <functional>
+#include <iostream>
 #include <memory>
 #include <DEAD_controllable_player.h>
 #include <zombies/DEAD_zombie.h>
@@ -144,6 +145,11 @@ std::shared_ptr<DEAD_ZombieDirector> DEAD_Game::getZombieDirector() {
   return this->zombieDirector;
 }
 
+void DEAD_Game::checkPlayerDied() {
+  if (this->getPlayer()->getHealth() > 0) return;
+  std::cout << "YOU DIED!" << std::endl;
+}
+
 Uint32 DEAD_Game::bulletCheckCollisionCallback(Uint32 interval, void *param) {
   SDL_Event event;
   SDL_UserEvent userEvent;
@@ -200,7 +206,7 @@ void DEAD_Game::mainLoop(DEAD_Game* game) {
   game->player->handlePlayerRotation();
   game->bulletDirector->tickBullets();
   game->getZombieDirector()->tickZombies();
-
+  game->checkPlayerDied();
 }
 void DEAD_Game::checkAndDeleteCollisionBullets(DEAD_Game* game) {
   game->bulletDirector->checkAndDeleteCollisionBullets();

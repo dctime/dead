@@ -51,6 +51,7 @@ private:
   SDL_TimerID mainLoopID;
   SDL_TimerID zombieSpawnID;
   int getSecretNumber();
+  void checkPlayerDied();
   static Uint32 bulletCheckCollisionCallback(Uint32 interval, void *param);
   static Uint32 playerMovementCallback(Uint32 interval, void *param);
   static Uint32 spawnZombieCallback(Uint32 interval, void *param);

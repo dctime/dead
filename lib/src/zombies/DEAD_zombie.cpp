@@ -1,16 +1,38 @@
+#include <DEAD_player.h>
 #include <SDL2/SDL_rect.h>
+#include <SDL2/SDL_timer.h>
 #include <iostream>
 #include <memory>
 #include <zombies/DEAD_zombie.h>
 
-DEAD_Zombie::DEAD_Zombie(std::shared_ptr<DEAD_Game> game) : DEAD_Entity::DEAD_Entity(game, 100) {
+DEAD_Zombie::DEAD_Zombie(std::shared_ptr<DEAD_Game> game)
+    : DEAD_Entity::DEAD_Entity(game, 100), lastTimeAttackTicks(0),
+      attackCoolDown(1000) {
   std::cout << "Zombie Built" << std::endl;
 }
 
 SDL_Rect DEAD_Zombie::getTextureRect() {
-  SDL_Rect rect = {.x=0, .y=0, .w=100, .h=100};
-  return rect; 
+  SDL_Rect rect = {.x = 0, .y = 0, .w = 100, .h = 100};
+  return rect;
 };
 
+int DEAD_Zombie::getAttackDamage() { return 25; }
 
-  
+bool DEAD_Zombie::attackReady() {
+  if (this->lastTimeAttackTicks + attackCoolDown <= SDL_GetTicks64()) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void DEAD_Zombie::bite(std::shared_ptr<DEAD_Player> player) {
+  if (!this->getHitbox()->iscollideWithCircle(player->getHitbox()))
+    return;
+  if (!this->attackReady())
+    return;
+  player->damage(this->getAttackDamage());
+  this->lastTimeAttackTicks = SDL_GetTicks64();
+  std::cout << "Player health left: " << player->getHealth() << std::endl;
+
+}

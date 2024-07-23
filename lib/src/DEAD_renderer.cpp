@@ -50,7 +50,14 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window, std::shared_ptr<DEAD_Game> game
   this->game = game;
 }
 
-DEAD_Renderer::~DEAD_Renderer() { SDL_DestroyRenderer(this->renderer); }
+DEAD_Renderer::~DEAD_Renderer() { 
+  SDL_DestroyTexture(this->zombiesTexture);
+  SDL_DestroyTexture(this->bulletTexture);
+  SDL_DestroyTexture(this->itemTexture);
+  SDL_DestroyTexture(this->playerTexture);
+  SDL_DestroyTexture(this->mapObjectTexture);
+  SDL_DestroyRenderer(this->renderer); 
+}
 
 void DEAD_Renderer::render() {
   SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 0);

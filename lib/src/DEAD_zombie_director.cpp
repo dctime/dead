@@ -1,5 +1,6 @@
 #include "DEAD_entity.h"
 #include "DEAD_map.h"
+#include "DEAD_player.h"
 #include "zombies/DEAD_zombie.h"
 #include <DEAD_game.h>
 #include <DEAD_zombie_director.h>
@@ -53,6 +54,7 @@ void DEAD_ZombieDirector::tickZombies() {
       double moveYVec = zombie->getPos().y - playerLoc.y;
       zombie->move(-moveXVec / distanceBetween / 100.0, 0);
       zombie->move(0, -moveYVec / distanceBetween / 100.0);
+      zombie->bite(this->game->getPlayer());
       continue;
     } 
     DEAD_ZombieDirector::ZombieVector moveVector = this->getMovementVector(zombie->getPos().x, zombie->getPos().y);
@@ -62,6 +64,8 @@ void DEAD_ZombieDirector::tickZombies() {
   }
 
 }
+
+
 
 void DEAD_ZombieDirector::updateHeatMapValue() {
   std::queue<std::vector<int>> calQueue;
