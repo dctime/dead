@@ -2,16 +2,43 @@
 #include "DEAD_controllable_player.h"
 #include <DEAD_game.h>
 #include <guns/DEAD_pistol.h>
+#include <iostream>
 #include <memory>
 
-DEAD_Entity::DEAD_Entity(std::shared_ptr<DEAD_Game> game)
-    : speed(3), position({.x = 0, .y = 0}), rotation(0), size(0.8) {
+DEAD_Entity::DEAD_Entity(std::shared_ptr<DEAD_Game> game, int maxHealth)
+    : speed(3), position({.x = 0, .y = 0}), rotation(0), size(0.8), maxHealth(maxHealth), health(maxHealth) {
   this->hitbox = std::make_shared<DEAD_CircleHitbox>(this->getSize() / 2 * 0.8,
                                                      this->position);
   this->setGame(game);
 }
 
+void DEAD_Entity::damage(int damage) {
+  int newHealth = this->health - damage;
+  if(newHealth < 0) {
+    this->health = 0;
+  } else {
+    this->health = newHealth;
+  }
+  std::cout << "New health: " << this->health << std::endl;
+}
+
 DEAD_Entity::~DEAD_Entity() { SDL_Log("Entity Destoryed"); }
+
+int DEAD_Entity::getMaxhealth() {
+  return this->maxHealth;
+}
+
+int DEAD_Entity::getHealth() {
+  return this->health;
+}
+
+void DEAD_Entity::setMaxHealth(int maxHealth) {
+  this->maxHealth = maxHealth;
+}
+
+void DEAD_Entity::setHealth(int health) {
+  this->health = health;
+} 
 
 DEAD_Map::MapLocation DEAD_Entity::getPos() { return this->position; }
 

@@ -14,7 +14,7 @@
 #include <memory>
 
 DEAD_ControllablePlayer::DEAD_ControllablePlayer(std::shared_ptr<DEAD_Game> game)
-    : DEAD_Player::DEAD_Player(game), baseSpeed(0.01 * DEAD_Game::PLAYER_MOVEMENT_DELAY / 10) {
+    : DEAD_Player::DEAD_Player(game), baseSpeed(0.01 * DEAD_Game::MAIN_LOOP_DELAY / 10) {
 }
 
 DEAD_ControllablePlayer::~DEAD_ControllablePlayer() {}

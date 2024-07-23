@@ -3,7 +3,7 @@
 #include <memory>
 #include <zombies/DEAD_zombie.h>
 
-DEAD_Zombie::DEAD_Zombie(std::shared_ptr<DEAD_Game> game) : DEAD_Entity::DEAD_Entity(game) {
+DEAD_Zombie::DEAD_Zombie(std::shared_ptr<DEAD_Game> game) : DEAD_Entity::DEAD_Entity(game, 100) {
   std::cout << "Zombie Built" << std::endl;
 }
 

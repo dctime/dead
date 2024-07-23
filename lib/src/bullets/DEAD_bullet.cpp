@@ -5,8 +5,8 @@
 #include <cmath>
 #include <memory>
 
-DEAD_Bullet::DEAD_Bullet(std::shared_ptr<DEAD_Player> owner, std::shared_ptr<DEAD_Gun> gun, double speed)
-: owner(owner), gun(gun), rotation(owner->getRotation()), speed(speed) {
+DEAD_Bullet::DEAD_Bullet(std::shared_ptr<DEAD_Player> owner, std::shared_ptr<DEAD_Gun> gun, double speed, int damage)
+: owner(owner), gun(gun), rotation(owner->getRotation()), speed(speed*100), damage(damage) {
   double rad = owner->getRotation() * (M_PI / (180.0));
   double bulletX = (owner->getPos()).x + cos(rad) * gun->getBarrelLength();
   double bulletY = (owner->getPos()).y + sin(rad) * gun->getBarrelLength();
@@ -20,6 +20,9 @@ std::shared_ptr<DEAD_Player> DEAD_Bullet::getOwner() {
 }
 
 DEAD_Bullet::~DEAD_Bullet() {}
+int DEAD_Bullet::getDamage() {
+  return this->damage;
+}
 DEAD_Map::MapLocation DEAD_Bullet::getMapLocation() {
   return this->pos;
 }

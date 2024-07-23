@@ -15,7 +15,7 @@
 #include <zombies/DEAD_zombie.h>
 
 const int DEAD_Game::BULLET_COLLISION_DELAY = 1000.0 / 60;
-const int DEAD_Game::PLAYER_MOVEMENT_DELAY = 10;
+const int DEAD_Game::MAIN_LOOP_DELAY = 1000.0 / 60;
 
 DEAD_Game::DEAD_Game()
     : SCREEN_WIDTH(720), SCREEN_HEIGHT(480),
@@ -65,14 +65,14 @@ void DEAD_Game::initObjectThatHasSharedFromThis() {
 
   this->bulletCollisionID = (SDL_AddTimer(
     DEAD_Game::BULLET_COLLISION_DELAY, this->bulletCheckCollisionCallback, shared_from_this().get()));
-  this->playerMovementID = SDL_AddTimer(DEAD_Game::PLAYER_MOVEMENT_DELAY, this->playerMovementCallback, shared_from_this().get()); 
-  this->zombieSpawnID = SDL_AddTimer(10000, this->spawnZombieCallback, shared_from_this().get());
+  this->mainLoopID = SDL_AddTimer(DEAD_Game::MAIN_LOOP_DELAY, this->playerMovementCallback, shared_from_this().get()); 
+  this->zombieSpawnID = SDL_AddTimer(1000, this->spawnZombieCallback, shared_from_this().get());
   
 }
 
 DEAD_Game::~DEAD_Game() {
   SDL_RemoveTimer(this->bulletCollisionID);
-  SDL_RemoveTimer(this->playerMovementID);
+  SDL_RemoveTimer(this->mainLoopID);
   SDL_DestroyWindow(this->window);
   IMG_Quit();
   SDL_Quit();
@@ -80,8 +80,7 @@ DEAD_Game::~DEAD_Game() {
 }
 
 void DEAD_Game::tick() {
-  this->player->handlePlayerRotation();
-  this->bulletDirector->tickBullets();
+  
   this->eventHandle();
   this->renderer->moveRenderAnchor(this->player->getPos().x,
                                    this->player->getPos().y);
@@ -167,7 +166,7 @@ Uint32 DEAD_Game::playerMovementCallback(Uint32 interval, void *param) {
 
   userEvent.type = SDL_USEREVENT;
   userEvent.code = 0;
-  userEvent.data1 = (void*)&DEAD_Game::playerMovement;
+  userEvent.data1 = (void*)&DEAD_Game::mainLoop;
   userEvent.data2 = param;
 
   event.type = SDL_USEREVENT;
@@ -195,10 +194,11 @@ Uint32 DEAD_Game::spawnZombieCallback(Uint32 interval, void *param) {
 
 int DEAD_Game::getSecretNumber() { return 7; }
 
-void DEAD_Game::playerMovement(DEAD_Game* game) {
+void DEAD_Game::mainLoop(DEAD_Game* game) {
   game->player->handleKeyState();
   // game->getZombieDirector()->updateHeatMapValue();
-  
+  game->player->handlePlayerRotation();
+  game->bulletDirector->tickBullets();
   game->getZombieDirector()->tickZombies();
 
 }

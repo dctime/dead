@@ -34,7 +34,7 @@ public:
   const int SCREEN_HEIGHT = 480;
 
   static const int BULLET_COLLISION_DELAY;
-  static const int PLAYER_MOVEMENT_DELAY;
+  static const int MAIN_LOOP_DELAY;
 private:
   SDL_Window* window;
   std::shared_ptr<DEAD_Map> map;
@@ -48,14 +48,14 @@ private:
   std::shared_ptr<DEAD_ZombieDirector> zombieDirector;
   void initObjectThatHasSharedFromThis();
   SDL_TimerID bulletCollisionID;
-  SDL_TimerID playerMovementID;
+  SDL_TimerID mainLoopID;
   SDL_TimerID zombieSpawnID;
   int getSecretNumber();
   static Uint32 bulletCheckCollisionCallback(Uint32 interval, void *param);
   static Uint32 playerMovementCallback(Uint32 interval, void *param);
   static Uint32 spawnZombieCallback(Uint32 interval, void *param);
   static void checkAndDeleteCollisionBullets(DEAD_Game* game);
-  static void playerMovement(DEAD_Game* game);
+  static void mainLoop(DEAD_Game* game);
   static void zombieSpawn(DEAD_Game* game);
   
   friend class DEAD_GameBuilder;

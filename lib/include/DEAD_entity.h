@@ -10,7 +10,7 @@ class DEAD_Game;
 class DEAD_Entity :
   public std::enable_shared_from_this<DEAD_Entity> {
 public:
-  DEAD_Entity(std::shared_ptr<DEAD_Game> game);
+  DEAD_Entity(std::shared_ptr<DEAD_Game> game, int maxHealth);
   ~DEAD_Entity();
   DEAD_Map::MapLocation getPos();
   virtual SDL_Rect getTextureRect() = 0;
@@ -25,6 +25,11 @@ public:
   double getSize();
   double getPickItemRadius();
   std::shared_ptr<DEAD_CircleHitbox> getHitbox();
+  int getMaxhealth();
+  int getHealth();
+  void setMaxHealth(int health);
+  void setHealth(int health);
+  void damage(int health);
 protected:
   std::shared_ptr<DEAD_Item> holdItem;
   std::shared_ptr<DEAD_Game> game;
@@ -34,4 +39,6 @@ private:
   double rotation;
   double size;
   std::shared_ptr<DEAD_CircleHitbox> hitbox;
+  int health;
+  int maxHealth;
 };

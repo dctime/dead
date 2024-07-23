@@ -61,7 +61,7 @@ void DEAD_Renderer::render() {
   this->renderBullets();
   this->renderPlayer(this->game->getPlayer());
   this->renderZombies(this->game->getZombieDirector());
-  this->drawZombieMovementMap();
+  // this->drawZombieMovementMap();
 
   SDL_RenderPresent(this->renderer);
 }
