@@ -27,8 +27,8 @@
      inkscape:deskcolor="#505050"
      inkscape:document-units="mm"
      inkscape:zoom="1.5326361"
-     inkscape:cx="331.12884"
-     inkscape:cy="2.9361178"
+     inkscape:cx="259.35706"
+     inkscape:cy="147.78459"
      inkscape:window-width="1920"
      inkscape:window-height="1012"
      inkscape:window-x="0"
@@ -42,10 +42,10 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="fill:#666666;stroke-width:0.264583"
+       style="fill:#666666;stroke-width:0.280017"
        id="rect1"
-       width="25"
-       height="25"
+       width="26.458334"
+       height="26.458334"
        x="0"
        y="-1.7763568e-15" />
     <rect
@@ -53,22 +53,22 @@
        id="rect1-5"
        width="20"
        height="20"
-       x="2.5"
-       y="2.5" />
+       x="3.3072917"
+       y="3.3072917" />
     <rect
-       style="fill:#554400;stroke-width:0.264583"
+       style="fill:#554400;stroke-width:0.280017"
        id="rect2"
-       width="25"
-       height="25"
-       x="25"
+       width="26.458334"
+       height="26.458334"
+       x="26.458334"
        y="-8.8817842e-16" />
     <rect
        style="fill:#806600;stroke-width:0.211667"
        id="rect2-2"
        width="20"
        height="20"
-       x="27.5"
-       y="2.5" />
+       x="29.765625"
+       y="3.3072917" />
     <circle
        id="path3"
        style="fill:#806600;stroke:#000000;stroke-width:0.264583"
@@ -80,16 +80,23 @@
        id="rect8"
        width="3.2384903"
        height="28.835783"
-       x="16.284952"
-       y="21.211803"
+       x="16.898252"
+       y="22.635794"
        transform="rotate(-45.04145)" />
     <rect
        style="fill:#554400;stroke-width:0.518627"
        id="rect8-7"
        width="3.2384903"
        height="28.835783"
-       x="34.006325"
-       y="-32.08968"
+       x="35.615417"
+       y="-33.160728"
        transform="rotate(44.95855)" />
+    <rect
+       style="fill:#2e002e;stroke-width:0.263046;fill-opacity:1"
+       id="rect3"
+       width="26.458334"
+       height="26.458334"
+       x="52.916668"
+       y="0" />
   </g>
 </svg>

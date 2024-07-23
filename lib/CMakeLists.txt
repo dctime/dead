@@ -15,6 +15,6 @@ file(GLOB SOURCES
 add_library(${PROJECT_NAME} ${SOURCES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
-target_link_libraries(${PROJECT_NAME} SDL2 SDL2main)
+target_link_libraries(${PROJECT_NAME} SDL2 SDL2main SDL2_ttf SDL2_mixer)
 
 

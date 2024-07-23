@@ -8,3 +8,7 @@ const std::string DEAD_FilePaths::PLAYER_TEXTURE_PNG = ASSETS_FILE_PATH + "/imgs
 const std::string DEAD_FilePaths::BULLET_TEXTURE_PNG = ASSETS_FILE_PATH + "/imgs/bullets.png";
 const std::string DEAD_FilePaths::ITEM_TEXTURE_PNG = ASSETS_FILE_PATH + "/imgs/items.png";
 const std::string DEAD_FilePaths::ZOMBIES_TEXTURE_PNG = ASSETS_FILE_PATH + "/imgs/zombies.png";
+
+const std::string DEAD_FilePaths::YOU_DIED_FONT = ASSETS_FILE_PATH + "/fonts/you_died.ttf";
+
+const std::string DEAD_FilePaths::YOU_DIED_SOUND = ASSETS_FILE_PATH + "/sounds/you_died.wav";

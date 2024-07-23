@@ -36,6 +36,8 @@ public:
   ScreenLocation getEntityRenderLocation(std::shared_ptr<DEAD_Entity> entity, bool mid);
   ScreenLocation getBulletRenderLocation(std::shared_ptr<DEAD_Bullet> bullet);
   ScreenLocation getPointRenderLocation(double x, double y);
+  void startYouDied();
+  void closeYouDied();
 private:
   void renderMapObjects();
   SDL_Renderer* renderer;
@@ -48,12 +50,19 @@ private:
   SDL_Texture *bulletTexture;
   SDL_Texture* itemTexture;
   SDL_Texture* zombiesTexture;
+  SDL_Texture* youDiedFontTexture;
   void renderPlayer(std::shared_ptr<DEAD_Player> player);
   void renderZombies(const std::shared_ptr<DEAD_ZombieDirector>& zombieDirector);
   void renderEntity(std::shared_ptr<DEAD_Entity> entity, SDL_Texture* texture);
   void renderItemDropLayer();
   void renderBullets();
+  void renderYouDied();
   void drawZombieMovementMap();
   void getTextureFromSurface(SDL_Texture*& texture, std::string filePath);
+  void getTextureFromFont(std::string fontFilePath, SDL_Texture*& texture, std::string text, int fontSize, SDL_Color color);
   ScreenLocation getItemDropRenderLocation(std::shared_ptr<DEAD_ItemDrop> itemDrop);
+  int youDiedAlpha;
+  bool playingYouDied;
+  int startYouDiedTicks;
+  
 };

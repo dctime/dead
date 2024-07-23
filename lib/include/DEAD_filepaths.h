@@ -10,4 +10,8 @@ public:
   static const std::string BULLET_TEXTURE_PNG;
   static const std::string ITEM_TEXTURE_PNG;
   static const std::string ZOMBIES_TEXTURE_PNG;
+
+  static const std::string YOU_DIED_FONT;
+
+  static const std::string YOU_DIED_SOUND;
 };

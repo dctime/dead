@@ -12,6 +12,7 @@
 #include "DEAD_collision_director.h"
 #include "DEAD_item_drop_layer.h"
 #include "DEAD_zombie_director.h"
+#include "DEAD_sound_director.h"
 
 class DEAD_ControllablePlayer;
 
@@ -20,7 +21,7 @@ class DEAD_Game
 public:
   DEAD_Game();
   ~DEAD_Game();
-  void tick();
+  void mapTick();
   void run();
   std::shared_ptr<DEAD_Map> getMap();
   std::shared_ptr<DEAD_Player> getPlayer();
@@ -30,6 +31,7 @@ public:
   std::shared_ptr<DEAD_CollisionDirector> getCollisionDirector();
   std::shared_ptr<DEAD_ItemDropLayer> getItemDropLayer();
   std::shared_ptr<DEAD_ZombieDirector> getZombieDirector();
+  std::shared_ptr<DEAD_SoundDirector> getSoundDirector();
   const int SCREEN_WIDTH = 720;
   const int SCREEN_HEIGHT = 480;
 
@@ -40,12 +42,14 @@ private:
   std::shared_ptr<DEAD_Map> map;
   std::shared_ptr<DEAD_ControllablePlayer> player;
   void eventHandle();
-  bool running = true;
+  bool running;
+  bool ticking;
   std::shared_ptr<DEAD_Renderer> renderer;
   std::shared_ptr<DEAD_BulletDirector> bulletDirector;
   std::shared_ptr<DEAD_CollisionDirector> collisionDirector;
   std::shared_ptr<DEAD_ItemDropLayer> itemDropLayer;
   std::shared_ptr<DEAD_ZombieDirector> zombieDirector;
+  std::shared_ptr<DEAD_SoundDirector> soundDirector;
   void initObjectThatHasSharedFromThis();
   SDL_TimerID bulletCollisionID;
   SDL_TimerID mainLoopID;

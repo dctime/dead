@@ -1,30 +1,32 @@
 #include "DEAD_player.h"
+#include <DEAD_controllable_player.h>
 #include <DEAD_game.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_log.h>
+#include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_render.h>
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_timer.h>
+#include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_video.h>
 #include <functional>
 #include <iostream>
 #include <memory>
-#include <DEAD_controllable_player.h>
 #include <zombies/DEAD_zombie.h>
-
 const int DEAD_Game::BULLET_COLLISION_DELAY = 1000.0 / 60;
 const int DEAD_Game::MAIN_LOOP_DELAY = 1000.0 / 60;
 
 DEAD_Game::DEAD_Game()
-    : SCREEN_WIDTH(720), SCREEN_HEIGHT(480),
+    : SCREEN_WIDTH(1080), SCREEN_HEIGHT(760),
       window(SDL_CreateWindow("DEAD", SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED, this->SCREEN_WIDTH,
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
-      map(std::make_shared<DEAD_Map>()), 
-      itemDropLayer(std::make_shared<DEAD_ItemDropLayer>()) {
+      map(std::make_shared<DEAD_Map>()),
+      itemDropLayer(std::make_shared<DEAD_ItemDropLayer>()), running(true),
+      ticking(true) {
 
   SDL_Log("Game Init");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
@@ -40,35 +42,47 @@ DEAD_Game::DEAD_Game()
     // handle error
   }
 
+  if (TTF_Init() == -1) {
+    SDL_Log("Font Crashed");
+  }
+
   if (window == NULL) {
     SDL_Log("Unable to init window: %s", SDL_GetError());
   }
 
+  if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
+    printf("SDL_mixer could not initialize! SDL_mixer Error: %s\n",
+           Mix_GetError());
+  }
+
+  this->soundDirector = std::make_shared<DEAD_SoundDirector>();
   this->map->loadMap();
-
-  
-
 }
 
 void DEAD_Game::initObjectThatHasSharedFromThis() {
-  this->map->getMapSpawner()->initAccess(shared_from_this()); 
+  this->map->getMapSpawner()->initAccess(shared_from_this());
   this->renderer =
       std::make_shared<DEAD_Renderer>(this->window, shared_from_this());
   this->bulletDirector =
       std::make_shared<DEAD_BulletDirector>(shared_from_this());
   this->collisionDirector =
       std::make_shared<DEAD_CollisionDirector>(shared_from_this());
-  this->zombieDirector = std::make_shared<DEAD_ZombieDirector>(shared_from_this(), this->getMap()->getMapSize().width, this->getMap()->getMapSize().height);
-  // std::shared_ptr<DEAD_Zombie> zombie = std::make_shared<DEAD_Zombie>(shared_from_this());
+  this->zombieDirector = std::make_shared<DEAD_ZombieDirector>(
+      shared_from_this(), this->getMap()->getMapSize().width,
+      this->getMap()->getMapSize().height);
+  // std::shared_ptr<DEAD_Zombie> zombie =
+  // std::make_shared<DEAD_Zombie>(shared_from_this());
   // zombie->setPos(1.5, 1.5);
   // this->zombieDirector->registerZombie(zombie);
-  
 
-  this->bulletCollisionID = (SDL_AddTimer(
-    DEAD_Game::BULLET_COLLISION_DELAY, this->bulletCheckCollisionCallback, shared_from_this().get()));
-  this->mainLoopID = SDL_AddTimer(DEAD_Game::MAIN_LOOP_DELAY, this->playerMovementCallback, shared_from_this().get()); 
-  this->zombieSpawnID = SDL_AddTimer(1000, this->spawnZombieCallback, shared_from_this().get());
-  
+  this->bulletCollisionID = (SDL_AddTimer(DEAD_Game::BULLET_COLLISION_DELAY,
+                                          this->bulletCheckCollisionCallback,
+                                          shared_from_this().get()));
+  this->mainLoopID =
+      SDL_AddTimer(DEAD_Game::MAIN_LOOP_DELAY, this->playerMovementCallback,
+                   shared_from_this().get());
+  this->zombieSpawnID =
+      SDL_AddTimer(1000, this->spawnZombieCallback, shared_from_this().get());
 }
 
 DEAD_Game::~DEAD_Game() {
@@ -80,8 +94,8 @@ DEAD_Game::~DEAD_Game() {
   SDL_Log("Game Destroyed");
 }
 
-void DEAD_Game::tick() {
-  
+void DEAD_Game::mapTick() {
+
   this->eventHandle();
   this->renderer->moveRenderAnchor(this->player->getPos().x,
                                    this->player->getPos().y);
@@ -92,27 +106,30 @@ void DEAD_Game::eventHandle() {
   SDL_Event event;
   SDL_PollEvent(&event);
 
-  
-  std::function<void(void*)> p; 
+  std::function<void(void *)> p;
   switch (event.type) {
-  case SDL_USEREVENT: 
-    p = (void(*)(void*))event.user.data1;
-    p((DEAD_Game*)event.user.data2);
+  case SDL_USEREVENT:
+    if (!ticking)
+      break;
+    p = (void (*)(void *))event.user.data1;
+    p((DEAD_Game *)event.user.data2);
+
     break;
   case SDL_QUIT:
     this->running = false;
     break;
   default:
+    if (!ticking)
+      break;
     this->player->playerEvents(event);
   }
 }
 
 void DEAD_Game::run() {
   while (this->running) {
-    this->tick();
+    this->mapTick();
   }
 }
-
 std::shared_ptr<DEAD_Map> DEAD_Game::getMap() { return this->map; }
 
 std::shared_ptr<DEAD_Player> DEAD_Game::getPlayer() { return this->player; }
@@ -145,9 +162,17 @@ std::shared_ptr<DEAD_ZombieDirector> DEAD_Game::getZombieDirector() {
   return this->zombieDirector;
 }
 
+std::shared_ptr<DEAD_SoundDirector> DEAD_Game::getSoundDirector() {
+  return this->soundDirector;
+}
+
 void DEAD_Game::checkPlayerDied() {
-  if (this->getPlayer()->getHealth() > 0) return;
+  if (this->getPlayer()->getHealth() > 0)
+    return;
   std::cout << "YOU DIED!" << std::endl;
+  this->renderer->startYouDied();
+  this->soundDirector->playYouDiedSound(); 
+  ticking = false;
 }
 
 Uint32 DEAD_Game::bulletCheckCollisionCallback(Uint32 interval, void *param) {
@@ -156,7 +181,7 @@ Uint32 DEAD_Game::bulletCheckCollisionCallback(Uint32 interval, void *param) {
 
   userEvent.type = SDL_USEREVENT;
   userEvent.code = 0;
-  userEvent.data1 = (void*)&DEAD_Game::checkAndDeleteCollisionBullets;
+  userEvent.data1 = (void *)&DEAD_Game::checkAndDeleteCollisionBullets;
   userEvent.data2 = param;
 
   event.type = SDL_USEREVENT;
@@ -172,7 +197,7 @@ Uint32 DEAD_Game::playerMovementCallback(Uint32 interval, void *param) {
 
   userEvent.type = SDL_USEREVENT;
   userEvent.code = 0;
-  userEvent.data1 = (void*)&DEAD_Game::mainLoop;
+  userEvent.data1 = (void *)&DEAD_Game::mainLoop;
   userEvent.data2 = param;
 
   event.type = SDL_USEREVENT;
@@ -188,7 +213,7 @@ Uint32 DEAD_Game::spawnZombieCallback(Uint32 interval, void *param) {
 
   userEvent.type = SDL_USEREVENT;
   userEvent.code = 0;
-  userEvent.data1 = (void*)&DEAD_Game::zombieSpawn;
+  userEvent.data1 = (void *)&DEAD_Game::zombieSpawn;
   userEvent.data2 = param;
 
   event.type = SDL_USEREVENT;
@@ -200,7 +225,7 @@ Uint32 DEAD_Game::spawnZombieCallback(Uint32 interval, void *param) {
 
 int DEAD_Game::getSecretNumber() { return 7; }
 
-void DEAD_Game::mainLoop(DEAD_Game* game) {
+void DEAD_Game::mainLoop(DEAD_Game *game) {
   game->player->handleKeyState();
   // game->getZombieDirector()->updateHeatMapValue();
   game->player->handlePlayerRotation();
@@ -208,10 +233,10 @@ void DEAD_Game::mainLoop(DEAD_Game* game) {
   game->getZombieDirector()->tickZombies();
   game->checkPlayerDied();
 }
-void DEAD_Game::checkAndDeleteCollisionBullets(DEAD_Game* game) {
+void DEAD_Game::checkAndDeleteCollisionBullets(DEAD_Game *game) {
   game->bulletDirector->checkAndDeleteCollisionBullets();
 }
 
-void DEAD_Game::zombieSpawn(DEAD_Game* game) {
+void DEAD_Game::zombieSpawn(DEAD_Game *game) {
   game->getMap()->getMapSpawner()->randomSpawnAZombie();
 }
