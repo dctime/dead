@@ -35,7 +35,7 @@ int DEAD_Gun::getMagazineSize() {
 }
 
 void DEAD_Gun::reload() {
-  this->ammoLeftInMagazine = this->MAGAZINE_SIZE;
+  this->insertNewMagazine();
   this->startReload();
   std::cout << "Gun Reloaded" << std::endl;
 }

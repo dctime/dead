@@ -19,4 +19,5 @@ public:
   static const std::string PISTOL_SHOOT_SOUND_2;
   static const std::string PISTOL_SHOOT_SOUND_3;
   static const std::string PISTOL_SHOOT_SOUND_4;
+  static const std::string PISTOL_RELOAD_SOUND;
 };

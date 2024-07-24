@@ -82,7 +82,7 @@ void DEAD_Game::initObjectThatHasSharedFromThis() {
       SDL_AddTimer(DEAD_Game::MAIN_LOOP_DELAY, this->playerMovementCallback,
                    shared_from_this().get());
   this->zombieSpawnID =
-      SDL_AddTimer(1000, this->spawnZombieCallback, shared_from_this().get());
+      SDL_AddTimer(3000, this->spawnZombieCallback, shared_from_this().get());
 }
 
 DEAD_Game::~DEAD_Game() {

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <random>
 // 1: You Died
-// 2 - 9 gun sound
+// 2 - 9 gun sounds
 DEAD_SoundDirector::DEAD_SoundDirector() 
   : youDiedSound(Mix_LoadWAV(DEAD_FilePaths::YOU_DIED_SOUND.c_str())) {
   Mix_AllocateChannels(32);
@@ -14,6 +14,7 @@ DEAD_SoundDirector::DEAD_SoundDirector()
   this->pistolShootSounds.push_back(Mix_LoadWAV(DEAD_FilePaths::PISTOL_SHOOT_SOUND_2.c_str()));
   this->pistolShootSounds.push_back(Mix_LoadWAV(DEAD_FilePaths::PISTOL_SHOOT_SOUND_3.c_str()));
   this->pistolShootSounds.push_back(Mix_LoadWAV(DEAD_FilePaths::PISTOL_SHOOT_SOUND_4.c_str()));
+  this->pistolReloadSound = Mix_LoadWAV(DEAD_FilePaths::PISTOL_RELOAD_SOUND.c_str());
 }
 
 void DEAD_SoundDirector::playYouDiedSound() {
@@ -34,6 +35,14 @@ void DEAD_SoundDirector::playPistolShootSound() {
   for (int channelCounter = 2; channelCounter <= 9; channelCounter++) {
     if (Mix_Playing(channelCounter)) continue;
     Mix_PlayChannel(channelCounter, this->pistolShootSounds.at(dis(rd)), 0);
+    break;
+  }
+}
+
+void DEAD_SoundDirector::playPistolReloadSound() {
+  for (int channelCounter = 2; channelCounter <= 9; channelCounter++) {
+    if (Mix_Playing(channelCounter)) continue;
+    Mix_PlayChannel(channelCounter, this->pistolReloadSound, 0);
     break;
   }
 }

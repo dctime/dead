@@ -17,3 +17,4 @@ const std::string DEAD_FilePaths::PISTOL_SHOOT_SOUND_1 = ASSETS_FILE_PATH + "/so
 const std::string DEAD_FilePaths::PISTOL_SHOOT_SOUND_2 = ASSETS_FILE_PATH + "/sounds/pistol_2.wav";
 const std::string DEAD_FilePaths::PISTOL_SHOOT_SOUND_3 = ASSETS_FILE_PATH + "/sounds/pistol_3.wav";
 const std::string DEAD_FilePaths::PISTOL_SHOOT_SOUND_4 = ASSETS_FILE_PATH + "/sounds/pistol_4.wav";
+const std::string DEAD_FilePaths::PISTOL_RELOAD_SOUND = ASSETS_FILE_PATH + "/sounds/pistol_reload.wav";

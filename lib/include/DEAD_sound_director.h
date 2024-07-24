@@ -6,8 +6,10 @@ public:
   ~DEAD_SoundDirector();
   void playYouDiedSound();
   void playPistolShootSound();
+  void playPistolReloadSound();
 private:
   Mix_Chunk* youDiedSound;
   std::vector<Mix_Chunk*> pistolShootSounds;
+  Mix_Chunk* pistolReloadSound;
   
 };

@@ -42,7 +42,7 @@ void DEAD_Renderer::getTextureFromFont(std::string fontFilePath,
 
 DEAD_Renderer::DEAD_Renderer(SDL_Window *window,
                              std::shared_ptr<DEAD_Game> game)
-    : renderBlockSize(25), renderAnchor({.x = 0, .y = 0}), youDiedAlpha(0),
+    : renderBlockSize(50), renderAnchor({.x = 0, .y = 0}), youDiedAlpha(0),
       playingYouDied(false), startYouDiedTicks(0) {
 
   if (window == NULL) {
@@ -310,9 +310,9 @@ void DEAD_Renderer::renderYouDied() {
   SDL_SetRenderDrawColor(this->renderer, 82, 11, 11, this->youDiedAlpha);
   SDL_RenderFillRect(this->renderer, &rect);
   SDL_SetTextureAlphaMod(this->youDiedFontTexture, this->youDiedAlpha);
-  rect.x = this->game->SCREEN_WIDTH / 4;
   rect.y += rect.y / 4;
-  rect.w -= rect.w / 2;
+  rect.w -= rect.w / 1.7;
+  rect.x = this->getGame()->SCREEN_WIDTH/2 - rect.w/2;
   rect.h = rect.h / 2;
   SDL_RenderCopy(this->renderer, this->youDiedFontTexture, NULL, &rect);
 }

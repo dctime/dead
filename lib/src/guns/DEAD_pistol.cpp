@@ -8,7 +8,7 @@
 #include <memory>
 
 DEAD_Pistol::DEAD_Pistol(std::shared_ptr<DEAD_Player> player)
-: DEAD_Gun(player, 10, 1000, 3000) {}
+: DEAD_Gun(player, 10, 500, 2000) {}
 
 DEAD_Pistol::~DEAD_Pistol() {
   SDL_Log("Destroyed A Pistol");
@@ -37,6 +37,13 @@ void DEAD_Pistol::attack() {
   this->startCoolDown();
   std::cout << "Bullet Count: " << this->getPlayer()->getGame()->getBulletDirector()->bulletCount() << std::endl;
   this->getPlayer()->getGame()->getSoundDirector()->playPistolShootSound();
+}
+
+void DEAD_Pistol::reload() {
+  this->insertNewMagazine();
+  this->startReload();
+  this->getPlayer()->getGame()->getSoundDirector()->playPistolReloadSound();
+  std::cout << "Gun Reloaded" << std::endl;
 }
 
 double DEAD_Pistol::getBarrelLength() {

@@ -15,8 +15,7 @@ public:
   int getMagazineSize();
   bool removeAmmoFromMagazine(int count);
   int getAmmoLeftInMagazine();
-  void insertNewMagazine();
-  void reload();
+  virtual void reload();
   // 0.0 - 1.0, -1 means not cooling;
   double checkStillCooling();
   double checkStillReloading();
@@ -30,4 +29,5 @@ private:
 protected:
   void startCoolDown();
   void startReload();
+  void insertNewMagazine();
 };
