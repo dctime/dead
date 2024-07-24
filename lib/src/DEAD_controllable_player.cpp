@@ -44,10 +44,6 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
     }
 
     break;
-  case SDL_MOUSEBUTTONDOWN:
-    if (event.button.button == SDL_BUTTON_LEFT) {
-      this->attack();
-    }
   }
 }
 
@@ -90,6 +86,12 @@ void DEAD_ControllablePlayer::handleKeyState() {
   const Uint8 *state = SDL_GetKeyboardState(NULL);
   double moveTickDistance = this->baseSpeed * this->getSpeed();
   bool moved = false;
+
+  int mouseX;
+  int mouseY;
+  if (SDL_GetMouseState(&mouseX, &mouseY) & SDL_BUTTON_LMASK) {
+    this->attack();
+  }
 
   if (state[SDL_SCANCODE_W]) {
     if ((int)this->getPos().y != (int)(this->getPos().y-moveTickDistance)) {
