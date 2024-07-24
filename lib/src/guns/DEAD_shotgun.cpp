@@ -5,7 +5,7 @@
 #include <memory>
 
 DEAD_Shotgun::DEAD_Shotgun(std::shared_ptr<DEAD_Player> player)
-  : DEAD_Gun(player, 5) {
+  : DEAD_Gun(player, 5, 5000, 5000) {
 
 }
 DEAD_Shotgun::~DEAD_Shotgun() {}

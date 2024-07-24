@@ -5,7 +5,7 @@
 
 class DEAD_Gun : public DEAD_Weapon {
 public:
-  DEAD_Gun(std::shared_ptr<DEAD_Player> player, int magazineSize);
+  DEAD_Gun(std::shared_ptr<DEAD_Player> player, int MAGAZINE_SIZE, const int COOLDOWN_TIME, const int RELOAD_TIME);
   ~DEAD_Gun();
   virtual SDL_Rect getTextureRect() override = 0;
   virtual void attack() override = 0;
@@ -17,7 +17,17 @@ public:
   int getAmmoLeftInMagazine();
   void insertNewMagazine();
   void reload();
+  // 0.0 - 1.0, -1 means not cooling;
+  double checkStillCooling();
+  double checkStillReloading();
 private:
   int ammoLeftInMagazine;
-  const int magazineSize;
+  const int MAGAZINE_SIZE;
+  const int RELOAD_TIME;
+  const int COOLDOWN_TIME;
+  int startCoolingTicks;
+  int startReloadTicks;
+protected:
+  void startCoolDown();
+  void startReload();
 };
