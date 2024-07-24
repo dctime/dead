@@ -2,10 +2,10 @@
 #include "guns/DEAD_gun.h"
 #include "ui/DEAD_ui.h"
 #include <DEAD_game.h>
+#include <DEAD_player.h>
 #include <SDL2/SDL_pixels.h>
 #include <memory>
 #include <ui/DEAD_magazine_ui.h>
-#include <DEAD_player.h>
 
 DEAD_MagazineUI::DEAD_MagazineUI(std::shared_ptr<DEAD_Renderer> renderer,
                                  std::shared_ptr<DEAD_Player> player)
@@ -19,21 +19,26 @@ DEAD_MagazineUI::DEAD_MagazineUI(std::shared_ptr<DEAD_Renderer> renderer,
           this->magazineUIWidth, this->magazineUIHeight,
           this->distanceBetweenScreenBoarder, this->boarderWidth)) {
   this->renderer = renderer;
-  this->player = player; 
+  this->player = player;
 }
 
 void DEAD_MagazineUI::render() {
-  std::shared_ptr<DEAD_Gun> holdGun = std::dynamic_pointer_cast<DEAD_Gun>(this->player->getHoldItem());
-  if (holdGun == nullptr) return;
+  std::shared_ptr<DEAD_Gun> holdGun =
+      std::dynamic_pointer_cast<DEAD_Gun>(this->player->getHoldItem());
+  if (holdGun == nullptr)
+    return;
 
   int magazineSize = holdGun->getMagazineSize();
   int ammoLeftInMagazine = holdGun->getAmmoLeftInMagazine();
-  
+
   double leftPercent = 0;
   double subPercent = 0;
   if (holdGun->checkStillReloading() == 1.0) {
     leftPercent = static_cast<double>(ammoLeftInMagazine) / magazineSize;
-    subPercent = holdGun->checkStillCooling();
+    if (leftPercent == 0)
+      subPercent = 0;
+    else
+      subPercent = holdGun->checkStillCooling();
   } else {
     leftPercent = 0;
     subPercent = holdGun->checkStillReloading();
@@ -41,6 +46,7 @@ void DEAD_MagazineUI::render() {
 
   SDL_Color baseColor = {.r = 50, .g = 50, .b = 50, .a = 255};
   SDL_Color juiceColor = {.r = 0, .g = 0, .b = 200, .a = 255};
-  SDL_Color subColor = {.r=255, .g=255, .b=255, .a=255};
-  this->barElement->render(baseColor, juiceColor, subColor, leftPercent, subPercent);
+  SDL_Color subColor = {.r = 255, .g = 255, .b = 255, .a = 255};
+  this->barElement->render(baseColor, juiceColor, subColor, leftPercent,
+                           subPercent);
 }

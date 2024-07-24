@@ -38,16 +38,9 @@ void DEAD_ValueBarUIElement::render(SDL_Color baseColor, SDL_Color juiceColor,
 void DEAD_ValueBarUIElement::render(SDL_Color baseColor, SDL_Color juiceColor,
                                     SDL_Color subColor, double percent,
                                     double subPercent) {
-
-  this->barRectJuice.w = this->juiceMaxWidth * percent;
+  this->render(baseColor, juiceColor, percent);
   this->barRectSub.w = this->barMaxWidth * subPercent;
 
-  SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), baseColor.r,
-                         baseColor.g, baseColor.b, baseColor.a);
-  SDL_RenderFillRect(this->renderer->getSDLRenderer(), &barRectBase);
-  SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), juiceColor.r,
-                         juiceColor.g, juiceColor.b, juiceColor.a);
-  SDL_RenderFillRect(this->renderer->getSDLRenderer(), &barRectJuice);
   SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), subColor.r,
                          subColor.g, subColor.b, subColor.a);
   SDL_RenderFillRect(this->renderer->getSDLRenderer(), &barRectSub);
