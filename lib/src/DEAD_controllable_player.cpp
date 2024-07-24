@@ -21,9 +21,7 @@ DEAD_ControllablePlayer::~DEAD_ControllablePlayer() {}
 
 void DEAD_ControllablePlayer::setGame(std::shared_ptr<DEAD_Game> game) {
   this->game = game;
-  this->game->setPlayer(std::dynamic_pointer_cast<DEAD_ControllablePlayer>(shared_from_this()));
-  this->game->getRenderer()->initWithSharedFromThis(this->game->getRenderer());
-}
+  }
 
 void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
 
