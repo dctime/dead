@@ -27,6 +27,7 @@ public:
   std::shared_ptr<DEAD_CircleHitbox> getHitbox();
   int getMaxhealth();
   int getHealth();
+  std::shared_ptr<DEAD_Item> getHoldItem();
   void setMaxHealth(int health);
   void setHealth(int health);
   void damage(int health);

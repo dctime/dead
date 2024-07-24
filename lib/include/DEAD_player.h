@@ -22,7 +22,7 @@ protected:
   void attack();
 private:
   void pickupWeapon();
-  void dropWeapon(); 
+  void dropWeapon();
   
   
 };

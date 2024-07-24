@@ -33,6 +33,10 @@ int DEAD_Entity::getHealth() {
   return this->health;
 }
 
+std::shared_ptr<DEAD_Item> DEAD_Entity::getHoldItem() {
+  return this->holdItem;
+}
+
 void DEAD_Entity::setMaxHealth(int maxHealth) {
   this->maxHealth = maxHealth;
 }

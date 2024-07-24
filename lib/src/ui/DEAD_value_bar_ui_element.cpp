@@ -8,9 +8,8 @@ DEAD_ValueBarUIElement::DEAD_ValueBarUIElement(
     int healthBarHeight, int distanceBetweenScreenBoarder, int boarderWidth) {
   this->renderer = renderer;
   this->healthBarRectBase = {
-      .x = renderer->getGame()->SCREEN_WIDTH / 2 - healthBarWidth / 2,
-      .y = renderer->getGame()->SCREEN_HEIGHT - healthBarHeight -
-           distanceBetweenScreenBoarder,
+      .x = x,
+      .y = y,
       .w = healthBarWidth,
       .h = healthBarHeight};
 
@@ -27,14 +26,12 @@ DEAD_ValueBarUIElement::DEAD_ValueBarUIElement(
       (int)((healthBarRectBase.w - 2 * boarderWidth) * healthPercent);
 }
 
-void DEAD_ValueBarUIElement::render() {
-  double healthPercent =
-      static_cast<double>(renderer->getGame()->getPlayer()->getHealth()) /
-      renderer->getGame()->getPlayer()->getMaxhealth();
-  this->healthBarRectJuice.w = this->juiceMaxWidth * healthPercent;
+void DEAD_ValueBarUIElement::render(SDL_Color baseColor, SDL_Color juiceColor, double percent) {
+  
+  this->healthBarRectJuice.w = this->juiceMaxWidth * percent;
 
-  SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), 50, 50, 50, 255);
+  SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), baseColor.r, baseColor.g, baseColor.b, baseColor.a);
   SDL_RenderFillRect(this->renderer->getSDLRenderer(), &healthBarRectBase);
-  SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), 200, 15, 15, 255);
+  SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), juiceColor.r, juiceColor.g, juiceColor.b, juiceColor.a);
   SDL_RenderFillRect(this->renderer->getSDLRenderer(), &healthBarRectJuice);
 }
