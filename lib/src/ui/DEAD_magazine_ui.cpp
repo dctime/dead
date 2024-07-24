@@ -30,10 +30,17 @@ void DEAD_MagazineUI::render() {
   int ammoLeftInMagazine = holdGun->getAmmoLeftInMagazine();
   
   double leftPercent = 0;
-  if (holdGun->checkStillReloading() == 1.0)
+  double subPercent = 0;
+  if (holdGun->checkStillReloading() == 1.0) {
     leftPercent = static_cast<double>(ammoLeftInMagazine) / magazineSize;
+    subPercent = holdGun->checkStillCooling();
+  } else {
+    leftPercent = 0;
+    subPercent = holdGun->checkStillReloading();
+  }
 
   SDL_Color baseColor = {.r = 50, .g = 50, .b = 50, .a = 255};
   SDL_Color juiceColor = {.r = 0, .g = 0, .b = 200, .a = 255};
-  this->barElement->render(baseColor, juiceColor, leftPercent);
+  SDL_Color subColor = {.r=255, .g=255, .b=255, .a=255};
+  this->barElement->render(baseColor, juiceColor, subColor, leftPercent, subPercent);
 }
