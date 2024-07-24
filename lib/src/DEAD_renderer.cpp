@@ -1,4 +1,5 @@
 #include "DEAD_item_drop.h"
+#include "DEAD_ui_renderer.h"
 #include "DEAD_zombie_director.h"
 #include "map_objects/DEAD_map_object_base.h"
 #include "zombies/DEAD_zombie.h"
@@ -68,6 +69,10 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window,
   this->game = game;
 }
 
+void DEAD_Renderer::initWithSharedFromThis(std::shared_ptr<DEAD_Renderer> renderer) {
+  this->uiRenderer = std::make_shared<DEAD_UIRenderer>(renderer);
+}
+
 DEAD_Renderer::~DEAD_Renderer() {
   SDL_DestroyTexture(this->zombiesTexture);
   SDL_DestroyTexture(this->bulletTexture);
@@ -89,9 +94,18 @@ void DEAD_Renderer::render() {
   this->renderPlayer(this->game->getPlayer());
   this->renderZombies(this->game->getZombieDirector());
   // this->drawZombieMovementMap();
+  this->uiRenderer->render();
   this->renderYouDied();
 
   SDL_RenderPresent(this->renderer);
+}
+
+SDL_Renderer* DEAD_Renderer::getSDLRenderer() {
+  return this->renderer;
+}
+
+std::shared_ptr<DEAD_Game> DEAD_Renderer::getGame() {
+  return this->game;
 }
 
 void DEAD_Renderer::renderMapObjects() {

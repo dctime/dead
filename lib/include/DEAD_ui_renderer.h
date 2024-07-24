@@ -1,10 +1,11 @@
+#pragma once 
 #include "ui/DEAD_ui.h"
 #include <memory>
 #include <vector>
-class DEAD_UIDirector {
+class DEAD_UIRenderer {
 public:
-  void addUI(std::shared_ptr<DEAD_UI> ui);
-  std::vector<std::shared_ptr<DEAD_UI>> getUis();
+  DEAD_UIRenderer(std::shared_ptr<DEAD_Renderer> renderer);
+  void render();
 private:
   std::vector<std::shared_ptr<DEAD_UI>> uis;
 };

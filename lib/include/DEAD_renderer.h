@@ -6,6 +6,7 @@
 #include <string>
 #include "DEAD_entity.h"
 #include "DEAD_zombie_director.h"
+#include "DEAD_ui_renderer.h"
 
 class DEAD_Game;
 class DEAD_Player;
@@ -36,11 +37,15 @@ public:
   ScreenLocation getEntityRenderLocation(std::shared_ptr<DEAD_Entity> entity, bool mid);
   ScreenLocation getBulletRenderLocation(std::shared_ptr<DEAD_Bullet> bullet);
   ScreenLocation getPointRenderLocation(double x, double y);
+  SDL_Renderer* getSDLRenderer();
+  void initWithSharedFromThis(std::shared_ptr<DEAD_Renderer> renderer);
   void startYouDied();
   void closeYouDied();
+  std::shared_ptr<DEAD_Game> getGame();
 private:
   void renderMapObjects();
   SDL_Renderer* renderer;
+  std::shared_ptr<DEAD_UIRenderer> uiRenderer;
   int renderBlockSize;
   std::shared_ptr<DEAD_Game> game;
   RenderAnchor renderAnchor = {.x=0, .y=0};

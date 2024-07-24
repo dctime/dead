@@ -1,6 +1,7 @@
 #include "DEAD_entity.h"
 #include "DEAD_controllable_player.h"
 #include <DEAD_game.h>
+#include <cstdlib>
 #include <guns/DEAD_pistol.h>
 #include <iostream>
 #include <memory>
