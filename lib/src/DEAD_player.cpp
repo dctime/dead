@@ -61,3 +61,12 @@ void DEAD_Player::attack() {
   }
   weapon->attack();
 }
+
+void DEAD_Player::reloadGun() {
+  std::shared_ptr<DEAD_Gun> gun = std::dynamic_pointer_cast<DEAD_Gun>(this->holdItem);
+  if (gun == nullptr) {
+    return;
+  }
+
+  gun->reload();
+}

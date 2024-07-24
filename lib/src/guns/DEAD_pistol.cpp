@@ -8,7 +8,7 @@
 #include <memory>
 
 DEAD_Pistol::DEAD_Pistol(std::shared_ptr<DEAD_Player> player)
-: DEAD_Gun(player) {}
+: DEAD_Gun(player, 10) {}
 
 DEAD_Pistol::~DEAD_Pistol() {
   SDL_Log("Destroyed A Pistol");
@@ -20,6 +20,11 @@ SDL_Rect DEAD_Pistol::getTextureRect() {
 }
 
 void DEAD_Pistol::attack() {
+  if (!this->removeAmmoFromMagazine(1)) {
+    std::cout << "No ammo left in magazine" << std::endl;
+    return;
+  }
+
   std::shared_ptr<DEAD_Bullet> bullet = 
     std::make_shared<DEAD_NormalBullet>(this->getPlayer(), std::static_pointer_cast<DEAD_Pistol>(DEAD_Pistol::shared_from_this()));
   bullet->registerBullet();
@@ -38,6 +43,10 @@ std::shared_ptr<DEAD_ItemDrop> DEAD_Pistol::getItemDrop() {
 
   return this->itemDrop;
     
+}
+
+int DEAD_Pistol::getMagazineSize() {
+  return 10;
 }
 
 SDL_Rect DEAD_Pistol::getItemTextureRect() {

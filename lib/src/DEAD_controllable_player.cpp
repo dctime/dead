@@ -40,6 +40,8 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
     case SDLK_v:
       this->getGame()->getMap()->getMapSpawner()->randomSpawnAZombie();
       break;
+    case SDLK_r:
+      this->reloadGun();
     }
 
     break;

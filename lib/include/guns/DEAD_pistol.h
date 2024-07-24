@@ -11,4 +11,6 @@ public:
   double getBarrelLength() override;
   std::shared_ptr<DEAD_ItemDrop> getItemDrop() override;
   virtual SDL_Rect getItemTextureRect() override;
+  int getMagazineSize();
+  
 };
