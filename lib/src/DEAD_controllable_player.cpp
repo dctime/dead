@@ -10,6 +10,7 @@
 #include <guns/DEAD_pistol.h>
 #include <DEAD_controllable_player.h>
 #include <DEAD_game.h>
+#include <weapons/DEAD_bat.h>
 #include <iostream>
 #include <memory>
 
@@ -33,8 +34,8 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
       this->pickupOrDrop();
       break;
     case SDLK_g:
-      SDL_Log("Summon Pistol");
-      this->summonPistol();
+      SDL_Log("Summon Weapon");
+      this->summonWeapon<DEAD_Bat>();
       break;
     case SDLK_v:
       this->getGame()->getMap()->getMapSpawner()->randomSpawnAZombie();

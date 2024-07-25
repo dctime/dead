@@ -19,10 +19,6 @@ void DEAD_Player::move(double x, double y) {
   }
 }
 
-void DEAD_Player::summonPistol() {
-  this->holdItem = std::make_shared<DEAD_Pistol>(std::static_pointer_cast<DEAD_Player>(DEAD_Entity::shared_from_this()));
-}
-
 void DEAD_Player::pickupOrDrop() {
   if (this->holdItem != nullptr) {
     this->dropWeapon();

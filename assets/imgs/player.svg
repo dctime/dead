@@ -27,13 +27,13 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#505050"
      inkscape:document-units="mm"
-     inkscape:zoom="2.8614197"
-     inkscape:cx="128.78223"
-     inkscape:cy="-9.6106139"
+     inkscape:zoom="2.0233293"
+     inkscape:cx="259.22622"
+     inkscape:cy="32.12527"
      inkscape:window-width="1920"
-     inkscape:window-height="1012"
+     inkscape:window-height="1019"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="31"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
@@ -73,5 +73,21 @@
        xlink:href="#path1-5"
        id="use3"
        transform="translate(26.458344)" />
+    <circle
+       style="fill:#cccccc;stroke-width:0.230481"
+       id="path2"
+       cx="66.145836"
+       cy="13.229166"
+       r="10.583333" />
+    <path
+       style="fill:#552200;stroke-width:0.275149"
+       d="m 78.947657,17.602863 0.293523,2.249299 c 0,0 0.348161,1.229283 -1.085904,1.567154 -1.434066,0.337861 -14.560833,2.87272 -14.560833,2.87272 0,0 -1.048366,-0.45558 -1.184286,-1.084814 -0.135924,-0.629234 -0.233623,-0.865027 0.925055,-1.530825 1.158669,-0.6658 13.833645,-4.682495 13.917577,-4.578581 0.08388,0.103962 1.168293,-0.129367 1.694867,0.505053 z"
+       id="path5" />
+    <circle
+       style="fill:#e6e6e6;stroke-width:0.25843"
+       id="path3"
+       cx="66.145836"
+       cy="13.229167"
+       r="7.9375" />
   </g>
 </svg>
