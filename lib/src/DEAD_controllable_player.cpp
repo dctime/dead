@@ -13,6 +13,7 @@
 #include <weapons/DEAD_bat.h>
 #include <iostream>
 #include <memory>
+#include <DEAD_particle_renderer.h>
 
 DEAD_ControllablePlayer::DEAD_ControllablePlayer(std::shared_ptr<DEAD_Game> game)
     : DEAD_Player::DEAD_Player(game), baseSpeed(0.01 * DEAD_Game::MAIN_LOOP_DELAY / 10) {
@@ -26,6 +27,7 @@ void DEAD_ControllablePlayer::setGame(std::shared_ptr<DEAD_Game> game) {
 
 void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
 
+  DEAD_Map::MapLocation loc = {.x=5.5, .y=5.5};
   switch (event.type) {
   case SDL_KEYDOWN:
     switch (event.key.keysym.sym) {
@@ -38,7 +40,8 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
       this->summonWeapon<DEAD_Bat>();
       break;
     case SDLK_v:
-      this->getGame()->getMap()->getMapSpawner()->randomSpawnAZombie();
+      // TODO: playParticle
+      this->game->getRenderer()->getParticleRenderer()->playSwordAttackParticle(loc, 0);
       break;
     case SDLK_r:
       this->reloadGun();

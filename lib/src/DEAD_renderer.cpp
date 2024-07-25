@@ -71,6 +71,7 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window,
 
 void DEAD_Renderer::initWithSharedFromThis(std::shared_ptr<DEAD_Renderer> renderer) {
   this->uiRenderer = std::make_shared<DEAD_UIRenderer>(renderer);
+  this->particleRenderer = std::make_shared<DEAD_ParticleRenderer>(renderer);
 }
 
 DEAD_Renderer::~DEAD_Renderer() {
@@ -94,6 +95,7 @@ void DEAD_Renderer::render() {
   this->renderPlayer(this->game->getPlayer());
   this->renderZombies(this->game->getZombieDirector());
   // this->drawZombieMovementMap();
+  this->particleRenderer->render();
   this->uiRenderer->render();
   this->renderYouDied();
 
@@ -106,6 +108,14 @@ SDL_Renderer* DEAD_Renderer::getSDLRenderer() {
 
 std::shared_ptr<DEAD_Game> DEAD_Renderer::getGame() {
   return this->game;
+}
+
+int DEAD_Renderer::getRenderBlockSize() {
+  return this->renderBlockSize;
+}
+
+std::shared_ptr<DEAD_ParticleRenderer> DEAD_Renderer::getParticleRenderer() {
+  return this->particleRenderer;
 }
 
 void DEAD_Renderer::renderMapObjects() {

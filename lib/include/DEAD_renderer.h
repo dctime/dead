@@ -7,6 +7,7 @@
 #include "DEAD_entity.h"
 #include "DEAD_zombie_director.h"
 #include "DEAD_ui_renderer.h"
+#include "DEAD_particle_renderer.h"
 
 class DEAD_Game;
 class DEAD_Player;
@@ -37,7 +38,9 @@ public:
   ScreenLocation getEntityRenderLocation(std::shared_ptr<DEAD_Entity> entity, bool mid);
   ScreenLocation getBulletRenderLocation(std::shared_ptr<DEAD_Bullet> bullet);
   ScreenLocation getPointRenderLocation(double x, double y);
+  std::shared_ptr<DEAD_ParticleRenderer> getParticleRenderer();
   SDL_Renderer* getSDLRenderer();
+  int getRenderBlockSize();
   void initWithSharedFromThis(std::shared_ptr<DEAD_Renderer> renderer);
   void startYouDied();
   void closeYouDied();
@@ -46,6 +49,7 @@ private:
   void renderMapObjects();
   SDL_Renderer* renderer;
   std::shared_ptr<DEAD_UIRenderer> uiRenderer;
+  std::shared_ptr<DEAD_ParticleRenderer> particleRenderer;
   int renderBlockSize;
   std::shared_ptr<DEAD_Game> game;
   RenderAnchor renderAnchor = {.x=0, .y=0};
@@ -69,5 +73,4 @@ private:
   int youDiedAlpha;
   bool playingYouDied;
   int startYouDiedTicks;
-  
 };

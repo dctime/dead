@@ -12,6 +12,7 @@ file(GLOB SOURCES
   "src/zombies/*.cpp"
   "src/ui/*.cpp"
   "src/weapons/*.cpp"
+  "src/particles/*.cpp"
 )
 
 add_library(${PROJECT_NAME} ${SOURCES})
