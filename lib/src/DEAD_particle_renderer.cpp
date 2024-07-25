@@ -1,6 +1,7 @@
 #include <DEAD_particle_renderer.h>
 #include <iostream>
 #include <memory>
+#include <vector>
 #include <particles/DEAD_particle_base.h>
 #include <particles/DEAD_sword_attack_particle.h>
 
@@ -17,8 +18,13 @@ void DEAD_ParticleRenderer::playSwordAttackParticle(DEAD_Map::MapLocation loc,
 }
 
 void DEAD_ParticleRenderer::render() {
+  std::vector<std::shared_ptr<DEAD_ParticleBase>> readyToFreeParticles;
   for (std::shared_ptr<DEAD_ParticleBase> particle : this->playingParticles) {
     if (!particle->render())
-      this->playingParticles.erase(particle);
+      readyToFreeParticles.push_back(particle);
+  }
+
+  for (std::shared_ptr<DEAD_ParticleBase> readyToFreeParticle : readyToFreeParticles) {
+    this->playingParticles.erase(readyToFreeParticle);
   }
 }
