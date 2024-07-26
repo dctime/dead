@@ -128,7 +128,6 @@ void DEAD_ControllablePlayer::handleKeyState() {
   }
   
   if (moved) {
-    std::cout << "Moved Update Path finding" << std::endl;
     this->getGame()->getZombieDirector()->updateHeatMapValue();
     this->getGame()->getZombieDirector()->updateZombieMapVector();
   } 

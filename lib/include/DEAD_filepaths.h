@@ -33,4 +33,9 @@ public:
   static const std::string BAT_SWING_7;
   static const std::string BAT_SWING_8;
   static const std::string BAT_SWING_9;
+
+  static const std::string HIT_WITH_BAT;
+  static const std::string HIT_WITH_BULLET_1;
+  static const std::string HIT_WITH_BULLET_2;
+  static const std::string HIT_WITH_BULLET_3;
 };

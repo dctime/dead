@@ -28,10 +28,7 @@ void DEAD_ItemDropLayer::getNearItemDrop(DEAD_Map::MapLocation loc, double radiu
             [](DEAD_Map::MapLocation loc1, DEAD_Map::MapLocation loc2) {
               return sqrt(pow(loc1.x - loc2.x, 2) + pow(loc1.y - loc2.y, 2));
             };
-    std::cout << "item: " << itemDrop->getLoc().x << ", " << itemDrop->getLoc().y;
-    std::cout << "  Player: " << loc.x << ", " << loc.y << std::endl; 
     if (calDistance(itemDrop->getLoc(), loc) <= radius) {
-      std::cout << "Pick That UP!" << std::endl;
       returnItem = itemDrop->getItem();
       this->itemDrops.erase(itemDrop);
       break;

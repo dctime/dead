@@ -31,3 +31,9 @@ const std::string DEAD_FilePaths::BAT_SWING_7 = BAT_SWING_SOUND_DIRECTORY + "/ba
 const std::string DEAD_FilePaths::BAT_SWING_8 = BAT_SWING_SOUND_DIRECTORY + "/bat_swing_8.wav";
 const std::string DEAD_FilePaths::BAT_SWING_9 = BAT_SWING_SOUND_DIRECTORY + "/bat_swing_9.wav";
 
+const std::string DEAD_FilePaths::HIT_WITH_BAT = ASSETS_FILE_PATH + "/sounds/hit_with_bat.wav";
+const std::string DEAD_FilePaths::HIT_WITH_BULLET_1 = ASSETS_FILE_PATH + "/sounds/hit_with_bullet_1.wav";
+const std::string DEAD_FilePaths::HIT_WITH_BULLET_2 = ASSETS_FILE_PATH + "/sounds/hit_with_bullet_2.wav";
+const std::string DEAD_FilePaths::HIT_WITH_BULLET_3 = ASSETS_FILE_PATH + "/sounds/hit_with_bullet_3.wav";
+
+

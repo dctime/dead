@@ -6,6 +6,7 @@
 #include <random>
 // 1: You Died
 // 2 - 9 weapon sounds
+// 10 - 17 hit sounds
 DEAD_SoundDirector::DEAD_SoundDirector()
     : youDiedSound(Mix_LoadWAV(DEAD_FilePaths::YOU_DIED_SOUND.c_str())) {
   Mix_AllocateChannels(32);
@@ -39,6 +40,10 @@ DEAD_SoundDirector::DEAD_SoundDirector()
       Mix_LoadWAV(DEAD_FilePaths::BAT_SWING_8.c_str()));
   this->batSwingSounds.push_back(
       Mix_LoadWAV(DEAD_FilePaths::BAT_SWING_9.c_str()));
+  this->hitWithBatSound = Mix_LoadWAV(DEAD_FilePaths::HIT_WITH_BAT.c_str());
+  this->hitWithBulletSounds.push_back(Mix_LoadWAV(DEAD_FilePaths::HIT_WITH_BULLET_1.c_str()));
+  this->hitWithBulletSounds.push_back(Mix_LoadWAV(DEAD_FilePaths::HIT_WITH_BULLET_2.c_str()));
+  this->hitWithBulletSounds.push_back(Mix_LoadWAV(DEAD_FilePaths::HIT_WITH_BULLET_3.c_str()));
 }
 
 void DEAD_SoundDirector::playYouDiedSound() {
@@ -79,6 +84,27 @@ void DEAD_SoundDirector::playBatSwingSound() {
     if (Mix_Playing(channelCounter))
       continue;
     Mix_PlayChannel(channelCounter, this->batSwingSounds.at(dis(rd)), 0);
+    break;
+  }
+}
+
+void DEAD_SoundDirector::playHitWithBat() { 
+  for (int channelCounter=10; channelCounter <= 17; channelCounter++) {
+    if (Mix_Playing(channelCounter))
+      continue;
+    Mix_PlayChannel(channelCounter, this->hitWithBatSound, 0);
+    break;
+  }
+}
+
+void DEAD_SoundDirector::playHitWithBullet() {
+  std::random_device rd;
+  std::uniform_int_distribution<int> dis(0, this->hitWithBulletSounds.size()-1);
+
+  for (int channelCounter=10; channelCounter <= 17; channelCounter++) {
+    if (Mix_Playing(channelCounter))
+      continue;
+    Mix_PlayChannel(channelCounter, this->hitWithBulletSounds.at(dis(rd)), 0);
     break;
   }
 }

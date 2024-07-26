@@ -53,6 +53,7 @@ void DEAD_BulletDirector::getCollisionBullets(
     if (zombie == nullptr)
       continue;
 
+    this->game->getSoundDirector()->playHitWithBullet();
     zombie->damage(bullet->getDamage());
     bullets.push_back(bullet);
     

@@ -9,10 +9,14 @@ public:
   void playPistolShootSound();
   void playPistolReloadSound();
   void playBatSwingSound();
+  void playHitWithBat();
+  void playHitWithBullet();
 private:
   Mix_Chunk* youDiedSound;
   std::vector<Mix_Chunk*> pistolShootSounds;
   Mix_Chunk* pistolReloadSound;
   std::vector<Mix_Chunk*> batSwingSounds;
+  Mix_Chunk* hitWithBatSound;
+  std::vector<Mix_Chunk*> hitWithBulletSounds;
   
 };
