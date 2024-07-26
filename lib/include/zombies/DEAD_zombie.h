@@ -11,4 +11,5 @@ public:
 private:
   int lastTimeAttackTicks;
   int attackCoolDown;
+  
 };

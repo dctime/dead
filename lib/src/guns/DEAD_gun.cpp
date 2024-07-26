@@ -6,8 +6,7 @@
 #include <memory>
 
 DEAD_Gun::DEAD_Gun(std::shared_ptr<DEAD_Player> player, const int MAGAZINE_SIZE, const int COOLDOWN_TIME, const int RELOAD_TIME)
-  : DEAD_Weapon(player), MAGAZINE_SIZE(MAGAZINE_SIZE), COOLDOWN_TIME(COOLDOWN_TIME), RELOAD_TIME(RELOAD_TIME),
-    startReloadTicks(0), startCoolingTicks(0) {
+  : DEAD_Weapon(player, COOLDOWN_TIME), MAGAZINE_SIZE(MAGAZINE_SIZE), RELOAD_TIME(RELOAD_TIME), startReloadTicks(0) {
   this->ammoLeftInMagazine = this->MAGAZINE_SIZE;
 }
 
@@ -40,21 +39,13 @@ void DEAD_Gun::reload() {
   std::cout << "Gun Reloaded" << std::endl;
 }
 
-void DEAD_Gun::startCoolDown() {
-  this->startCoolingTicks = SDL_GetTicks64();
-}
+
 
 void DEAD_Gun::startReload() {
   this->startReloadTicks = SDL_GetTicks64();
 }
 
-// 0.0 - 1.0, means not cooling;
-double DEAD_Gun::checkStillCooling() {
-  int nowTicks = SDL_GetTicks64();
-  int coolingTicks = nowTicks - this->startCoolingTicks;
-  if (coolingTicks >= this->COOLDOWN_TIME) return 1.0;
-  else return static_cast<double>(coolingTicks) / this->COOLDOWN_TIME;
-}
+
 
 double DEAD_Gun::checkStillReloading() {
   int nowTicks = SDL_GetTicks64();

@@ -1,19 +1,22 @@
 #include "DEAD_entity.h"
 #include "DEAD_controllable_player.h"
 #include <DEAD_game.h>
+#include <SDL2/SDL_timer.h>
 #include <cstdlib>
 #include <guns/DEAD_pistol.h>
 #include <iostream>
 #include <memory>
 
 DEAD_Entity::DEAD_Entity(std::shared_ptr<DEAD_Game> game, int maxHealth)
-    : speed(3), position({.x = 0, .y = 0}), rotation(0), size(0.8), maxHealth(maxHealth), health(maxHealth) {
+    : speed(3), position({.x = 0, .y = 0}), rotation(0), size(0.8), maxHealth(maxHealth), health(maxHealth),
+      lastTimeBeenHitTicks(0), knockBackCooldown(300) {
   this->hitbox = std::make_shared<DEAD_CircleHitbox>(this->getSize() / 2 * 0.8,
                                                      this->position);
   this->setGame(game);
 }
 
 void DEAD_Entity::damage(int damage) {
+  this->lastTimeBeenHitTicks = SDL_GetTicks64();
   int newHealth = this->health - damage;
   if(newHealth < 0) {
     this->health = 0;
@@ -24,6 +27,11 @@ void DEAD_Entity::damage(int damage) {
 }
 
 DEAD_Entity::~DEAD_Entity() { SDL_Log("Entity Destoryed"); }
+
+bool DEAD_Entity::checkIfInKnockback() {
+  if (SDL_GetTicks64() - this->lastTimeBeenHitTicks < this->knockBackCooldown) return true; 
+  else return false;
+}
 
 int DEAD_Entity::getMaxhealth() {
   return this->maxHealth;

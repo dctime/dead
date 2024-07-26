@@ -35,8 +35,7 @@ void DEAD_Renderer::getTextureFromFont(std::string fontFilePath,
                                        SDL_Texture *&texture, std::string text,
                                        int fontSize, SDL_Color color) {
   TTF_Font *font = TTF_OpenFont(fontFilePath.c_str(), fontSize);
-  SDL_Surface *surface =
-      TTF_RenderText_Blended(font, text.c_str(), color);
+  SDL_Surface *surface = TTF_RenderText_Blended(font, text.c_str(), color);
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
 }
 
@@ -65,11 +64,12 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window,
                         DEAD_FilePaths::ZOMBIES_TEXTURE_PNG);
   SDL_Color color = {200, 0, 0, 255};
   getTextureFromFont(DEAD_FilePaths::YOU_DIED_FONT, this->youDiedFontTexture,
-                     "You Died", 72 , color);
+                     "You Died", 72, color);
   this->game = game;
 }
 
-void DEAD_Renderer::initWithSharedFromThis(std::shared_ptr<DEAD_Renderer> renderer) {
+void DEAD_Renderer::initWithSharedFromThis(
+    std::shared_ptr<DEAD_Renderer> renderer) {
   this->uiRenderer = std::make_shared<DEAD_UIRenderer>(renderer);
   this->particleRenderer = std::make_shared<DEAD_ParticleRenderer>(renderer);
 }
@@ -102,17 +102,11 @@ void DEAD_Renderer::render() {
   SDL_RenderPresent(this->renderer);
 }
 
-SDL_Renderer* DEAD_Renderer::getSDLRenderer() {
-  return this->renderer;
-}
+SDL_Renderer *DEAD_Renderer::getSDLRenderer() { return this->renderer; }
 
-std::shared_ptr<DEAD_Game> DEAD_Renderer::getGame() {
-  return this->game;
-}
+std::shared_ptr<DEAD_Game> DEAD_Renderer::getGame() { return this->game; }
 
-int DEAD_Renderer::getRenderBlockSize() {
-  return this->renderBlockSize;
-}
+int DEAD_Renderer::getRenderBlockSize() { return this->renderBlockSize; }
 
 std::shared_ptr<DEAD_ParticleRenderer> DEAD_Renderer::getParticleRenderer() {
   return this->particleRenderer;
@@ -171,7 +165,12 @@ void DEAD_Renderer::renderEntity(std::shared_ptr<DEAD_Entity> entity,
 
 void DEAD_Renderer::renderZombies(
     const std::shared_ptr<DEAD_ZombieDirector> &zombieDirector) {
+  std::set<std::shared_ptr<DEAD_Zombie>> knockbackingZombies;
   for (std::shared_ptr<DEAD_Zombie> zombie : zombieDirector->getZombies()) {
+    if (zombie->checkIfInKnockback())
+      SDL_SetTextureColorMod(this->zombiesTexture, 100, 100, 100);
+    else
+      SDL_SetTextureColorMod(this->zombiesTexture, 255, 255, 255);
     renderEntity(zombie, this->zombiesTexture);
   }
 }
@@ -304,7 +303,7 @@ void DEAD_Renderer::moveRenderAnchor(double x, double y) {
 }
 
 void DEAD_Renderer::renderYouDied() {
-  
+
   if (playingYouDied == false)
     return;
 
@@ -322,7 +321,7 @@ void DEAD_Renderer::renderYouDied() {
   SDL_SetTextureAlphaMod(this->youDiedFontTexture, this->youDiedAlpha);
   rect.y += rect.y / 4;
   rect.w -= rect.w / 1.7;
-  rect.x = this->getGame()->SCREEN_WIDTH/2 - rect.w/2;
+  rect.x = this->getGame()->SCREEN_WIDTH / 2 - rect.w / 2;
   rect.h = rect.h / 2;
   SDL_RenderCopy(this->renderer, this->youDiedFontTexture, NULL, &rect);
 }

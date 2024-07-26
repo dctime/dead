@@ -13,14 +13,19 @@
 #include <DEAD_functions.h>
 
 DEAD_Bat::DEAD_Bat(std::shared_ptr<DEAD_Player> owner) :
-  DEAD_Weapon(owner), angleEffectRange(60), effectDistance(2) {
+  DEAD_Weapon(owner, 500), angleEffectRange(100), effectDistance(2), damage(30) {
 
 }
 
 void DEAD_Bat::attack() {
+  if (this->checkStillCooling() != 1.0) return;
+  this->startCoolDown();
+
   DEAD_Map::MapLocation attackingLoc;
-  attackingLoc.x = this->getPlayer()->getPos().x + cos(this->getPlayer()->getRotation()/180*M_PI);
-  attackingLoc.y = this->getPlayer()->getPos().y + sin(this->getPlayer()->getRotation()/180*M_PI);
+  DEAD_Vector attackingUnitVector = DEAD_Functions::calUnitVector(this->getPlayer()->getRotation());
+  attackingLoc.x = this->getPlayer()->getPos().x + attackingUnitVector.x;
+  attackingLoc.y = this->getPlayer()->getPos().y + attackingUnitVector.y;
+  
   this->getPlayer()->getGame()->getRenderer()->getParticleRenderer()->playSwordAttackParticle(attackingLoc, this->getPlayer()->getRotation());
   this->getPlayer()->getGame()->getSoundDirector()->playBatSwingSound();
 
@@ -39,11 +44,16 @@ void DEAD_Bat::attack() {
     double deltaAngle = attackAngle - targetAngle;
     std::cout << "Delta Angle: " << deltaAngle << std::endl;
     
+    while (int(deltaAngle/180) != 0) {
+      if (deltaAngle > 0) deltaAngle -= 360;
+      else if (deltaAngle < 0) deltaAngle += 360;
+    }
+
     if (distance > effectDistance) continue;
     std::cout << "Distance Reached" << std::endl;
     if (!((deltaAngle >= 0 && deltaAngle <= this->angleEffectRange/2) || (deltaAngle < 0 && deltaAngle >= -this->angleEffectRange/2))) continue;
     std::cout << "Angle Correct" << std::endl;
-    zombie->damage(100);
+    zombie->damage(this->damage);
   }
   // TODO: Implement Attack Range
 }

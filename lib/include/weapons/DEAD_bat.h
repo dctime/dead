@@ -9,5 +9,6 @@ public:
 private:
   double angleEffectRange;
   double effectDistance;
+  int damage;
 };
 

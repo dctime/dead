@@ -31,6 +31,7 @@ public:
   void setMaxHealth(int health);
   void setHealth(int health);
   void damage(int health);
+  bool checkIfInKnockback();
 protected:
   std::shared_ptr<DEAD_Item> holdItem;
   std::shared_ptr<DEAD_Game> game;
@@ -42,4 +43,6 @@ private:
   std::shared_ptr<DEAD_CircleHitbox> hitbox;
   int health;
   int maxHealth;
+  int lastTimeBeenHitTicks;
+  int knockBackCooldown;
 };

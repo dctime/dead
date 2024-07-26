@@ -17,17 +17,14 @@ public:
   int getAmmoLeftInMagazine();
   virtual void reload();
   // 0.0 - 1.0, -1 means not cooling;
-  double checkStillCooling();
   double checkStillReloading();
+  
 private:
   int ammoLeftInMagazine;
   const int MAGAZINE_SIZE;
   const int RELOAD_TIME;
-  const int COOLDOWN_TIME;
-  int startCoolingTicks;
   int startReloadTicks;
 protected:
-  void startCoolDown();
   void startReload();
   void insertNewMagazine();
 };
