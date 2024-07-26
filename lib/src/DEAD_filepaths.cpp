@@ -19,3 +19,15 @@ const std::string DEAD_FilePaths::PISTOL_SHOOT_SOUND_2 = ASSETS_FILE_PATH + "/so
 const std::string DEAD_FilePaths::PISTOL_SHOOT_SOUND_3 = ASSETS_FILE_PATH + "/sounds/pistol_3.wav";
 const std::string DEAD_FilePaths::PISTOL_SHOOT_SOUND_4 = ASSETS_FILE_PATH + "/sounds/pistol_4.wav";
 const std::string DEAD_FilePaths::PISTOL_RELOAD_SOUND = ASSETS_FILE_PATH + "/sounds/pistol_reload.wav";
+
+const std::string DEAD_FilePaths::BAT_SWING_SOUND_DIRECTORY = ASSETS_FILE_PATH + "/sounds/bat_swing";
+const std::string DEAD_FilePaths::BAT_SWING_1 = BAT_SWING_SOUND_DIRECTORY + "/bat_swing_1.wav";
+const std::string DEAD_FilePaths::BAT_SWING_2 = BAT_SWING_SOUND_DIRECTORY + "/bat_swing_2.wav";
+const std::string DEAD_FilePaths::BAT_SWING_3 = BAT_SWING_SOUND_DIRECTORY + "/bat_swing_3.wav";
+const std::string DEAD_FilePaths::BAT_SWING_4 = BAT_SWING_SOUND_DIRECTORY + "/bat_swing_4.wav";
+const std::string DEAD_FilePaths::BAT_SWING_5 = BAT_SWING_SOUND_DIRECTORY + "/bat_swing_5.wav";
+const std::string DEAD_FilePaths::BAT_SWING_6 = BAT_SWING_SOUND_DIRECTORY + "/bat_swing_6.wav";
+const std::string DEAD_FilePaths::BAT_SWING_7 = BAT_SWING_SOUND_DIRECTORY + "/bat_swing_7.wav";
+const std::string DEAD_FilePaths::BAT_SWING_8 = BAT_SWING_SOUND_DIRECTORY + "/bat_swing_8.wav";
+const std::string DEAD_FilePaths::BAT_SWING_9 = BAT_SWING_SOUND_DIRECTORY + "/bat_swing_9.wav";
+

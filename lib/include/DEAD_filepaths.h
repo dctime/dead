@@ -21,4 +21,16 @@ public:
   static const std::string PISTOL_SHOOT_SOUND_3;
   static const std::string PISTOL_SHOOT_SOUND_4;
   static const std::string PISTOL_RELOAD_SOUND;
+
+  static const std::string BAT_SWING_SOUND_DIRECTORY;
+
+  static const std::string BAT_SWING_1;
+  static const std::string BAT_SWING_2;
+  static const std::string BAT_SWING_3;
+  static const std::string BAT_SWING_4;
+  static const std::string BAT_SWING_5;
+  static const std::string BAT_SWING_6;
+  static const std::string BAT_SWING_7;
+  static const std::string BAT_SWING_8;
+  static const std::string BAT_SWING_9;
 };

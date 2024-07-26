@@ -9,10 +9,11 @@
 #include <DEAD_game.h>
 #include <DEAD_particle_renderer.h>
 #include <DEAD_zombie_director.h>
+#include <DEAD_sound_director.h>
 #include <DEAD_functions.h>
 
 DEAD_Bat::DEAD_Bat(std::shared_ptr<DEAD_Player> owner) :
-  DEAD_Weapon(owner) {
+  DEAD_Weapon(owner), angleEffectRange(60), effectDistance(2) {
 
 }
 
@@ -21,6 +22,7 @@ void DEAD_Bat::attack() {
   attackingLoc.x = this->getPlayer()->getPos().x + cos(this->getPlayer()->getRotation()/180*M_PI);
   attackingLoc.y = this->getPlayer()->getPos().y + sin(this->getPlayer()->getRotation()/180*M_PI);
   this->getPlayer()->getGame()->getRenderer()->getParticleRenderer()->playSwordAttackParticle(attackingLoc, this->getPlayer()->getRotation());
+  this->getPlayer()->getGame()->getSoundDirector()->playBatSwingSound();
 
   std::shared_ptr<DEAD_ZombieDirector> zombieDirector;
   zombieDirector = this->getPlayer()->getGame()->getZombieDirector();
@@ -36,12 +38,10 @@ void DEAD_Bat::attack() {
     std::cout << "Attack Angle: " << attackAngle << std::endl;
     double deltaAngle = attackAngle - targetAngle;
     std::cout << "Delta Angle: " << deltaAngle << std::endl;
-    double angleEffectRange = 30;
-    double effectDistance = 1.5;
     
     if (distance > effectDistance) continue;
     std::cout << "Distance Reached" << std::endl;
-    if (!((deltaAngle >= 0 && deltaAngle <= angleEffectRange) || (deltaAngle < 0 && deltaAngle >= -angleEffectRange))) continue;
+    if (!((deltaAngle >= 0 && deltaAngle <= this->angleEffectRange/2) || (deltaAngle < 0 && deltaAngle >= -this->angleEffectRange/2))) continue;
     std::cout << "Angle Correct" << std::endl;
     zombie->damage(100);
   }
