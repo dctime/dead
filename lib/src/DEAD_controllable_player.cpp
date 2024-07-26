@@ -40,7 +40,6 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
       this->summonWeapon<DEAD_Bat>();
       break;
     case SDLK_v:
-      // TODO: playParticle
       this->game->getRenderer()->getParticleRenderer()->playSwordAttackParticle(loc, 0);
       break;
     case SDLK_r:

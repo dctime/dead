@@ -55,8 +55,6 @@ void DEAD_BulletDirector::getCollisionBullets(
 
     zombie->damage(bullet->getDamage());
     bullets.push_back(bullet);
-    if (zombie->getHealth() <= 0) {
-      this->game->getZombieDirector()->killZombie(zombie);
-    }
+    
   }
 }
