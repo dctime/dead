@@ -37,10 +37,10 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
       break;
     case SDLK_g:
       SDL_Log("Summon Weapon");
-      this->summonWeapon<DEAD_Bat>();
+      this->summonWeapon<DEAD_Pistol>();
       break;
     case SDLK_v:
-      this->game->getRenderer()->getParticleRenderer()->playSwordAttackParticle(loc, 0);
+      std::cout << "Zombie count: " << this->game->getZombieDirector()->getZombies().size() << std::endl;
       break;
     case SDLK_r:
       this->reloadGun();

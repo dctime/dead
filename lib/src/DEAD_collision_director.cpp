@@ -9,7 +9,6 @@
 #include <map_objects/DEAD_map_object_base.h>
 #include <memory>
 #include <vector>
-#include <DEAD_collision_director.h>
 DEAD_CollisionDirector::DEAD_CollisionDirector(std::shared_ptr<DEAD_Game> game)
     : game(game) {
   SDL_Log("collision init");
@@ -35,7 +34,6 @@ DEAD_CollisionDirector::entityCheckCollision(
     if (objectY < 0 || objectY >= this->game->getMap()->getMapSize().height)
       continue;
 
-  std:;
     std::shared_ptr<DEAD_MapObjectBase> object =
         this->game->getMap()->getMapObjects()[objectY][objectX];
     if (!object->isZombieCollidable()) {
@@ -45,7 +43,7 @@ DEAD_CollisionDirector::entityCheckCollision(
     DEAD_Map::MapLocation futureLoc = {.x = targetX, .y = targetY};
 
     if (object->getHitBox()->isCollideWithCircle(
-            futureLoc, entity->getHitbox()->getRadius()*0.01)) {
+            futureLoc, entity->getHitbox()->getRadius() * 0.00000000001)) {
       collideObjects.insert(object);
     }
   }
@@ -172,14 +170,14 @@ DEAD_CollisionDirector::bulletCheckCollision(
   return collideObjects;
 }
 
-std::shared_ptr<DEAD_Zombie>
-DEAD_CollisionDirector::bulletCheckCollideZombie(
-  const std::shared_ptr<DEAD_Bullet> &bullet) {
-  std::set<std::shared_ptr<DEAD_Zombie>> zombies = this->game->getZombieDirector()->getZombies();
+std::shared_ptr<DEAD_Zombie> DEAD_CollisionDirector::bulletCheckCollideZombie(
+    const std::shared_ptr<DEAD_Bullet> &bullet) {
+  std::set<std::shared_ptr<DEAD_Zombie>> zombies =
+      this->game->getZombieDirector()->getZombies();
   for (std::shared_ptr<DEAD_Zombie> zombie : zombies) {
     DEAD_Map::MapLocation bulletLoc = bullet->getLoc();
     if (zombie->getHitbox()->iscollideWithCircle(bullet->getHitBox())) {
-      return zombie; 
+      return zombie;
     }
   }
   return nullptr;

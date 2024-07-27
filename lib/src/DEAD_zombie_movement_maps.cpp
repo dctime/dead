@@ -3,18 +3,24 @@
 #include <DEAD_zombie_movement_maps.h>
 #include <climits>
 #include <functional>
+#include <iostream>
 #include <memory>
 #include <queue>
 #include <vector>
+
 
 DEAD_ZombieMovementMaps::DEAD_ZombieMovementMaps(
     std::shared_ptr<DEAD_Game> game)
     : game(game) {
   MapSize mapSize = this->game->getMap()->getMapSize();
+  int fullprocesses = mapSize.width * mapSize.height;
+  int completeProcesses = 0;
   for (int y = 0; y < mapSize.height; y++) {
     std::vector<std::shared_ptr<DEAD_ZombieMovementMap>> mapRow;
     for (int x = 0; x < mapSize.width; x++) {
       mapRow.push_back(std::make_shared<DEAD_ZombieMovementMap>(game, x, y));
+      completeProcesses++;
+      std::cout << fullprocesses << " / " << completeProcesses << std::endl;
     }
     this->maps.push_back(mapRow);
   }

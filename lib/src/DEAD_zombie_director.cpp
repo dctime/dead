@@ -2,16 +2,18 @@
 #include "DEAD_map.h"
 #include "DEAD_player.h"
 #include "zombies/DEAD_zombie.h"
+#include <DEAD_collision_director.h>
 #include <DEAD_functions.h>
 #include <DEAD_game.h>
 #include <DEAD_zombie_director.h>
+#include <DEAD_zombie_movement_maps.h>
 #include <climits>
 #include <cmath>
 #include <functional>
+#include <iostream>
 #include <memory>
 #include <set>
 #include <vector>
-#include <DEAD_zombie_movement_maps.h>
 
 DEAD_ZombieDirector::DEAD_ZombieDirector(std::shared_ptr<DEAD_Game> game)
     : game(game),
@@ -29,7 +31,8 @@ std::set<std::shared_ptr<DEAD_Zombie>> DEAD_ZombieDirector::getZombies() {
   return this->zombies;
 }
 
-std::shared_ptr<DEAD_ZombieMovementMaps> DEAD_ZombieDirector::getZombieMovementMaps() {
+std::shared_ptr<DEAD_ZombieMovementMaps>
+DEAD_ZombieDirector::getZombieMovementMaps() {
   return this->zombieMovementMaps;
 }
 
@@ -49,13 +52,19 @@ void DEAD_ZombieDirector::tickZombies() {
   for (std::shared_ptr<DEAD_Zombie> zombie : this->zombies) {
     double distanceBetween = DEAD_Functions::calDistance(
         zombie->getPos().x, zombie->getPos().y, playerLoc.x, playerLoc.y);
-    if (distanceBetween < 1) {
+    if (distanceBetween < 1.414) {
       double moveXVec = zombie->getPos().x - playerLoc.x;
       double moveYVec = zombie->getPos().y - playerLoc.y;
-      zombie->move(-moveXVec / distanceBetween / 100.0, 0);
-      zombie->move(0, -moveYVec / distanceBetween / 100.0);
-      zombie->bite(this->game->getPlayer());
-      continue;
+      double deltaX = -moveXVec / distanceBetween / 100.0;
+      double deltaY = -moveYVec / distanceBetween / 100.0;
+      if (!(this->game->getCollisionDirector()
+                ->entityCheckCollision(zombie, deltaX, deltaY)
+                .size())) {
+        zombie->move(deltaX, 0);
+        zombie->move(0, deltaY);
+        zombie->bite(this->game->getPlayer());
+        continue;
+      }
     }
     ZombieVector moveVector =
         this->getMovementVector(zombie->getPos().x, zombie->getPos().y);
@@ -91,7 +100,7 @@ ZombieVector DEAD_ZombieDirector::getMovementVector(double targetX,
 
   std::vector<ZombieVector> sequence;
 
-  for (int multiplyCounter = 0; multiplyCounter < 5; multiplyCounter++)
+  for (int multiplyCounter = 0; multiplyCounter < 10; multiplyCounter++)
     sequence.push_back({.vectorX = baseX, .vectorY = baseY});
 
   sequence.push_back({.vectorX = baseX + 1, .vectorY = baseY});
@@ -108,13 +117,10 @@ ZombieVector DEAD_ZombieDirector::getMovementVector(double targetX,
     if (!check(step.vectorX, step.vectorY, this->game))
       continue;
     double weight = calDistance(targetX, step.vectorX, targetY, step.vectorY);
-    ZombieVector elementVector = this->zombieMovementMaps->getMovementGradient(playerLoc.x, playerLoc.y, step.vectorX, step.vectorY);
-    returnVector.vectorX +=
-        elementVector.vectorX *
-        weight;
-    returnVector.vectorY +=
-        elementVector.vectorY *
-        weight;
+    ZombieVector elementVector = this->zombieMovementMaps->getMovementGradient(
+        playerLoc.x, playerLoc.y, step.vectorX, step.vectorY);
+    returnVector.vectorX += elementVector.vectorX * weight;
+    returnVector.vectorY += elementVector.vectorY * weight;
   }
 
   double vectorLength =

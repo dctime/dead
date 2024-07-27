@@ -69,10 +69,6 @@ void DEAD_Game::initObjectThatHasSharedFromThis() {
       std::make_shared<DEAD_CollisionDirector>(shared_from_this());
   this->zombieDirector = std::make_shared<DEAD_ZombieDirector>(
       shared_from_this());
-  // std::shared_ptr<DEAD_Zombie> zombie =
-  // std::make_shared<DEAD_Zombie>(shared_from_this());
-  // zombie->setPos(1.5, 1.5);
-  // this->zombieDirector->registerZombie(zombie);
 
   this->bulletCollisionID = (SDL_AddTimer(DEAD_Game::BULLET_COLLISION_DELAY,
                                           this->bulletCheckCollisionCallback,
