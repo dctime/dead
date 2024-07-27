@@ -68,8 +68,7 @@ void DEAD_Game::initObjectThatHasSharedFromThis() {
   this->collisionDirector =
       std::make_shared<DEAD_CollisionDirector>(shared_from_this());
   this->zombieDirector = std::make_shared<DEAD_ZombieDirector>(
-      shared_from_this(), this->getMap()->getMapSize().width,
-      this->getMap()->getMapSize().height);
+      shared_from_this());
   // std::shared_ptr<DEAD_Zombie> zombie =
   // std::make_shared<DEAD_Zombie>(shared_from_this());
   // zombie->setPos(1.5, 1.5);

@@ -39,6 +39,4 @@ void DEAD_MapSpawner::randomSpawnAZombie() {
   std::shared_ptr<DEAD_Zombie> zombie = std::make_shared<DEAD_Zombie>(this->game);
   zombie->setPos(spawnLoc.x, spawnLoc.y);
   this->game->getZombieDirector()->registerZombie(zombie);
-  this->game->getZombieDirector()->updateHeatMapValue();
-  this->game->getZombieDirector()->updateZombieMapVector();
 }

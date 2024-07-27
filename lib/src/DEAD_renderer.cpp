@@ -94,7 +94,7 @@ void DEAD_Renderer::render() {
   this->renderBullets();
   this->renderPlayer(this->game->getPlayer());
   this->renderZombies(this->game->getZombieDirector());
-  // this->drawZombieMovementMap();
+  this->drawZombieMovementMap();
   this->particleRenderer->render();
   this->uiRenderer->render();
   this->renderYouDied();
@@ -259,10 +259,11 @@ ScreenLocation DEAD_Renderer::getItemDropRenderLocation(
 void DEAD_Renderer::drawZombieMovementMap() {
   std::shared_ptr<DEAD_ZombieDirector> zombieDirector =
       this->game->getZombieDirector();
+  DEAD_Map::MapLocation playerLoc = this->getGame()->getPlayer()->getPos();
   for (int y = 0; y < this->game->getMap()->getMapSize().height; y++) {
     for (int x = 0; x < this->game->getMap()->getMapSize().width; x++) {
-      DEAD_ZombieDirector::ZombieVector drawingVector =
-          zombieDirector->getLocMovementMapData(x, y).vector;
+      ZombieVector drawingVector =
+          zombieDirector->getZombieMovementMaps()->getMovementGradient(playerLoc.x, playerLoc.y, x, y);
       ScreenLocation startLoc = this->getPointRenderLocation(x + 0.5, y + 0.5);
       ScreenLocation endLoc = this->getPointRenderLocation(
           x + 0.5 + drawingVector.vectorX, y + 0.5 + drawingVector.vectorY);
@@ -276,7 +277,7 @@ void DEAD_Renderer::drawZombieMovementMap() {
        this->game->getZombieDirector()->getZombies()) {
     ScreenLocation zombieLoc =
         this->getPointRenderLocation(zombie->getPos().x, zombie->getPos().y);
-    DEAD_ZombieDirector::ZombieVector zombieMoveVec =
+    ZombieVector zombieMoveVec =
         zombieDirector->getMovementVector(zombie->getPos().x,
                                           zombie->getPos().y);
     ScreenLocation zombieMoveEndScreen = this->getPointRenderLocation(

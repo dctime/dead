@@ -126,10 +126,4 @@ void DEAD_ControllablePlayer::handleKeyState() {
     }
     this->move(moveTickDistance, 0);
   }
-  
-  if (moved) {
-    this->getGame()->getZombieDirector()->updateHeatMapValue();
-    this->getGame()->getZombieDirector()->updateZombieMapVector();
-  } 
-  
 }
