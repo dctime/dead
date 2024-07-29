@@ -7,6 +7,7 @@
 #include <DEAD_game.h>
 #include <DEAD_zombie_director.h>
 #include <DEAD_zombie_movement_maps.h>
+#include <SDL2/SDL_timer.h>
 #include <climits>
 #include <cmath>
 #include <functional>
@@ -23,7 +24,7 @@ void DEAD_ZombieDirector::registerZombie(std::shared_ptr<DEAD_Zombie> zombie) {
   this->zombies.insert(zombie);
 }
 
-void DEAD_ZombieDirector::killZombie(std::shared_ptr<DEAD_Zombie> zombie) {
+void DEAD_ZombieDirector::killZombie(const std::shared_ptr<DEAD_Zombie>& zombie) {
   this->zombies.erase(zombie);
 }
 
@@ -39,17 +40,18 @@ DEAD_ZombieDirector::getZombieMovementMaps() {
 void DEAD_ZombieDirector::tickZombies() {
   DEAD_Map::MapLocation playerLoc = this->game->getPlayer()->getPos();
   std::vector<std::shared_ptr<DEAD_Zombie>> deadZombies;
-  for (std::shared_ptr<DEAD_Zombie> zombie : this->zombies) {
+
+  for (const std::shared_ptr<DEAD_Zombie>& zombie : this->zombies) {
     if (zombie->getHealth() <= 0) {
       deadZombies.push_back(zombie);
     }
   }
 
-  for (std::shared_ptr<DEAD_Zombie> deadZombie : deadZombies) {
+  for (const std::shared_ptr<DEAD_Zombie>& deadZombie : deadZombies) {
     this->game->getZombieDirector()->killZombie(deadZombie);
   }
 
-  for (std::shared_ptr<DEAD_Zombie> zombie : this->zombies) {
+  for (const std::shared_ptr<DEAD_Zombie>& zombie : this->zombies) {
     double distanceBetween = DEAD_Functions::calDistance(
         zombie->getPos().x, zombie->getPos().y, playerLoc.x, playerLoc.y);
     if (distanceBetween < 1.414) {
@@ -66,8 +68,13 @@ void DEAD_ZombieDirector::tickZombies() {
         continue;
       }
     }
-    ZombieVector moveVector =
-        this->getMovementVector(zombie->getPos().x, zombie->getPos().y);
+
+    if (SDL_GetTicks64() % 100 == 0) {
+      zombie->setMovingUnitVector(this->getMovementVector(zombie->getPos().x, zombie->getPos().y));
+    }
+
+    ZombieVector moveVector = zombie->getMovingUnitVector();
+
     // std::cout << "Move vector: " << moveVector.vectorX << ", " <<
     // moveVector.vectorY << std::endl;
     zombie->move(moveVector.vectorX / 100, 0);

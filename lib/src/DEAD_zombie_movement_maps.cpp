@@ -42,7 +42,7 @@ DEAD_ZombieMovementMaps::getMovementGradient(ZombieMapLoc playerLoc,
                                    zombieLoc.y);
 }
 
-std::shared_ptr<DEAD_ZombieMovementMap>
+const std::shared_ptr<DEAD_ZombieMovementMap>&
 DEAD_ZombieMovementMaps::getZombieMovementMap(int x, int y) {
   return this->maps.at(y).at(x);
 }
@@ -214,7 +214,7 @@ void DEAD_ZombieMovementMap::calHeatMapValue() {
   std::set<std::vector<int>> visited;
   while (!calQueue.empty()) {
 
-    std::vector<int> currentLoc = calQueue.front();
+    std::vector<int>& currentLoc = calQueue.front();
 
     std::vector<int> currentLocationOnly;
     currentLocationOnly.push_back(currentLoc[0]);

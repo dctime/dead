@@ -77,7 +77,7 @@ void DEAD_Game::initObjectThatHasSharedFromThis() {
       SDL_AddTimer(DEAD_Game::MAIN_LOOP_DELAY, this->playerMovementCallback,
                    shared_from_this().get());
   this->zombieSpawnID =
-      SDL_AddTimer(3000, this->spawnZombieCallback, shared_from_this().get());
+      SDL_AddTimer(500, this->spawnZombieCallback, shared_from_this().get());
 }
 
 DEAD_Game::~DEAD_Game() {
@@ -92,9 +92,7 @@ DEAD_Game::~DEAD_Game() {
 void DEAD_Game::mapTick() {
 
   this->eventHandle();
-  this->renderer->moveRenderAnchor(this->player->getPos().x,
-                                   this->player->getPos().y);
-  this->renderer->render();
+  
 }
 
 void DEAD_Game::eventHandle() {
@@ -222,11 +220,13 @@ int DEAD_Game::getSecretNumber() { return 7; }
 
 void DEAD_Game::mainLoop(DEAD_Game *game) {
   game->player->handleKeyState();
-  // game->getZombieDirector()->updateHeatMapValue();
   game->player->handlePlayerRotation();
   game->bulletDirector->tickBullets();
   game->getZombieDirector()->tickZombies();
   game->checkPlayerDied();
+  game->renderer->moveRenderAnchor(game->player->getPos().x,
+                                   game->player->getPos().y);
+  game->renderer->render();
 }
 void DEAD_Game::checkAndDeleteCollisionBullets(DEAD_Game *game) {
   game->bulletDirector->checkAndDeleteCollisionBullets();

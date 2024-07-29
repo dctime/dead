@@ -25,7 +25,7 @@ public:
   DEAD_ZombieMovementMaps(std::shared_ptr<DEAD_Game> game);
   ZombieVector getMovementGradient(ZombieMapLoc playerLoc, ZombieMapLoc zombieLoc);
   ZombieVector getMovementGradient(int playerX, int playerY, int zombieX, int zombieY);
-  std::shared_ptr<DEAD_ZombieMovementMap> getZombieMovementMap(int x, int y);
+  const std::shared_ptr<DEAD_ZombieMovementMap>& getZombieMovementMap(int x, int y);
 private:
   std::shared_ptr<DEAD_Game> game;
   std::vector<std::vector<std::shared_ptr<DEAD_ZombieMovementMap>>> maps;

@@ -8,6 +8,7 @@
 DEAD_Zombie::DEAD_Zombie(std::shared_ptr<DEAD_Game> game)
     : DEAD_Entity::DEAD_Entity(game, 100), lastTimeAttackTicks(0),
       attackCoolDown(1000) {
+  this->movingUnitVector = {.vectorX=0, .vectorY=0};
   std::cout << "Zombie Built" << std::endl;
 }
 
@@ -36,3 +37,17 @@ void DEAD_Zombie::bite(std::shared_ptr<DEAD_Player> player) {
   std::cout << "Player health left: " << player->getHealth() << std::endl;
 
 }
+
+ZombieVector DEAD_Zombie::getMovingUnitVector() {
+  return this->movingUnitVector;
+}
+
+void DEAD_Zombie::setMovingUnitVector(ZombieVector vector) {
+  this->movingUnitVector = vector; 
+}
+
+
+
+
+
+

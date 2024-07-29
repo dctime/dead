@@ -9,7 +9,7 @@ class DEAD_ZombieDirector {
 public:
   DEAD_ZombieDirector(std::shared_ptr<DEAD_Game> game);
   void registerZombie(std::shared_ptr<DEAD_Zombie> zombie);
-  void killZombie(std::shared_ptr<DEAD_Zombie> zombie);
+  void killZombie(const std::shared_ptr<DEAD_Zombie>& zombie);
   std::set<std::shared_ptr<DEAD_Zombie>> getZombies();
   ZombieVector getMovementVector(double targetX, double targetY);
   std::shared_ptr<DEAD_ZombieMovementMaps> getZombieMovementMaps();

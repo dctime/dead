@@ -97,33 +97,19 @@ void DEAD_ControllablePlayer::handleKeyState() {
   }
 
   if (state[SDL_SCANCODE_W]) {
-    if ((int)this->getPos().y != (int)(this->getPos().y-moveTickDistance)) {
-      moved = true;
-    }
-
     this->move(0, -moveTickDistance);
   }
 
   if (state[SDL_SCANCODE_S]) {
-    if ((int)this->getPos().y != (int)(this->getPos().y+moveTickDistance)) {
-      moved = true;
-    }
 
     this->move(0, moveTickDistance);
   }
 
   if (state[SDL_SCANCODE_A]) {
-    if ((int)this->getPos().x != (int)(this->getPos().x-moveTickDistance)) {
-      moved = true;
-    }
-
     this->move(-moveTickDistance, 0);
   }
 
   if (state[SDL_SCANCODE_D]) {
-    if ((int)this->getPos().x != (int)(this->getPos().x+moveTickDistance)) {
-      moved = true;
-    }
     this->move(moveTickDistance, 0);
   }
 }

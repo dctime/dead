@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.22.1)
 
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
 project(dead)
 
 add_subdirectory(lib)
