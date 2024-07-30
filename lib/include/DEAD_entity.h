@@ -10,7 +10,7 @@ class DEAD_Game;
 class DEAD_Entity :
   public std::enable_shared_from_this<DEAD_Entity> {
 public:
-  DEAD_Entity(DEAD_Game* game, int maxHealth);
+  DEAD_Entity(DEAD_Game* game, int maxHealth, double size);
   ~DEAD_Entity();
   DEAD_Map::MapLocation getPos();
   virtual SDL_Rect getTextureRect() = 0;

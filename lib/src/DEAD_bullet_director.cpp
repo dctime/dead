@@ -43,11 +43,12 @@ void DEAD_BulletDirector::deleteBullet(DEAD_Bullet* bullet) {
   for (const std::unique_ptr<DEAD_Bullet>& bulletUnique : this->bullets) {
     if (bulletUnique.get() != bullet) continue;
     this->bullets.erase(bulletUnique);
+    break;
   }
 }
 
 void DEAD_BulletDirector::getCollisionBullets(
-    std::vector<DEAD_Bullet*> bullets) {
+    std::vector<DEAD_Bullet*>& bullets) {
 
   for (const std::unique_ptr<DEAD_Bullet>& bullet : this->bullets) {
     if (this->game->getCollisionDirector()

@@ -15,7 +15,7 @@ public:
   void checkAndDeleteCollisionBullets();
   void deleteBullet(DEAD_Bullet* bullet);
 private:
-  void getCollisionBullets(std::vector<DEAD_Bullet*> bullets);
+  void getCollisionBullets(std::vector<DEAD_Bullet*>& bullets);
   std::set<std::unique_ptr<DEAD_Bullet>> bullets; 
   DEAD_Game* game;
 };

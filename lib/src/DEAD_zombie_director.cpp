@@ -29,6 +29,7 @@ void DEAD_ZombieDirector::killZombie(DEAD_Zombie* zombie) {
   for (const std::unique_ptr<DEAD_Zombie>& zombieUnique : this->zombies) {
     if (zombieUnique.get() != zombie) continue;
     this->zombies.erase(zombieUnique);
+    break;
   }
 }
 
@@ -73,9 +74,7 @@ void DEAD_ZombieDirector::tickZombies() {
       }
     }
 
-    if (SDL_GetTicks64() % 100 == 0) {
-      zombie->setMovingUnitVector(this->getMovementVector(zombie->getPos().x, zombie->getPos().y));
-    }
+    zombie->setMovingUnitVector(this->getMovementVector(zombie->getPos().x, zombie->getPos().y));
 
     ZombieVector moveVector = zombie->getMovingUnitVector();
 

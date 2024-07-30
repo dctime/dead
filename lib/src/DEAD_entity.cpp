@@ -6,10 +6,10 @@
 #include <iostream>
 #include <memory>
 
-DEAD_Entity::DEAD_Entity(DEAD_Game* game, int maxHealth)
-    : speed(3), position({.x = 0, .y = 0}), rotation(0), size(0.8), maxHealth(maxHealth), health(maxHealth),
+DEAD_Entity::DEAD_Entity(DEAD_Game* game, int maxHealth, double size)
+    : speed(3), position({.x = 0, .y = 0}), rotation(0), size(size), maxHealth(maxHealth), health(maxHealth),
       lastTimeBeenHitTicks(0), knockBackCooldown(300) {
-  this->hitbox = std::make_unique<DEAD_CircleHitbox>(this->getSize() / 2 * 0.8,
+  this->hitbox = std::make_unique<DEAD_CircleHitbox>(size / 2,
                                                      this->position);
   this->setGame(game);
 }
@@ -74,7 +74,11 @@ double DEAD_Entity::getSize() {
   return this->size;
 }
 
-DEAD_CircleHitbox* DEAD_Entity::getHitbox() { return this->hitbox.get(); }
+DEAD_CircleHitbox* DEAD_Entity::getHitbox() {
+  this->hitbox->setLoc(this->getPos());
+  this->hitbox->setRadius(this->getSize()/2.0);
+  return this->hitbox.get(); 
+}
 
 void DEAD_Entity::move(double x, double y) {
   if (this->getGame()->getCollisionDirector()->entityCheckCollision(this, x, y).size() != 0) {

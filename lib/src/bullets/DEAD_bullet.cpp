@@ -48,7 +48,9 @@ void DEAD_Bullet::tickFly() {
 }
 
 DEAD_CircleHitbox* DEAD_Bullet::getHitBox() {
-  return hitbox.get();
+  this->hitbox->setLoc(this->getLoc());
+  this->hitbox->setRadius(this->getBulletSize()/2);
+  return this->hitbox.get();
 }
 
 

@@ -6,7 +6,7 @@
 #include <zombies/DEAD_zombie.h>
 
 DEAD_Zombie::DEAD_Zombie(DEAD_Game* game)
-    : DEAD_Entity::DEAD_Entity(game, 100), lastTimeAttackTicks(0),
+    : DEAD_Entity::DEAD_Entity(game, 100, 0.8), lastTimeAttackTicks(0),
       attackCoolDown(1000) {
   this->movingUnitVector = {.vectorX=0, .vectorY=0};
   std::cout << "Zombie Built" << std::endl;
