@@ -96,7 +96,9 @@ DEAD_Game::~DEAD_Game() {
 void DEAD_Game::mapTick() {
 
   this->eventHandle();
-  
+  this->renderer->moveRenderAnchor(this->player->getPos().x,
+                                   this->player->getPos().y);
+  this->renderer->render();
 }
 
 void DEAD_Game::eventHandle() {
@@ -220,9 +222,7 @@ void DEAD_Game::mainLoop(DEAD_Game *game) {
   game->bulletDirector->tickBullets();
   game->getZombieDirector()->tickZombies();
   game->checkPlayerDied();
-  game->renderer->moveRenderAnchor(game->player->getPos().x,
-                                   game->player->getPos().y);
-  game->renderer->render();
+  
 }
 void DEAD_Game::checkAndDeleteCollisionBullets(DEAD_Game *game) {
   game->bulletDirector->checkAndDeleteCollisionBullets();
