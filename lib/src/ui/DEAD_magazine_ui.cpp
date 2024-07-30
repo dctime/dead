@@ -7,12 +7,12 @@
 #include <memory>
 #include <ui/DEAD_magazine_ui.h>
 
-DEAD_MagazineUI::DEAD_MagazineUI(std::shared_ptr<DEAD_Renderer> renderer,
-                                 std::shared_ptr<DEAD_Player> player)
+DEAD_MagazineUI::DEAD_MagazineUI(DEAD_Renderer* renderer,
+                                 DEAD_Player* player)
     : DEAD_UI(renderer), magazineUIWidth(this->game->SCREEN_WIDTH / 3),
       magazineUIHeight(this->game->SCREEN_HEIGHT / 50),
       distanceBetweenScreenBoarder(10), boarderWidth(magazineUIHeight / 4),
-      barElement(std::make_shared<DEAD_ValueBarUIElement>(
+      barElement(std::make_unique<DEAD_ValueBarUIElement>(
           renderer, this->game->SCREEN_WIDTH / 2 - this->magazineUIWidth / 2,
           this->game->SCREEN_HEIGHT - this->magazineUIHeight * 2 -
               this->distanceBetweenScreenBoarder - 10,

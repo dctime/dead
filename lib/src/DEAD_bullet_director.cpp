@@ -2,16 +2,17 @@
 #include <DEAD_bullet_director.h>
 #include <DEAD_game.h>
 #include <SDL2/SDL_log.h>
+#include <algorithm>
 #include <bullets/DEAD_bullet.h>
 #include <iostream>
 #include <memory>
 #include <set>
 
-DEAD_BulletDirector::DEAD_BulletDirector(std::shared_ptr<DEAD_Game> game)
+DEAD_BulletDirector::DEAD_BulletDirector(DEAD_Game* game)
     : game(game) {}
 
-void DEAD_BulletDirector::registerBullet(std::shared_ptr<DEAD_Bullet> bullet) {
-  this->bullets.insert(bullet);
+void DEAD_BulletDirector::registerBullet(std::unique_ptr<DEAD_Bullet>& bullet) {
+  this->bullets.insert(std::move(bullet));
   SDL_Log("[Bullet Director] register a bullet");
 }
 
@@ -19,43 +20,51 @@ int DEAD_BulletDirector::bulletCount() { return this->bullets.size(); }
 
 DEAD_BulletDirector::~DEAD_BulletDirector() { this->bullets.clear(); }
 
-std::set<std::shared_ptr<DEAD_Bullet>> DEAD_BulletDirector::getBullets() {
+std::set<std::unique_ptr<DEAD_Bullet>>& DEAD_BulletDirector::getBullets() {
   return this->bullets;
 }
 
 void DEAD_BulletDirector::tickBullets() {
-  for (std::shared_ptr<DEAD_Bullet> bullet : this->bullets) {
+  for (const std::unique_ptr<DEAD_Bullet>& bullet : this->bullets) {
     bullet->tickBullet();
   }
 }
 
 void DEAD_BulletDirector::checkAndDeleteCollisionBullets() {
-  std::vector<std::shared_ptr<DEAD_Bullet>> removingBullets;
+  std::vector<DEAD_Bullet*> removingBullets;
   this->getCollisionBullets(removingBullets);
   for (int i = 0; i < removingBullets.size(); i++) {
-    this->bullets.erase(removingBullets.at(i));
+    
+    this->deleteBullet(removingBullets.at(i));
+  }
+}
+
+void DEAD_BulletDirector::deleteBullet(DEAD_Bullet* bullet) {
+  for (const std::unique_ptr<DEAD_Bullet>& bulletUnique : this->bullets) {
+    if (bulletUnique.get() != bullet) continue;
+    this->bullets.erase(bulletUnique);
   }
 }
 
 void DEAD_BulletDirector::getCollisionBullets(
-    std::vector<std::shared_ptr<DEAD_Bullet>> &bullets) {
+    std::vector<DEAD_Bullet*> bullets) {
 
-  for (std::shared_ptr<DEAD_Bullet> bullet : this->bullets) {
+  for (const std::unique_ptr<DEAD_Bullet>& bullet : this->bullets) {
     if (this->game->getCollisionDirector()
-            ->bulletCheckCollision(bullet)
+            ->bulletCheckCollision(bullet.get())
             .size() != 0) {
-      bullets.push_back(bullet);
+      bullets.push_back(bullet.get());
       continue;
     }
 
-    std::shared_ptr<DEAD_Zombie> zombie =
-        this->game->getCollisionDirector()->bulletCheckCollideZombie(bullet);
+    DEAD_Zombie* zombie =
+        this->game->getCollisionDirector()->bulletCheckCollideZombie(bullet.get());
     if (zombie == nullptr)
       continue;
 
     this->game->getSoundDirector()->playHitWithBullet();
     zombie->damage(bullet->getDamage());
-    bullets.push_back(bullet);
+    bullets.push_back(bullet.get());
     
   }
 }

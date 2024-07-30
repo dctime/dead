@@ -6,15 +6,16 @@
 
 class DEAD_BulletDirector {
 public:
-  DEAD_BulletDirector(std::shared_ptr<DEAD_Game> game);
-  void registerBullet(std::shared_ptr<DEAD_Bullet> bullet);
+  DEAD_BulletDirector(DEAD_Game* game);
+  void registerBullet(std::unique_ptr<DEAD_Bullet>& bullet);
   ~DEAD_BulletDirector();
   int bulletCount();
-  std::set<std::shared_ptr<DEAD_Bullet>> getBullets();
+  std::set<std::unique_ptr<DEAD_Bullet>>& getBullets();
   void tickBullets();
   void checkAndDeleteCollisionBullets();
+  void deleteBullet(DEAD_Bullet* bullet);
 private:
-  void getCollisionBullets(std::vector<std::shared_ptr<DEAD_Bullet>>& bullets);
-  std::set<std::shared_ptr<DEAD_Bullet>> bullets; 
-  std::shared_ptr<DEAD_Game> game;
+  void getCollisionBullets(std::vector<DEAD_Bullet*> bullets);
+  std::set<std::unique_ptr<DEAD_Bullet>> bullets; 
+  DEAD_Game* game;
 };

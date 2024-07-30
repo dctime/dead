@@ -13,15 +13,15 @@
 DEAD_MapSpawner::DEAD_MapSpawner() {
 }
 
-void DEAD_MapSpawner::addCurseDirt(std::shared_ptr<DEAD_CursedDirt> curseDirt) {
+void DEAD_MapSpawner::addCurseDirt(DEAD_CursedDirt* curseDirt) {
   this->curseDirts.push_back(curseDirt);
 }
 
-std::vector<std::shared_ptr<DEAD_CursedDirt>> DEAD_MapSpawner::getCursedDirts() {
+std::vector<DEAD_CursedDirt*> DEAD_MapSpawner::getCursedDirts() {
   return this->curseDirts;
 }
 
-void DEAD_MapSpawner::initAccess(std::shared_ptr<DEAD_Game> game) {
+void DEAD_MapSpawner::initAccess(DEAD_Game* game) {
   this->game = game;
 }
 
@@ -36,7 +36,7 @@ void DEAD_MapSpawner::randomSpawnAZombie() {
   spawnLoc.x += 0.5;
   spawnLoc.y += 0.5;
 
-  std::shared_ptr<DEAD_Zombie> zombie = std::make_shared<DEAD_Zombie>(this->game);
+  std::unique_ptr<DEAD_Zombie> zombie = std::make_unique<DEAD_Zombie>(this->game);
   zombie->setPos(spawnLoc.x, spawnLoc.y);
   this->game->getZombieDirector()->registerZombie(zombie);
 }

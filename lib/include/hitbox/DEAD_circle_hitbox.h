@@ -9,7 +9,7 @@ public:
   double getRadius();
   DEAD_Map::MapLocation getLoc();
   void setLoc(DEAD_Map::MapLocation newLoc);
-  bool iscollideWithCircle(std::shared_ptr<DEAD_CircleHitbox> circleHitbox);
+  bool iscollideWithCircle(DEAD_CircleHitbox* circleHitbox);
 private:
   double radius;
   DEAD_Map::MapLocation loc;

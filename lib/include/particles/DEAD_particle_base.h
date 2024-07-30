@@ -9,13 +9,13 @@ class DEAD_Renderer;
 
 class DEAD_ParticleBase {
 public:
-  DEAD_ParticleBase(std::shared_ptr<DEAD_Renderer> renderer);
+  DEAD_ParticleBase(DEAD_Renderer* renderer);
   virtual ~DEAD_ParticleBase();
   virtual void play() = 0;
   virtual bool render() = 0;
 protected:
   std::vector<SDL_Rect> particleTextureRects;
   SDL_Texture* particleTexture;
-  std::shared_ptr<DEAD_Renderer> renderer;
+  DEAD_Renderer* renderer;
 private:
 };

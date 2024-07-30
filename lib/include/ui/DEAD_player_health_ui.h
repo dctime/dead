@@ -6,7 +6,7 @@
 
 class DEAD_PlayerHealthUI : public DEAD_UI {
 public:
-  DEAD_PlayerHealthUI(std::shared_ptr<DEAD_Renderer> renderer, std::shared_ptr<DEAD_Player> player);
+  DEAD_PlayerHealthUI(DEAD_Renderer* renderer, DEAD_Player* player);
   void render() override;
 private:
   SDL_Rect healthBarRectBase;
@@ -15,6 +15,6 @@ private:
   int healthBarHeight;
   int distanceBetweenScreenBoarder;
   int boarderWidth;
-  std::shared_ptr<DEAD_Player> player;
-  std::shared_ptr<DEAD_ValueBarUIElement> barElement;
+  DEAD_Player* player;
+  std::unique_ptr<DEAD_ValueBarUIElement> barElement;
 };

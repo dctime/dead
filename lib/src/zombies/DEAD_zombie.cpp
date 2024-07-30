@@ -5,7 +5,7 @@
 #include <memory>
 #include <zombies/DEAD_zombie.h>
 
-DEAD_Zombie::DEAD_Zombie(std::shared_ptr<DEAD_Game> game)
+DEAD_Zombie::DEAD_Zombie(DEAD_Game* game)
     : DEAD_Entity::DEAD_Entity(game, 100), lastTimeAttackTicks(0),
       attackCoolDown(1000) {
   this->movingUnitVector = {.vectorX=0, .vectorY=0};
@@ -27,7 +27,7 @@ bool DEAD_Zombie::attackReady() {
   }
 }
 
-void DEAD_Zombie::bite(std::shared_ptr<DEAD_Player> player) {
+void DEAD_Zombie::bite(DEAD_Player* player) {
   if (!this->getHitbox()->iscollideWithCircle(player->getHitbox()))
     return;
   if (!this->attackReady())

@@ -40,7 +40,7 @@ void DEAD_Renderer::getTextureFromFont(std::string fontFilePath,
 }
 
 DEAD_Renderer::DEAD_Renderer(SDL_Window *window,
-                             std::shared_ptr<DEAD_Game> game)
+                             DEAD_Game* game)
     : renderBlockSize(50), renderAnchor({.x = 0, .y = 0}), youDiedAlpha(0),
       playingYouDied(false), startYouDiedTicks(0) {
 
@@ -69,9 +69,9 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window,
 }
 
 void DEAD_Renderer::initWithSharedFromThis(
-    std::shared_ptr<DEAD_Renderer> renderer) {
-  this->uiRenderer = std::make_shared<DEAD_UIRenderer>(renderer);
-  this->particleRenderer = std::make_shared<DEAD_ParticleRenderer>(renderer);
+  DEAD_Renderer* renderer) {
+  this->uiRenderer = std::make_unique<DEAD_UIRenderer>(renderer);
+  this->particleRenderer = std::make_unique<DEAD_ParticleRenderer>(renderer);
 }
 
 DEAD_Renderer::~DEAD_Renderer() {
@@ -104,21 +104,21 @@ void DEAD_Renderer::render() {
 
 SDL_Renderer *DEAD_Renderer::getSDLRenderer() { return this->renderer; }
 
-std::shared_ptr<DEAD_Game> DEAD_Renderer::getGame() { return this->game; }
+DEAD_Game* DEAD_Renderer::getGame() { return this->game; }
 
 int DEAD_Renderer::getRenderBlockSize() { return this->renderBlockSize; }
 
-std::shared_ptr<DEAD_ParticleRenderer> DEAD_Renderer::getParticleRenderer() {
-  return this->particleRenderer;
+DEAD_ParticleRenderer* DEAD_Renderer::getParticleRenderer() {
+  return this->particleRenderer.get();
 }
 
 void DEAD_Renderer::renderMapObjects() {
-  std::shared_ptr<DEAD_Map> map = this->game->getMap();
+  DEAD_Map* map = this->game->getMap();
 
   float windowWidthMid = this->game->SCREEN_WIDTH / 2.0;
   float windowHeightMid = this->game->SCREEN_HEIGHT / 2.0;
 
-  std::vector<std::vector<std::shared_ptr<DEAD_MapObjectBase>>> mapObjects =
+  std::vector<std::vector<std::unique_ptr<DEAD_MapObjectBase>>>& mapObjects =
       map->getMapObjects();
 
   for (int i = 0; i < mapObjects.size(); ++i) {
@@ -144,11 +144,11 @@ void DEAD_Renderer::renderMapObjects() {
   }
 }
 
-void DEAD_Renderer::renderPlayer(std::shared_ptr<DEAD_Player> player) {
+void DEAD_Renderer::renderPlayer(DEAD_Player* player) {
   this->renderEntity(player, this->playerTexture);
 }
 
-void DEAD_Renderer::renderEntity(std::shared_ptr<DEAD_Entity> entity,
+void DEAD_Renderer::renderEntity(DEAD_Entity* entity,
                                  SDL_Texture *texture) {
   DEAD_Map::MapLocation pos = entity->getPos();
   SDL_Rect rect = entity->getTextureRect();
@@ -164,19 +164,19 @@ void DEAD_Renderer::renderEntity(std::shared_ptr<DEAD_Entity> entity,
 }
 
 void DEAD_Renderer::renderZombies(
-    const std::shared_ptr<DEAD_ZombieDirector> &zombieDirector) {
-  std::set<std::shared_ptr<DEAD_Zombie>> knockbackingZombies;
-  for (std::shared_ptr<DEAD_Zombie> zombie : zombieDirector->getZombies()) {
+    DEAD_ZombieDirector* zombieDirector) {
+  std::set<DEAD_Zombie*> knockbackingZombies;
+  for (const std::unique_ptr<DEAD_Zombie>& zombie : zombieDirector->getZombies()) {
     if (zombie->checkIfInKnockback())
       SDL_SetTextureColorMod(this->zombiesTexture, 100, 100, 100);
     else
       SDL_SetTextureColorMod(this->zombiesTexture, 255, 255, 255);
-    renderEntity(zombie, this->zombiesTexture);
+    renderEntity(zombie.get(), this->zombiesTexture);
   }
 }
 
 ScreenLocation
-DEAD_Renderer::getEntityRenderLocation(std::shared_ptr<DEAD_Entity> entity,
+DEAD_Renderer::getEntityRenderLocation(DEAD_Entity* entity,
                                        bool mid) {
   ScreenLocation loc;
   loc.x = (entity->getPos().x - renderAnchor.x) * this->renderBlockSize -
@@ -194,15 +194,15 @@ DEAD_Renderer::getEntityRenderLocation(std::shared_ptr<DEAD_Entity> entity,
 }
 
 void DEAD_Renderer::renderBullets() {
-  std::shared_ptr<DEAD_BulletDirector> director =
+  DEAD_BulletDirector* director =
       this->game->getBulletDirector();
-  std::set<std::shared_ptr<DEAD_Bullet>> bullets = director->getBullets();
+  std::set<std::unique_ptr<DEAD_Bullet>>& bullets = director->getBullets();
 
-  for (std::shared_ptr<DEAD_Bullet> bullet : bullets) {
+  for (const std::unique_ptr<DEAD_Bullet>& bullet : bullets) {
     SDL_Rect textureRect = bullet->getBulletTextureRect();
     SDL_Rect renderRect = {
-        .x = this->getBulletRenderLocation(bullet).x,
-        .y = this->getBulletRenderLocation(bullet).y,
+        .x = this->getBulletRenderLocation(bullet.get()).x,
+        .y = this->getBulletRenderLocation(bullet.get()).y,
         .w = (int)(bullet->getBulletSize() * this->renderBlockSize),
         .h = (int)(bullet->getBulletSize() * this->renderBlockSize)};
     SDL_RenderCopy(this->renderer, this->bulletTexture, &textureRect,
@@ -211,7 +211,7 @@ void DEAD_Renderer::renderBullets() {
 }
 
 ScreenLocation
-DEAD_Renderer::getBulletRenderLocation(std::shared_ptr<DEAD_Bullet> bullet) {
+DEAD_Renderer::getBulletRenderLocation(DEAD_Bullet* bullet) {
   ScreenLocation loc;
   loc.x =
       (bullet->getMapLocation().x - renderAnchor.x) * this->renderBlockSize -
@@ -226,12 +226,12 @@ DEAD_Renderer::getBulletRenderLocation(std::shared_ptr<DEAD_Bullet> bullet) {
 }
 
 void DEAD_Renderer::renderItemDropLayer() {
-  std::shared_ptr<DEAD_ItemDropLayer> itemDropLayer =
+  DEAD_ItemDropLayer* itemDropLayer =
       this->game->getItemDropLayer();
-  std::set<std::shared_ptr<DEAD_ItemDrop>> itemDrops =
+  const std::set<std::shared_ptr<DEAD_ItemDrop>>& itemDrops =
       itemDropLayer->getItemDrops();
 
-  for (std::shared_ptr<DEAD_ItemDrop> itemDrop : itemDrops) {
+  for (const std::shared_ptr<DEAD_ItemDrop>& itemDrop : itemDrops) {
     SDL_Rect textureRect = itemDrop->getItem()->getItemTextureRect();
     SDL_Rect renderRect = {
         .x = this->getItemDropRenderLocation(itemDrop).x,
@@ -244,7 +244,7 @@ void DEAD_Renderer::renderItemDropLayer() {
 }
 
 ScreenLocation DEAD_Renderer::getItemDropRenderLocation(
-    std::shared_ptr<DEAD_ItemDrop> itemDrop) {
+    const std::shared_ptr<DEAD_ItemDrop>& itemDrop) {
   ScreenLocation loc;
   loc.x = (itemDrop->getLoc().x - renderAnchor.x) * this->renderBlockSize -
           itemDrop->getSize() * this->renderBlockSize / 2.0 +
@@ -257,7 +257,7 @@ ScreenLocation DEAD_Renderer::getItemDropRenderLocation(
 }
 
 void DEAD_Renderer::drawZombieMovementMap() {
-  std::shared_ptr<DEAD_ZombieDirector> zombieDirector =
+  DEAD_ZombieDirector* zombieDirector =
       this->game->getZombieDirector();
   DEAD_Map::MapLocation playerLoc = this->getGame()->getPlayer()->getPos();
   for (int y = 0; y < this->game->getMap()->getMapSize().height; y++) {
@@ -273,7 +273,7 @@ void DEAD_Renderer::drawZombieMovementMap() {
     }
   }
 
-  for (std::shared_ptr<DEAD_Zombie> zombie :
+  for (const std::unique_ptr<DEAD_Zombie>& zombie :
        this->game->getZombieDirector()->getZombies()) {
     ScreenLocation zombieLoc =
         this->getPointRenderLocation(zombie->getPos().x, zombie->getPos().y);

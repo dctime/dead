@@ -12,7 +12,7 @@
 #include <DEAD_sound_director.h>
 #include <DEAD_functions.h>
 
-DEAD_Bat::DEAD_Bat(std::shared_ptr<DEAD_Player> owner) :
+DEAD_Bat::DEAD_Bat(DEAD_Player* owner) :
   DEAD_Weapon(owner, 500), angleEffectRange(100), effectDistance(2), damage(10) {
 
 }
@@ -29,13 +29,13 @@ void DEAD_Bat::attack() {
   this->getPlayer()->getGame()->getRenderer()->getParticleRenderer()->playSwordAttackParticle(attackingLoc, this->getPlayer()->getRotation());
   this->getPlayer()->getGame()->getSoundDirector()->playBatSwingSound();
 
-  std::shared_ptr<DEAD_ZombieDirector> zombieDirector;
+  DEAD_ZombieDirector* zombieDirector;
   zombieDirector = this->getPlayer()->getGame()->getZombieDirector();
-  std::set<std::shared_ptr<DEAD_Zombie>> zombies = zombieDirector->getZombies();
+  std::set<std::unique_ptr<DEAD_Zombie>>& zombies = zombieDirector->getZombies();
 
   DEAD_Map::MapLocation playerLoc = this->getPlayer()->getPos();
 
-  for (std::shared_ptr<DEAD_Zombie> zombie : zombies) {
+  for (const std::unique_ptr<DEAD_Zombie>& zombie : zombies) {
     double distance = DEAD_Functions::calDistance(playerLoc.x, playerLoc.y, zombie->getPos().x, zombie->getPos().y);
     double targetAngle = DEAD_Functions::calAngle(playerLoc.x, playerLoc.y, zombie->getPos().x, zombie->getPos().y);
     double attackAngle = this->getPlayer()->getRotation();

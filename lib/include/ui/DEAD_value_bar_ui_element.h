@@ -5,7 +5,7 @@
 #include <memory>
 class DEAD_ValueBarUIElement {
 public:
-  DEAD_ValueBarUIElement(std::shared_ptr<DEAD_Renderer> renderer, int x, int y,
+  DEAD_ValueBarUIElement(DEAD_Renderer* renderer, int x, int y,
                          int healthBarWidth, int healthBarHeight,
                          int distanceBetweenScreenBoarder, int boarderWidth);
   void render(SDL_Color baseColor, SDL_Color juiceColor, SDL_Color subColor,
@@ -13,7 +13,7 @@ public:
   void render(SDL_Color baseColor, SDL_Color juiceColor, double percent);
 
 private:
-  std::shared_ptr<DEAD_Renderer> renderer;
+  DEAD_Renderer* renderer;
   SDL_Rect barRectBase;
   double percent;
   SDL_Rect barRectJuice;

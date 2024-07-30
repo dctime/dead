@@ -4,7 +4,7 @@
 #include <ui/DEAD_value_bar_ui_element.h>
 
 DEAD_ValueBarUIElement::DEAD_ValueBarUIElement(
-    std::shared_ptr<DEAD_Renderer> renderer, int x, int y, int healthBarWidth,
+    DEAD_Renderer* renderer, int x, int y, int healthBarWidth,
     int healthBarHeight, int distanceBetweenScreenBoarder, int boarderWidth) {
   this->renderer = renderer;
   this->barRectBase = {

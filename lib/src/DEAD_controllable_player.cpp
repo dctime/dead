@@ -15,13 +15,13 @@
 #include <memory>
 #include <DEAD_particle_renderer.h>
 
-DEAD_ControllablePlayer::DEAD_ControllablePlayer(std::shared_ptr<DEAD_Game> game)
+DEAD_ControllablePlayer::DEAD_ControllablePlayer(DEAD_Game* game)
     : DEAD_Player::DEAD_Player(game), baseSpeed(0.01 * DEAD_Game::MAIN_LOOP_DELAY / 10) {
 }
 
 DEAD_ControllablePlayer::~DEAD_ControllablePlayer() {}
 
-void DEAD_ControllablePlayer::setGame(std::shared_ptr<DEAD_Game> game) {
+void DEAD_ControllablePlayer::setGame(DEAD_Game* game) {
   this->game = game;
   }
 
@@ -54,16 +54,13 @@ void DEAD_ControllablePlayer::handlePlayerRotation() {
   int mouseX;
   int mouseY;
   SDL_GetMouseState(&mouseX, &mouseY);
-  std::shared_ptr<DEAD_ControllablePlayer> shared_from_this =
-      std::static_pointer_cast<DEAD_ControllablePlayer>(
-          DEAD_Entity::shared_from_this());
   int playerScreenX = this->getGame()
                           ->getRenderer()
-                          ->getEntityRenderLocation(shared_from_this, true)
+                          ->getEntityRenderLocation(this, true)
                           .x;
   int playerScreenY = this->getGame()
                           ->getRenderer()
-                          ->getEntityRenderLocation(shared_from_this, true)
+                          ->getEntityRenderLocation(this, true)
                           .y;
   double relX = mouseX - playerScreenX;
   double relY = mouseY - playerScreenY;

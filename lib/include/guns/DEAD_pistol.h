@@ -4,7 +4,7 @@
 
 class DEAD_Pistol : public DEAD_Gun {
 public:
-  DEAD_Pistol(std::shared_ptr<DEAD_Player> player);
+  DEAD_Pistol(DEAD_Player* player);
   ~DEAD_Pistol();
   SDL_Rect getTextureRect() override;
   void attack() override;

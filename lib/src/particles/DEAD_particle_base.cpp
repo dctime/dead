@@ -6,7 +6,7 @@
 
 DEAD_ParticleBase::~DEAD_ParticleBase() {}
 
-DEAD_ParticleBase::DEAD_ParticleBase(std::shared_ptr<DEAD_Renderer> renderer)
+DEAD_ParticleBase::DEAD_ParticleBase(DEAD_Renderer* renderer)
   : renderer(renderer) {
   SDL_Surface *textureSurface = IMG_Load(DEAD_FilePaths::PARTICLE_TEXTURE_PNG.c_str());
   this->particleTexture = SDL_CreateTextureFromSurface(renderer->getSDLRenderer(), textureSurface);

@@ -4,13 +4,13 @@
 
 DEAD_Weapon::~DEAD_Weapon() {}
 
-DEAD_Weapon::DEAD_Weapon(std::shared_ptr<DEAD_Player> player, const int COOLDOWN_TIME)
+DEAD_Weapon::DEAD_Weapon(DEAD_Player* player, const int COOLDOWN_TIME)
   : DEAD_Item(), COOLDOWN_TIME(COOLDOWN_TIME), 
     startCoolingTicks(0) {
   this->owner = player;
 }
 
-std::shared_ptr<DEAD_Player> DEAD_Weapon::getPlayer() {
+DEAD_Player* DEAD_Weapon::getPlayer() {
   return this->owner;
 }
 

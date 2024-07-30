@@ -5,7 +5,7 @@
 class DEAD_GameBuilder {
 public:
   DEAD_GameBuilder();
-  std::shared_ptr<DEAD_Game> build();
+  std::unique_ptr<DEAD_Game> build();
 private:
-  std::shared_ptr<DEAD_Game> buildingGame;
+  std::unique_ptr<DEAD_Game> buildingGame;
 };

@@ -4,7 +4,7 @@
 
 class DEAD_SwordAttackParticle : public DEAD_ParticleBase {
 public:
-  DEAD_SwordAttackParticle(std::shared_ptr<DEAD_Renderer> renderer, DEAD_Map::MapLocation loc, double angle); 
+  DEAD_SwordAttackParticle(DEAD_Renderer* renderer, DEAD_Map::MapLocation loc, double angle); 
   void play() override;
   bool render() override;
 private:

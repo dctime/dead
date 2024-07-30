@@ -7,7 +7,7 @@
 #include <iostream>
 #include <memory>
 
-DEAD_Pistol::DEAD_Pistol(std::shared_ptr<DEAD_Player> player)
+DEAD_Pistol::DEAD_Pistol(DEAD_Player* player)
 : DEAD_Gun(player, 10, 500, 2000) {}
 
 DEAD_Pistol::~DEAD_Pistol() {
@@ -29,9 +29,9 @@ void DEAD_Pistol::attack() {
     return;
   }
 
-  std::shared_ptr<DEAD_Bullet> bullet = 
-    std::make_shared<DEAD_NormalBullet>(this->getPlayer(), std::static_pointer_cast<DEAD_Pistol>(DEAD_Pistol::shared_from_this()));
-  bullet->registerBullet();
+  std::unique_ptr<DEAD_Bullet> bullet = 
+    std::make_unique<DEAD_NormalBullet>(this->getPlayer(), this);
+  this->getPlayer()->getGame()->getBulletDirector()->registerBullet(bullet);
   this->startCoolDown();
   this->getPlayer()->getGame()->getSoundDirector()->playPistolShootSound();
 }

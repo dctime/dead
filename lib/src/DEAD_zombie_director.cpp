@@ -8,6 +8,7 @@
 #include <DEAD_zombie_director.h>
 #include <DEAD_zombie_movement_maps.h>
 #include <SDL2/SDL_timer.h>
+#include <algorithm>
 #include <climits>
 #include <cmath>
 #include <functional>
@@ -16,42 +17,45 @@
 #include <set>
 #include <vector>
 
-DEAD_ZombieDirector::DEAD_ZombieDirector(std::shared_ptr<DEAD_Game> game)
+DEAD_ZombieDirector::DEAD_ZombieDirector(DEAD_Game* game)
     : game(game),
-      zombieMovementMaps(std::make_shared<DEAD_ZombieMovementMaps>(game)) {}
+      zombieMovementMaps(std::make_unique<DEAD_ZombieMovementMaps>(game)) {}
 
-void DEAD_ZombieDirector::registerZombie(std::shared_ptr<DEAD_Zombie> zombie) {
-  this->zombies.insert(zombie);
+void DEAD_ZombieDirector::registerZombie(std::unique_ptr<DEAD_Zombie>& zombie) {
+  this->zombies.insert(std::move(zombie));
 }
 
-void DEAD_ZombieDirector::killZombie(const std::shared_ptr<DEAD_Zombie>& zombie) {
-  this->zombies.erase(zombie);
+void DEAD_ZombieDirector::killZombie(DEAD_Zombie* zombie) {
+  for (const std::unique_ptr<DEAD_Zombie>& zombieUnique : this->zombies) {
+    if (zombieUnique.get() != zombie) continue;
+    this->zombies.erase(zombieUnique);
+  }
 }
 
-std::set<std::shared_ptr<DEAD_Zombie>> DEAD_ZombieDirector::getZombies() {
+std::set<std::unique_ptr<DEAD_Zombie>>& DEAD_ZombieDirector::getZombies() {
   return this->zombies;
 }
 
-std::shared_ptr<DEAD_ZombieMovementMaps>
+DEAD_ZombieMovementMaps*
 DEAD_ZombieDirector::getZombieMovementMaps() {
-  return this->zombieMovementMaps;
+  return this->zombieMovementMaps.get();
 }
 
 void DEAD_ZombieDirector::tickZombies() {
   DEAD_Map::MapLocation playerLoc = this->game->getPlayer()->getPos();
-  std::vector<std::shared_ptr<DEAD_Zombie>> deadZombies;
+  std::vector<DEAD_Zombie*> deadZombies;
 
-  for (const std::shared_ptr<DEAD_Zombie>& zombie : this->zombies) {
+  for (const std::unique_ptr<DEAD_Zombie>& zombie : this->zombies) {
     if (zombie->getHealth() <= 0) {
-      deadZombies.push_back(zombie);
+      deadZombies.push_back(zombie.get());
     }
   }
 
-  for (const std::shared_ptr<DEAD_Zombie>& deadZombie : deadZombies) {
+  for (DEAD_Zombie* deadZombie : deadZombies) {
     this->game->getZombieDirector()->killZombie(deadZombie);
   }
 
-  for (const std::shared_ptr<DEAD_Zombie>& zombie : this->zombies) {
+  for (const std::unique_ptr<DEAD_Zombie>& zombie : this->zombies) {
     double distanceBetween = DEAD_Functions::calDistance(
         zombie->getPos().x, zombie->getPos().y, playerLoc.x, playerLoc.y);
     if (distanceBetween < 1.414) {
@@ -60,7 +64,7 @@ void DEAD_ZombieDirector::tickZombies() {
       double deltaX = -moveXVec / distanceBetween / 100.0;
       double deltaY = -moveYVec / distanceBetween / 100.0;
       if (!(this->game->getCollisionDirector()
-                ->entityCheckCollision(zombie, deltaX, deltaY)
+                ->entityCheckCollision(zombie.get(), deltaX, deltaY)
                 .size())) {
         zombie->move(deltaX, 0);
         zombie->move(0, deltaY);
@@ -92,8 +96,8 @@ ZombieVector DEAD_ZombieDirector::getMovementVector(double targetX,
       [](double x1, double x2, double y1, double y2) {
         return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
       };
-  std::function<bool(int, int, std::shared_ptr<DEAD_Game>)> check =
-      [](int x, int y, std::shared_ptr<DEAD_Game> game) {
+  std::function<bool(int, int, DEAD_Game*)> check =
+      [](int x, int y, DEAD_Game* game) {
         if (x < 0 || x >= game->getMap()->getMapSize().width || y < 0 ||
             y >= game->getMap()->getMapSize().height)
           return false;

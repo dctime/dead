@@ -9,7 +9,7 @@ public:
   DEAD_MapObjectBase(DEAD_Map::MapLocation loc);
   ~DEAD_MapObjectBase();
   virtual char getChar() = 0;
-  std::shared_ptr<DEAD_RectHitbox> getHitBox();
+  DEAD_RectHitbox* getHitBox();
   DEAD_Map::MapLocation getLeftUpLoc();
   virtual bool isPlayerCollidable() = 0;
   virtual bool isZombieCollidable() = 0;
@@ -17,5 +17,5 @@ public:
   virtual SDL_Rect getTextureRect();
 private:
   DEAD_Map::MapLocation leftUpLoc;
-  std::shared_ptr<DEAD_RectHitbox> hitbox;  
+  std::unique_ptr<DEAD_RectHitbox> hitbox;  
 };

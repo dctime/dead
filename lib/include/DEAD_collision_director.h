@@ -9,33 +9,33 @@
 
 class DEAD_CollisionDirector {
 public:
-  DEAD_CollisionDirector(std::shared_ptr<DEAD_Game> game);
+  DEAD_CollisionDirector(DEAD_Game* game);
 
-  std::set<std::shared_ptr<DEAD_MapObjectBase>>
-  entityCheckCollision(const std::shared_ptr<DEAD_Entity> &entity,
+  std::set<DEAD_MapObjectBase*>
+  entityCheckCollision(DEAD_Entity* entity,
                        double deltaX, double deltaY);
-  std::set<std::shared_ptr<DEAD_MapObjectBase>>
+  std::set<DEAD_MapObjectBase*>
   entityCheckCollision(double targetX, double targetY,
-                       const std::shared_ptr<DEAD_Entity> &entity);
-  std::set<std::shared_ptr<DEAD_MapObjectBase>>
-  entityCheckCollision(const std::shared_ptr<DEAD_Entity> &entity,
+                       DEAD_Entity* entity);
+  std::set<DEAD_MapObjectBase*>
+  entityCheckCollision(DEAD_Entity* entity,
                        DEAD_Map::MapLocation targetLoc);
 
-  std::set<std::shared_ptr<DEAD_MapObjectBase>>
+  std::set<DEAD_MapObjectBase*>
   playerCheckCollision(double targetX, double targetY,
-                       const std::shared_ptr<DEAD_Player> &player);
+                       DEAD_Player* player);
 
-  std::set<std::shared_ptr<DEAD_MapObjectBase>>
-  playerCheckCollision(const std::shared_ptr<DEAD_Player> &player,
+  std::set<DEAD_MapObjectBase*>
+  playerCheckCollision(DEAD_Player* player,
                        DEAD_Map::MapLocation targetLoc);
-  std::set<std::shared_ptr<DEAD_MapObjectBase>>
-  playerCheckCollision(const std::shared_ptr<DEAD_Player> &player,
+  std::set<DEAD_MapObjectBase*>
+  playerCheckCollision(DEAD_Player* player,
                        double deltaX, double deltaY);
-  std::set<std::shared_ptr<DEAD_MapObjectBase>>
-  bulletCheckCollision(const std::shared_ptr<DEAD_Bullet> &bullet);
+  std::set<DEAD_MapObjectBase*>
+  bulletCheckCollision(DEAD_Bullet* bullet);
 
-  std::shared_ptr<DEAD_Zombie> bulletCheckCollideZombie(const std::shared_ptr<DEAD_Bullet> &bullet);
+  DEAD_Zombie* bulletCheckCollideZombie(DEAD_Bullet* bullet);
 
 private:
-  std::shared_ptr<DEAD_Game> game;
+  DEAD_Game* game;
 };

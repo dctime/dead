@@ -11,7 +11,7 @@
 #include <vector>
 
 DEAD_SwordAttackParticle::DEAD_SwordAttackParticle(
-    std::shared_ptr<DEAD_Renderer> renderer, DEAD_Map::MapLocation loc,
+    DEAD_Renderer* renderer, DEAD_Map::MapLocation loc,
     double angle)
     : DEAD_ParticleBase(renderer), TICKS_LENGTH(300), startTicks(INT_MIN),
       angle(angle), loc(loc) {

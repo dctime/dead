@@ -4,12 +4,12 @@
 
 class DEAD_ControllablePlayer : public DEAD_Player {
 public:
-  DEAD_ControllablePlayer(std::shared_ptr<DEAD_Game> game);
+  DEAD_ControllablePlayer(DEAD_Game* game);
   ~DEAD_ControllablePlayer();
   void playerEvents(SDL_Event event);
   void handleKeyState();
   void handlePlayerRotation();
-  void setGame(std::shared_ptr<DEAD_Game> game) override;
+  void setGame(DEAD_Game* game) override;
 private:
   double baseSpeed;
 };  

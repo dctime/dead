@@ -5,7 +5,7 @@
 #include <iostream>
 #include <memory>
 
-DEAD_Gun::DEAD_Gun(std::shared_ptr<DEAD_Player> player, const int MAGAZINE_SIZE, const int COOLDOWN_TIME, const int RELOAD_TIME)
+DEAD_Gun::DEAD_Gun(DEAD_Player* player, const int MAGAZINE_SIZE, const int COOLDOWN_TIME, const int RELOAD_TIME)
   : DEAD_Weapon(player, COOLDOWN_TIME), MAGAZINE_SIZE(MAGAZINE_SIZE), RELOAD_TIME(RELOAD_TIME), startReloadTicks(0) {
   this->ammoLeftInMagazine = this->MAGAZINE_SIZE;
 }

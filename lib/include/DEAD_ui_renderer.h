@@ -4,8 +4,8 @@
 #include <vector>
 class DEAD_UIRenderer {
 public:
-  DEAD_UIRenderer(std::shared_ptr<DEAD_Renderer> renderer);
+  DEAD_UIRenderer(DEAD_Renderer* renderer);
   void render();
 private:
-  std::vector<std::shared_ptr<DEAD_UI>> uis;
+  std::vector<std::unique_ptr<DEAD_UI>> uis;
 };

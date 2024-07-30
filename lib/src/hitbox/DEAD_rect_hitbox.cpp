@@ -10,7 +10,7 @@ DEAD_RectHitbox::DEAD_RectHitbox(DEAD_Map::MapLocation leftUpLoc, double width, 
 double DEAD_RectHitbox::getWidth() { return this->width; }
 double DEAD_RectHitbox::getHeight() { return this->height; }
 
-bool DEAD_RectHitbox::isCollideWithCircle(std::shared_ptr<DEAD_CircleHitbox> circleHitbox) {
+bool DEAD_RectHitbox::isCollideWithCircle(DEAD_CircleHitbox* circleHitbox) {
   return isCollideWithCircle(circleHitbox->getLoc(), circleHitbox->getRadius());
 
 }

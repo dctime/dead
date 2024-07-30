@@ -10,19 +10,19 @@
 
 
 DEAD_ZombieMovementMaps::DEAD_ZombieMovementMaps(
-    std::shared_ptr<DEAD_Game> game)
+    DEAD_Game* game)
     : game(game) {
   MapSize mapSize = this->game->getMap()->getMapSize();
   int fullprocesses = mapSize.width * mapSize.height;
   int completeProcesses = 0;
   for (int y = 0; y < mapSize.height; y++) {
-    std::vector<std::shared_ptr<DEAD_ZombieMovementMap>> mapRow;
+    std::vector<std::unique_ptr<DEAD_ZombieMovementMap>> mapRow;
     for (int x = 0; x < mapSize.width; x++) {
-      mapRow.push_back(std::make_shared<DEAD_ZombieMovementMap>(game, x, y));
+      mapRow.push_back(std::make_unique<DEAD_ZombieMovementMap>(game, x, y));
       completeProcesses++;
       std::cout << fullprocesses << " / " << completeProcesses << std::endl;
     }
-    this->maps.push_back(mapRow);
+    this->maps.push_back(std::move(mapRow));
   }
 }
 
@@ -30,7 +30,7 @@ ZombieVector DEAD_ZombieMovementMaps::getMovementGradient(int playerX,
                                                           int playerY,
                                                           int zombieX,
                                                           int zombieY) {
-  std::shared_ptr<DEAD_ZombieMovementMap> map =
+  DEAD_ZombieMovementMap* map =
       this->getZombieMovementMap(playerX, playerY);
   return map->getZombieMovementMapData(zombieX, zombieY).vector;
 }
@@ -42,9 +42,9 @@ DEAD_ZombieMovementMaps::getMovementGradient(ZombieMapLoc playerLoc,
                                    zombieLoc.y);
 }
 
-const std::shared_ptr<DEAD_ZombieMovementMap>&
+DEAD_ZombieMovementMap*
 DEAD_ZombieMovementMaps::getZombieMovementMap(int x, int y) {
-  return this->maps.at(y).at(x);
+  return this->maps.at(y).at(x).get();
 }
 
 void DEAD_ZombieMovementMap::calAllGradients() {
@@ -62,8 +62,8 @@ ZombieVector DEAD_ZombieMovementMap::calLocGradient(ZombieMapLoc loc) {
   returnVector.vectorX = 0;
   returnVector.vectorY = 0;
   std::function<double(int)> func = [](int x) { return 1.0 / x; };
-  std::function<bool(int, int, std::shared_ptr<DEAD_Game>)> check =
-      [](int x, int y, std::shared_ptr<DEAD_Game> game) {
+  std::function<bool(int, int, DEAD_Game*)> check =
+      [](int x, int y, DEAD_Game* game) {
         if (x < 0 || x >= game->getMap()->getMapSize().width || y < 0 ||
             y >= game->getMap()->getMapSize().height)
           return false;
@@ -71,8 +71,8 @@ ZombieVector DEAD_ZombieMovementMap::calLocGradient(ZombieMapLoc loc) {
           return true;
       };
 
-  std::function<bool(int, int, std::shared_ptr<DEAD_Game>)> isNearbyWall =
-      [check](int x, int y, std::shared_ptr<DEAD_Game> game) {
+  std::function<bool(int, int, DEAD_Game*)> isNearbyWall =
+      [check](int x, int y, DEAD_Game* game) {
         int checkSequence[8][2] = {{1, 0}, {0, 1},  {-1, 0},  {0, -1},
                                    {1, 1}, {1, -1}, {-1, -1}, {-1, 1}};
 
@@ -298,7 +298,7 @@ void DEAD_ZombieMovementMap::calHeatMapValue() {
   // std::cout << counter << std::endl;
 }
 
-DEAD_ZombieMovementMap::DEAD_ZombieMovementMap(std::shared_ptr<DEAD_Game> game,
+DEAD_ZombieMovementMap::DEAD_ZombieMovementMap(DEAD_Game* game,
                                                int x, int y)
     : game(game), x(x), y(y) {
   MapSize mapSize = this->game->getMap()->getMapSize();

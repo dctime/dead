@@ -31,12 +31,12 @@ Note that this is an abstract base class, meaning it cannot be instantiated on i
 
 class DEAD_Bullet : public std::enable_shared_from_this<DEAD_Bullet> {
 public:
-  DEAD_Bullet(std::shared_ptr<DEAD_Player> owner, std::shared_ptr<DEAD_Gun> gun, double speed, int damage);
+  DEAD_Bullet(DEAD_Player* owner, DEAD_Gun* gun, double speed, int damage);
   virtual SDL_Rect getBulletTextureRect() = 0;
-  std::shared_ptr<DEAD_Player> getOwner();
+  DEAD_Player* getOwner();
   virtual double getBulletSize() = 0;
   DEAD_Map::MapLocation getMapLocation();
-  std::shared_ptr<DEAD_Gun> getGun();
+  DEAD_Gun* getGun();
   double getRotation();
   DEAD_Map::MapLocation getLoc();
   void setLoc(DEAD_Map::MapLocation loc);
@@ -44,15 +44,15 @@ public:
   void tickFly();
   virtual void tickBullet() = 0;
   virtual ~DEAD_Bullet();
-  virtual void registerBullet() = 0;
-  std::shared_ptr<DEAD_CircleHitbox> getHitBox();
+  DEAD_CircleHitbox* getHitBox();
   int getDamage();
 private:
-  std::shared_ptr<DEAD_Player> owner;
+  DEAD_Player* owner;
   DEAD_Map::MapLocation pos;
-  std::shared_ptr<DEAD_Gun> gun;
-  std::shared_ptr<DEAD_Game> game;
+  DEAD_Gun* gun;
+  DEAD_Game* game;
   double rotation;
   double speed;
   int damage;
+  std::unique_ptr<DEAD_CircleHitbox> hitbox;
 };

@@ -22,16 +22,16 @@ public:
   DEAD_Map();
   ~DEAD_Map();
   void mapUpdateSizeAndInfo(); 
-  std::vector<std::vector<std::shared_ptr<DEAD_MapObjectBase>>> getMapObjects();
+  std::vector<std::vector<std::unique_ptr<DEAD_MapObjectBase>>>& getMapObjects();
   MapSize getMapSize();
   std::vector<DEAD_Map::MapLocation> getPlayerPointLocs();
-  std::shared_ptr<DEAD_MapSpawner> getMapSpawner();
+  DEAD_MapSpawner* getMapSpawner();
   void loadMap();
 private:
-  std::vector<std::vector<std::shared_ptr<DEAD_MapObjectBase>>> mapObjects;
+  std::vector<std::vector<std::unique_ptr<DEAD_MapObjectBase>>> mapObjects;
   bool isSquare();
   MapSize mapSize;
   std::vector<DEAD_Map::MapLocation> playerPointLocs;
-  std::shared_ptr<DEAD_MapSpawner> mapSpawner; 
+  std::unique_ptr<DEAD_MapSpawner> mapSpawner; 
   void initWithThis();
 };

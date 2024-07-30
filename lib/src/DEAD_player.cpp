@@ -6,13 +6,13 @@
 #include <SDL2/SDL_log.h>
 #include <memory>
 
-DEAD_Player::DEAD_Player(std::shared_ptr<DEAD_Game> game) : DEAD_Entity::DEAD_Entity(game, 10000) {
+DEAD_Player::DEAD_Player(DEAD_Game* game) : DEAD_Entity::DEAD_Entity(game, 10000) {
 }
 
 DEAD_Player::~DEAD_Player() {}
 
 void DEAD_Player::move(double x, double y) {
-  if (this->getGame()->getCollisionDirector()->playerCheckCollision(std::dynamic_pointer_cast<DEAD_Player>(shared_from_this()), x, y).size() != 0) {
+  if (this->getGame()->getCollisionDirector()->playerCheckCollision(this, x, y).size() != 0) {
     return;
   } else {
     this->setPos(this->getPos().x+x, this->getPos().y+y);
@@ -41,7 +41,7 @@ void DEAD_Player::pickupWeapon() {
 }
 
 SDL_Rect DEAD_Player::getTextureRect() {
-  std::shared_ptr<DEAD_Item> item = std::dynamic_pointer_cast<DEAD_Item>(this->holdItem);
+  const std::shared_ptr<DEAD_Item>& item = std::dynamic_pointer_cast<DEAD_Item>(this->holdItem);
   if (item == nullptr) {
     SDL_Rect rect = {.x = 0, .y = 0, .w = 100, .h = 100};
     return rect;
@@ -51,7 +51,7 @@ SDL_Rect DEAD_Player::getTextureRect() {
 }
 
 void DEAD_Player::attack() {
-  std::shared_ptr<DEAD_Weapon> weapon = std::dynamic_pointer_cast<DEAD_Weapon>(this->holdItem);
+  const std::shared_ptr<DEAD_Weapon>& weapon = std::dynamic_pointer_cast<DEAD_Weapon>(this->holdItem);
   if (weapon == nullptr) {
     return;
   }
@@ -59,7 +59,7 @@ void DEAD_Player::attack() {
 }
 
 void DEAD_Player::reloadGun() {
-  std::shared_ptr<DEAD_Gun> gun = std::dynamic_pointer_cast<DEAD_Gun>(this->holdItem);
+  const std::shared_ptr<DEAD_Gun>& gun = std::dynamic_pointer_cast<DEAD_Gun>(this->holdItem);
   if (gun == nullptr) {
     return;
   }

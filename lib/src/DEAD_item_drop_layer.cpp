@@ -22,7 +22,7 @@ void DEAD_ItemDropLayer::drop(std::shared_ptr<DEAD_ItemDrop> itemDrop) {
 int DEAD_ItemDropLayer::getDropsCount() { return this->itemDrops.size(); }
 
 void DEAD_ItemDropLayer::getNearItemDrop(DEAD_Map::MapLocation loc, double radius, std::shared_ptr<DEAD_Item>& returnItem) {
-  for (std::shared_ptr<DEAD_ItemDrop> itemDrop : this->itemDrops) {
+  for (const std::shared_ptr<DEAD_ItemDrop>& itemDrop : this->itemDrops) {
     std::function<double(DEAD_Map::MapLocation, DEAD_Map::MapLocation)>
         calDistance =
             [](DEAD_Map::MapLocation loc1, DEAD_Map::MapLocation loc2) {

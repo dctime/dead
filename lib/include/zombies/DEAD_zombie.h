@@ -4,11 +4,11 @@
 
 class DEAD_Zombie : public DEAD_Entity {
 public:
-  DEAD_Zombie(std::shared_ptr<DEAD_Game> game);
+  DEAD_Zombie(DEAD_Game* game);
   SDL_Rect getTextureRect() override;
   int getAttackDamage();
   bool attackReady();
-  void bite(std::shared_ptr<DEAD_Player> player);
+  void bite(DEAD_Player* player);
   ZombieVector getMovingUnitVector();
   void setMovingUnitVector(ZombieVector vector);
 private:

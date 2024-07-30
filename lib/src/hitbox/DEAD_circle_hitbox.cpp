@@ -12,7 +12,7 @@ void DEAD_CircleHitbox::setLoc(DEAD_Map::MapLocation newLoc) {
 }
 
 bool DEAD_CircleHitbox::iscollideWithCircle(
-    std::shared_ptr<DEAD_CircleHitbox> circleHitbox) {
+    DEAD_CircleHitbox* circleHitbox) {
   DEAD_Map::MapLocation locThis = this->loc;
   DEAD_Map::MapLocation locThat = circleHitbox->getLoc();
 

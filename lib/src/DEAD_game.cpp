@@ -24,8 +24,8 @@ DEAD_Game::DEAD_Game()
       window(SDL_CreateWindow("DEAD", SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED, this->SCREEN_WIDTH,
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
-      map(std::make_shared<DEAD_Map>()),
-      itemDropLayer(std::make_shared<DEAD_ItemDropLayer>()), running(true),
+      map(std::make_unique<DEAD_Map>()),
+      itemDropLayer(std::make_unique<DEAD_ItemDropLayer>()), running(true),
       ticking(true) {
 
   SDL_Log("Game Init");
@@ -55,30 +55,34 @@ DEAD_Game::DEAD_Game()
            Mix_GetError());
   }
 
-  this->soundDirector = std::make_shared<DEAD_SoundDirector>();
+  this->soundDirector = std::make_unique<DEAD_SoundDirector>();
   this->map->loadMap();
-}
-
-void DEAD_Game::initObjectThatHasSharedFromThis() {
-  this->map->getMapSpawner()->initAccess(shared_from_this());
+  this->player = std::make_unique<DEAD_ControllablePlayer>(this);
+  std::vector<DEAD_Map::MapLocation> locs = this->map->getPlayerPointLocs();
+  if (locs.size() > 0) {
+    // set the first player point
+    this->player->setPos(locs[0].x, locs[0].y);
+  }
+  this->map->getMapSpawner()->initAccess(this);
   this->renderer =
-      std::make_shared<DEAD_Renderer>(this->window, shared_from_this());
+      std::make_unique<DEAD_Renderer>(this->window, this);
   this->bulletDirector =
-      std::make_shared<DEAD_BulletDirector>(shared_from_this());
+      std::make_unique<DEAD_BulletDirector>(this);
   this->collisionDirector =
-      std::make_shared<DEAD_CollisionDirector>(shared_from_this());
-  this->zombieDirector = std::make_shared<DEAD_ZombieDirector>(
-      shared_from_this());
+      std::make_unique<DEAD_CollisionDirector>(this);
+  this->zombieDirector = std::make_unique<DEAD_ZombieDirector>(
+      this);
 
   this->bulletCollisionID = (SDL_AddTimer(DEAD_Game::BULLET_COLLISION_DELAY,
                                           this->bulletCheckCollisionCallback,
-                                          shared_from_this().get()));
+                                          this));
   this->mainLoopID =
       SDL_AddTimer(DEAD_Game::MAIN_LOOP_DELAY, this->playerMovementCallback,
-                   shared_from_this().get());
+                   this);
   this->zombieSpawnID =
-      SDL_AddTimer(500, this->spawnZombieCallback, shared_from_this().get());
+      SDL_AddTimer(500, this->spawnZombieCallback, this);
 }
+
 
 DEAD_Game::~DEAD_Game() {
   SDL_RemoveTimer(this->bulletCollisionID);
@@ -123,40 +127,32 @@ void DEAD_Game::run() {
     this->mapTick();
   }
 }
-std::shared_ptr<DEAD_Map> DEAD_Game::getMap() { return this->map; }
+DEAD_Map* DEAD_Game::getMap() { return this->map.get(); }
 
-std::shared_ptr<DEAD_Player> DEAD_Game::getPlayer() { return this->player; }
-void DEAD_Game::setPlayer(std::shared_ptr<DEAD_ControllablePlayer> player) {
-  this->player = player;
-  std::vector<DEAD_Map::MapLocation> locs = this->map->getPlayerPointLocs();
-  if (locs.size() > 0) {
-    // set the first player point
-    this->player->setPos(locs[0].x, locs[0].y);
-  }
+DEAD_Player* DEAD_Game::getPlayer() { return this->player.get(); }
+
+DEAD_Renderer* DEAD_Game::getRenderer() {
+  return this->renderer.get();
 }
 
-std::shared_ptr<DEAD_Renderer> DEAD_Game::getRenderer() {
-  return this->renderer;
+DEAD_BulletDirector* DEAD_Game::getBulletDirector() {
+  return this->bulletDirector.get();
 }
 
-std::shared_ptr<DEAD_BulletDirector> DEAD_Game::getBulletDirector() {
-  return this->bulletDirector;
+DEAD_CollisionDirector* DEAD_Game::getCollisionDirector() {
+  return this->collisionDirector.get();
 }
 
-std::shared_ptr<DEAD_CollisionDirector> DEAD_Game::getCollisionDirector() {
-  return this->collisionDirector;
+DEAD_ItemDropLayer* DEAD_Game::getItemDropLayer() {
+  return this->itemDropLayer.get();
 }
 
-std::shared_ptr<DEAD_ItemDropLayer> DEAD_Game::getItemDropLayer() {
-  return this->itemDropLayer;
+DEAD_ZombieDirector* DEAD_Game::getZombieDirector() {
+  return this->zombieDirector.get();
 }
 
-std::shared_ptr<DEAD_ZombieDirector> DEAD_Game::getZombieDirector() {
-  return this->zombieDirector;
-}
-
-std::shared_ptr<DEAD_SoundDirector> DEAD_Game::getSoundDirector() {
-  return this->soundDirector;
+DEAD_SoundDirector* DEAD_Game::getSoundDirector() {
+  return this->soundDirector.get();
 }
 
 void DEAD_Game::checkPlayerDied() {

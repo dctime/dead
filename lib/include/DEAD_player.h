@@ -10,16 +10,15 @@ class DEAD_Game;
 
 class DEAD_Player : public DEAD_Entity {
 public:
-  DEAD_Player(std::shared_ptr<DEAD_Game> game);
+  DEAD_Player(DEAD_Game* game);
   ~DEAD_Player();
   SDL_Rect getTextureRect() override;
   void pickupOrDrop();
   template <typename T> void summonWeapon() {
-    this->holdItem = std::make_shared<T>(
-        std::static_pointer_cast<DEAD_Player>(DEAD_Entity::shared_from_this()));
+    this->holdItem = std::make_shared<T>(this);
   }
 
-  void setGame(std::shared_ptr<DEAD_Game> game) override = 0;
+  void setGame(DEAD_Game* game) override = 0;
   void move(double x, double y) override;
   void reloadGun();
 

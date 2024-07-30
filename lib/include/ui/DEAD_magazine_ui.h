@@ -4,7 +4,7 @@
 
 class DEAD_MagazineUI : public DEAD_UI {
 public:
-  DEAD_MagazineUI(std::shared_ptr<DEAD_Renderer> renderer, std::shared_ptr<DEAD_Player> player);
+  DEAD_MagazineUI(DEAD_Renderer* renderer, DEAD_Player* player);
   void render() override;
 private:
   
@@ -13,7 +13,7 @@ private:
   int magazineUIHeight;
   int distanceBetweenScreenBoarder;
   int boarderWidth;
-  std::shared_ptr<DEAD_ValueBarUIElement> barElement;
-  std::shared_ptr<DEAD_Renderer> renderer;
-  std::shared_ptr<DEAD_Player> player;
+  std::unique_ptr<DEAD_ValueBarUIElement> barElement;
+  DEAD_Renderer* renderer;
+  DEAD_Player* player;
 };

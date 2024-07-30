@@ -1,5 +1,4 @@
 #include "DEAD_entity.h"
-#include "DEAD_controllable_player.h"
 #include <DEAD_game.h>
 #include <SDL2/SDL_timer.h>
 #include <cstdlib>
@@ -7,10 +6,10 @@
 #include <iostream>
 #include <memory>
 
-DEAD_Entity::DEAD_Entity(std::shared_ptr<DEAD_Game> game, int maxHealth)
+DEAD_Entity::DEAD_Entity(DEAD_Game* game, int maxHealth)
     : speed(3), position({.x = 0, .y = 0}), rotation(0), size(0.8), maxHealth(maxHealth), health(maxHealth),
       lastTimeBeenHitTicks(0), knockBackCooldown(300) {
-  this->hitbox = std::make_shared<DEAD_CircleHitbox>(this->getSize() / 2 * 0.8,
+  this->hitbox = std::make_unique<DEAD_CircleHitbox>(this->getSize() / 2 * 0.8,
                                                      this->position);
   this->setGame(game);
 }
@@ -67,7 +66,7 @@ void DEAD_Entity::setRotation(double rotation) { this->rotation = rotation; }
 
 int DEAD_Entity::getSpeed() { return this->speed; }
 
-std::shared_ptr<DEAD_Game> DEAD_Entity::getGame() {
+DEAD_Game* DEAD_Entity::getGame() {
   return this->game;
 }
 
@@ -75,17 +74,17 @@ double DEAD_Entity::getSize() {
   return this->size;
 }
 
-std::shared_ptr<DEAD_CircleHitbox> DEAD_Entity::getHitbox() { return this->hitbox; }
+DEAD_CircleHitbox* DEAD_Entity::getHitbox() { return this->hitbox.get(); }
 
 void DEAD_Entity::move(double x, double y) {
-  if (this->getGame()->getCollisionDirector()->entityCheckCollision(shared_from_this(), x, y).size() != 0) {
+  if (this->getGame()->getCollisionDirector()->entityCheckCollision(this, x, y).size() != 0) {
     return;
   } else {
     this->setPos(this->getPos().x+x, this->getPos().y+y);
   }
 }
 
-void DEAD_Entity::setGame(std::shared_ptr<DEAD_Game> game) {
+void DEAD_Entity::setGame(DEAD_Game* game) {
   this->game = game;
 }
 
