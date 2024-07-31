@@ -17,46 +17,47 @@
 #include <set>
 #include <vector>
 
-DEAD_ZombieDirector::DEAD_ZombieDirector(DEAD_Game* game)
+DEAD_ZombieDirector::DEAD_ZombieDirector(DEAD_Game *game)
     : game(game),
       zombieMovementMaps(std::make_unique<DEAD_ZombieMovementMaps>(game)) {}
 
-void DEAD_ZombieDirector::registerZombie(std::unique_ptr<DEAD_Zombie>& zombie) {
+void DEAD_ZombieDirector::registerZombie(std::unique_ptr<DEAD_Zombie> &zombie) {
   this->zombies.insert(std::move(zombie));
 }
 
-void DEAD_ZombieDirector::killZombie(DEAD_Zombie* zombie) {
-  for (const std::unique_ptr<DEAD_Zombie>& zombieUnique : this->zombies) {
-    if (zombieUnique.get() != zombie) continue;
+void DEAD_ZombieDirector::killZombie(DEAD_Zombie *zombie) {
+  for (const std::unique_ptr<DEAD_Zombie> &zombieUnique : this->zombies) {
+    if (zombieUnique.get() != zombie)
+      continue;
     this->zombies.erase(zombieUnique);
     break;
   }
 }
 
-std::set<std::unique_ptr<DEAD_Zombie>>& DEAD_ZombieDirector::getZombies() {
+std::set<std::unique_ptr<DEAD_Zombie>> &DEAD_ZombieDirector::getZombies() {
   return this->zombies;
 }
 
-DEAD_ZombieMovementMaps*
-DEAD_ZombieDirector::getZombieMovementMaps() {
+DEAD_ZombieMovementMaps *DEAD_ZombieDirector::getZombieMovementMaps() {
   return this->zombieMovementMaps.get();
 }
 
 void DEAD_ZombieDirector::tickZombies() {
   DEAD_Map::MapLocation playerLoc = this->game->getPlayer()->getPos();
-  std::vector<DEAD_Zombie*> deadZombies;
+  std::vector<DEAD_Zombie *> deadZombies;
 
-  for (const std::unique_ptr<DEAD_Zombie>& zombie : this->zombies) {
+  for (const std::unique_ptr<DEAD_Zombie> &zombie : this->zombies) {
     if (zombie->getHealth() <= 0) {
       deadZombies.push_back(zombie.get());
     }
   }
 
-  for (DEAD_Zombie* deadZombie : deadZombies) {
+  for (DEAD_Zombie *deadZombie : deadZombies) {
     this->game->getZombieDirector()->killZombie(deadZombie);
   }
 
-  for (const std::unique_ptr<DEAD_Zombie>& zombie : this->zombies) {
+  // zombie and player
+  for (const std::unique_ptr<DEAD_Zombie> &zombie : this->zombies) {
     double distanceBetween = DEAD_Functions::calDistance(
         zombie->getPos().x, zombie->getPos().y, playerLoc.x, playerLoc.y);
     if (distanceBetween < 1.414) {
@@ -74,7 +75,8 @@ void DEAD_ZombieDirector::tickZombies() {
       }
     }
 
-    zombie->setMovingUnitVector(this->getMovementVector(zombie->getPos().x, zombie->getPos().y));
+    zombie->setMovingUnitVector(
+        this->getMovementVector(zombie->getPos().x, zombie->getPos().y));
 
     ZombieVector moveVector = zombie->getMovingUnitVector();
 
@@ -95,14 +97,14 @@ ZombieVector DEAD_ZombieDirector::getMovementVector(double targetX,
       [](double x1, double x2, double y1, double y2) {
         return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
       };
-  std::function<bool(int, int, DEAD_Game*)> check =
-      [](int x, int y, DEAD_Game* game) {
-        if (x < 0 || x >= game->getMap()->getMapSize().width || y < 0 ||
-            y >= game->getMap()->getMapSize().height)
-          return false;
-        else
-          return true;
-      };
+  std::function<bool(int, int, DEAD_Game *)> check = [](int x, int y,
+                                                        DEAD_Game *game) {
+    if (x < 0 || x >= game->getMap()->getMapSize().width || y < 0 ||
+        y >= game->getMap()->getMapSize().height)
+      return false;
+    else
+      return true;
+  };
 
   ZombieVector returnVector;
   returnVector.vectorX = 0;
@@ -123,6 +125,8 @@ ZombieVector DEAD_ZombieDirector::getMovementVector(double targetX,
   // sequence.push_back({.vectorX=baseX-1, .vectorY=baseY-1});
 
   DEAD_Map::MapLocation playerLoc = this->game->getPlayer()->getPos();
+
+  // movement by fields
   for (ZombieVector step : sequence) {
     if (!check(step.vectorX, step.vectorY, this->game))
       continue;
@@ -133,6 +137,29 @@ ZombieVector DEAD_ZombieDirector::getMovementVector(double targetX,
     returnVector.vectorY += elementVector.vectorY * weight;
   }
 
+  DEAD_Functions::normalizeVector(returnVector);
+
+  // affect between zombies
+  double zombiesAffectWeight = 0.1;
+  for (const std::unique_ptr<DEAD_Zombie> &zombie : this->zombies) {
+    ZombieVector affectReverseDeltaUnitVector = {
+        .vectorX = targetX - zombie->getPos().x,
+        .vectorY = targetY - zombie->getPos().y};
+    double distance = DEAD_Functions::calDistance(affectReverseDeltaUnitVector);
+    DEAD_Functions::normalizeVector(affectReverseDeltaUnitVector);
+    if (distance != 0) {
+      affectReverseDeltaUnitVector.vectorX =
+          affectReverseDeltaUnitVector.vectorX / pow(distance, 2);
+      affectReverseDeltaUnitVector.vectorY =
+          affectReverseDeltaUnitVector.vectorY / pow(distance, 2);
+    }
+    returnVector.vectorX +=
+        affectReverseDeltaUnitVector.vectorX * zombiesAffectWeight;
+    returnVector.vectorY +=
+        affectReverseDeltaUnitVector.vectorY * zombiesAffectWeight;
+  }
+
+  // normalize
   double vectorLength =
       sqrt(pow(returnVector.vectorX, 2) + pow(returnVector.vectorY, 2));
   returnVector.vectorX = returnVector.vectorX / (vectorLength + 0.000001);

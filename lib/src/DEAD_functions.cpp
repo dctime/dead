@@ -51,3 +51,24 @@ DEAD_Vector DEAD_Functions::calUnitVector(double angle) {
   returnVector.y = sin(angle/180*M_PI);
   return returnVector;
 }
+
+void DEAD_Functions::normalizeVector(DEAD_Vector& vector) {
+  double distance = DEAD_Functions::calDistance(0, 0, vector.x, vector.y);
+  if (distance == 0) return;
+  vector.x = vector.x / distance;
+  vector.y = vector.y / distance;
+}
+
+void DEAD_Functions::normalizeVector(ZombieVector &vector) {
+  double distance = DEAD_Functions::calDistance(0, 0, vector.vectorX, vector.vectorY);
+  if (distance == 0) return;
+  vector.vectorX = vector.vectorX / distance;
+  vector.vectorY = vector.vectorY / distance;
+}
+
+double DEAD_Functions::calDistance(const ZombieVector& vector) {
+  return DEAD_Functions::calDistance(0, 0, vector.vectorX, vector.vectorY);
+}
+
+
+
