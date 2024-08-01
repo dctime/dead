@@ -15,7 +15,7 @@ SDL_Rect DEAD_CursedDirt::getTextureRect() {
   return rect;
 }
 bool DEAD_CursedDirt::isPlayerCollidable() {
-  return false;
+  return true;
 }
 
 bool DEAD_CursedDirt::isZombieCollidable() {

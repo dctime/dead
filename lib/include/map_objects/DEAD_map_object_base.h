@@ -7,7 +7,7 @@
 class DEAD_MapObjectBase {
 public:
   DEAD_MapObjectBase(DEAD_Map::MapLocation loc);
-  ~DEAD_MapObjectBase();
+  virtual ~DEAD_MapObjectBase();
   virtual char getChar() = 0;
   DEAD_RectHitbox* getHitBox();
   DEAD_Map::MapLocation getLeftUpLoc();

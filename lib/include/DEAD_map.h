@@ -35,5 +35,8 @@ private:
   std::vector<DEAD_Map::MapLocation> playerPointLocs;
   std::unique_ptr<DEAD_MapSpawner> mapSpawner; 
   void initWithThis();
+
+  template<typename T>
+  void setHorizonVertical();
   
 };

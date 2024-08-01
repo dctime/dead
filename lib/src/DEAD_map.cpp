@@ -12,6 +12,10 @@
 #include <map_objects/DEAD_point.h>
 #include <map_objects/DEAD_stone.h>
 #include <map_objects/DEAD_wood.h>
+#include <map_objects/DEAD_floor.h>
+#include <map_objects/DEAD_road.h>
+#include <map_objects/DEAD_mid_road.h>
+#include <map_objects/DEAD_door.h>
 #include <memory>
 #include <string>
 #include <vector>
@@ -42,6 +46,7 @@ void DEAD_Map::loadMap() {
     y += 1;
     std::vector<std::unique_ptr<DEAD_MapObjectBase>> temp;
     std::unique_ptr<DEAD_MapObjectBase> obj;
+    
     for (char c : line) {
       x += 1;
       DEAD_Map::MapLocation loc = {.x = (double)x, .y = (double)y};
@@ -55,6 +60,18 @@ void DEAD_Map::loadMap() {
         break;
       case ' ':
         obj = std::make_unique<DEAD_Air>(loc);
+        break;
+      case 'f':
+        obj = std::make_unique<DEAD_Floor>(loc);
+        break;
+      case 'r':
+        obj = std::make_unique<DEAD_Road>(loc);
+        break;
+      case 'R':
+        obj = std::make_unique<DEAD_MidRoad>(loc);
+        break;
+      case 'd':
+        obj = std::make_unique<DEAD_Door>(loc);
         break;
       case 'c':
         obj = std::make_unique<DEAD_CursedDirt>(loc);
@@ -87,6 +104,39 @@ void DEAD_Map::loadMap() {
     this->mapSize.width = 0;
     this->mapSize.height = 0;
     SDL_Log("Map File Not Square");
+  }
+
+  this->setHorizonVertical<DEAD_Door*>();
+}
+
+template<typename T>
+void DEAD_Map::setHorizonVertical() {
+  std::cout << "height: " << this->mapSize.height << ", width:" << this->mapSize.width << std::endl;
+  for (int y = 0; y < this->mapSize.height; y++) {
+    std::cout << "checkingY" << std::endl;
+    for (int x = 0; x < this->mapSize.width; x++) {
+      std::cout << "checkingX" << std::endl;
+      DEAD_MultitextureObjectBase* targetObject = dynamic_cast<T>(this->mapObjects.at(y).at(x).get()); 
+      if (targetObject == nullptr) continue;
+      std::cout << "pass the test" << std::endl;
+      int checkSequence[4][2] = {
+        {1, 0},
+        {-1, 0},
+        {0, 1},
+        {0, -1}
+      };
+
+      for (int i = 0; i < 4; i++) {
+        DEAD_MapObjectBase* checkObject = dynamic_cast<T>(this->mapObjects.at(y+checkSequence[i][0]).at(x+checkSequence[i][1]).get());
+        if (checkObject == nullptr && !this->mapObjects.at(y+checkSequence[i][0]).at(x+checkSequence[i][1]).get()->isPlayerCollidable()) continue;
+        std::cout << "pass the test again!" << std::endl;
+        if (i == 0 || i == 1) {
+          targetObject->setDirection(DEAD_MapObjectDirection::VERTICAL);
+        } else {
+          targetObject->setDirection(DEAD_MapObjectDirection::HORIZONTAL);
+        }
+      }
+    }
   }
 }
 

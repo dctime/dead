@@ -23,6 +23,7 @@
 #include <set>
 #include <string>
 #include <vector>
+#include <map_objects/DEAD_multitexture_object_base.h>
 
 void DEAD_Renderer::getTextureFromSurface(SDL_Texture *&texture,
                                           std::string filePath) {
@@ -86,7 +87,7 @@ DEAD_Renderer::~DEAD_Renderer() {
 void DEAD_Renderer::render() {
 
   SDL_SetRenderDrawBlendMode(this->renderer, SDL_BLENDMODE_BLEND);
-  SDL_SetRenderDrawColor(this->renderer, 0, 0, 0, 255);
+  SDL_SetRenderDrawColor(this->renderer, 50, 0, 48, 255);
   SDL_RenderClear(this->renderer);
 
   this->renderMapObjects();
@@ -125,6 +126,23 @@ void DEAD_Renderer::renderMapObjects() {
     this->renderRect.y =
         (i - this->renderAnchor.y) * this->renderBlockSize + windowHeightMid;
     for (int j = 0; j < mapObjects[i].size(); ++j) {
+      // default angle is 0
+      int angle = 0;
+
+      // Get Angle
+      DEAD_MultitextureObjectBase* mapObjectMultiTexture = 
+        dynamic_cast<DEAD_MultitextureObjectBase*>(mapObjects[i][j].get());
+      if (mapObjectMultiTexture != nullptr) {
+        switch (mapObjectMultiTexture->getDirection()) {
+        case DEAD_MapObjectDirection::HORIZONTAL:
+          angle = 90;
+          break;
+        case DEAD_MapObjectDirection::VERTICAL:
+          angle = 0;
+          break;
+        }
+      }
+
       this->renderRect.x =
           (j - this->renderAnchor.x) * this->renderBlockSize + windowWidthMid;
 
@@ -137,8 +155,8 @@ void DEAD_Renderer::renderMapObjects() {
 
       if (!isAir) {
 
-        SDL_RenderCopy(this->renderer, this->mapObjectTexture,
-                       &objectTextureRect, &renderRect);
+        SDL_RenderCopyEx(this->renderer, this->mapObjectTexture,
+                       &objectTextureRect, &renderRect, angle, NULL, SDL_RendererFlip::SDL_FLIP_NONE);
       }
     }
   }

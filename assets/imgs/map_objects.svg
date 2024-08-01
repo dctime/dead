@@ -7,7 +7,7 @@
    viewBox="0 0 132.29166 132.29167"
    version="1.1"
    id="svg1"
-   inkscape:export-filename="../../dead/assets/imgs/map_objects.png"
+   inkscape:export-filename="map_objects.png"
    inkscape:export-xdpi="384"
    inkscape:export-ydpi="384"
    inkscape:version="1.3.2 (091e20e, 2023-11-25)"
@@ -28,11 +28,11 @@
      inkscape:document-units="mm"
      inkscape:zoom="1.5326361"
      inkscape:cx="259.35706"
-     inkscape:cy="147.78459"
+     inkscape:cy="147.45836"
      inkscape:window-width="1920"
-     inkscape:window-height="1012"
+     inkscape:window-height="1019"
      inkscape:window-x="0"
-     inkscape:window-y="0"
+     inkscape:window-y="31"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
@@ -98,5 +98,12 @@
        height="26.458334"
        x="52.916668"
        y="0" />
+    <rect
+       style="fill:#806600;fill-opacity:1;stroke-width:0.264583"
+       id="rect4"
+       width="26.458334"
+       height="26.458334"
+       x="79.375"
+       y="-1.7763568e-15" />
   </g>
 </svg>
