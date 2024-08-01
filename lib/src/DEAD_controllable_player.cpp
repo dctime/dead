@@ -31,13 +31,13 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
   switch (event.type) {
   case SDL_KEYDOWN:
     switch (event.key.keysym.sym) {
-    case SDLK_f:
-      SDL_Log("[Controllable Player] use");
+    case SDLK_q:
+      SDL_Log("[Controllable Player] pickup or drop");
       this->pickupOrDrop();
       break;
-    case SDLK_g:
-      SDL_Log("Summon Weapon");
-      this->summonWeapon<DEAD_Pistol>();
+    case SDLK_f:
+      SDL_Log("use");
+      this->holdItem->use();
       break;
     case SDLK_v:
       std::cout << "Zombie count: " << this->game->getZombieDirector()->getZombies().size() << std::endl;

@@ -16,6 +16,7 @@ public:
   void unbindItemDrop();
   DEAD_Player* getPlayer();
   void setPlayer(DEAD_Player* player); 
+  virtual void use() = 0;
 protected:
   std::shared_ptr<DEAD_ItemDrop> itemDrop;
 private:

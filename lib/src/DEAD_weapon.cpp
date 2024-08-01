@@ -20,3 +20,4 @@ double DEAD_Weapon::checkStillCooling() {
   if (coolingTicks >= this->COOLDOWN_TIME) return 1.0;
   else return static_cast<double>(coolingTicks) / this->COOLDOWN_TIME;
 }
+

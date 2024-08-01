@@ -107,6 +107,8 @@ void DEAD_Map::loadMap() {
   }
 
   this->setHorizonVertical<DEAD_Door*>();
+  
+  
 }
 
 template<typename T>
