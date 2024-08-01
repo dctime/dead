@@ -8,6 +8,10 @@
 #include <queue>
 #include <vector>
 
+bool ZombieMapLoc::operator<(const ZombieMapLoc& loc) const {
+  return loc.x < x || (loc.x == x && loc.y < y);
+}
+
 
 DEAD_ZombieMovementMaps::DEAD_ZombieMovementMaps(
     DEAD_Game* game)

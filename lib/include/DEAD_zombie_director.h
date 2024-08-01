@@ -17,6 +17,7 @@ public:
 
 private:
   std::set<std::unique_ptr<DEAD_Zombie>> zombies;
+  std::map<ZombieMapLoc, std::set<DEAD_Zombie *>> zombiesMapped;
   DEAD_Game* game;
   std::unique_ptr<DEAD_ZombieMovementMaps> zombieMovementMaps;
 };

@@ -10,6 +10,7 @@ struct ZombieVector {
     double vectorY;
   };
 
+
   struct ZombieMovementMapData {
     ZombieVector vector;
     double heatMapValue;
@@ -18,6 +19,7 @@ struct ZombieVector {
   struct ZombieMapLoc {
     int x;
     int y;
+    bool operator<(const ZombieMapLoc& loc) const;
   };
 
 class DEAD_ZombieMovementMaps {

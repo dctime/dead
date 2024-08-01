@@ -13,13 +13,16 @@
 #include <cmath>
 #include <functional>
 #include <iostream>
+#include <map>
 #include <memory>
 #include <set>
+#include <utility>
 #include <vector>
 
 DEAD_ZombieDirector::DEAD_ZombieDirector(DEAD_Game *game)
     : game(game),
-      zombieMovementMaps(std::make_unique<DEAD_ZombieMovementMaps>(game)) {}
+      zombieMovementMaps(std::make_unique<DEAD_ZombieMovementMaps>(game)) {
+}
 
 void DEAD_ZombieDirector::registerZombie(std::unique_ptr<DEAD_Zombie> &zombie) {
   this->zombies.insert(std::move(zombie));
@@ -57,6 +60,14 @@ void DEAD_ZombieDirector::tickZombies() {
   }
 
   // zombie and player
+  // prepare for movement vector
+
+  for (const std::unique_ptr<DEAD_Zombie> &zombie : this->zombies) {
+    DEAD_Map::MapLocation loc = zombie->getPos();
+    ZombieMapLoc zombieMaploc = {.x = (int)loc.x, .y = (int)loc.y};
+    this->zombiesMapped[zombieMaploc].insert(zombie.get());
+  }
+
   for (const std::unique_ptr<DEAD_Zombie> &zombie : this->zombies) {
     double distanceBetween = DEAD_Functions::calDistance(
         zombie->getPos().x, zombie->getPos().y, playerLoc.x, playerLoc.y);
@@ -93,18 +104,7 @@ ZombieVector DEAD_ZombieDirector::getMovementVector(double targetX,
   double baseX = (int)targetX;
   double baseY = (int)targetY;
 
-  std::function<double(double, double, double, double)> calDistance =
-      [](double x1, double x2, double y1, double y2) {
-        return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
-      };
-  std::function<bool(int, int, DEAD_Game *)> check = [](int x, int y,
-                                                        DEAD_Game *game) {
-    if (x < 0 || x >= game->getMap()->getMapSize().width || y < 0 ||
-        y >= game->getMap()->getMapSize().height)
-      return false;
-    else
-      return true;
-  };
+  
 
   ZombieVector returnVector;
   returnVector.vectorX = 0;
@@ -128,9 +128,9 @@ ZombieVector DEAD_ZombieDirector::getMovementVector(double targetX,
 
   // movement by fields
   for (ZombieVector step : sequence) {
-    if (!check(step.vectorX, step.vectorY, this->game))
+    if (!this->game->getMap()->checkInMap(step.vectorX, step.vectorY))
       continue;
-    double weight = calDistance(targetX, step.vectorX, targetY, step.vectorY);
+    double weight = DEAD_Functions::calDistance(targetX, step.vectorX, targetY, step.vectorY);
     ZombieVector elementVector = this->zombieMovementMaps->getMovementGradient(
         playerLoc.x, playerLoc.y, step.vectorX, step.vectorY);
     returnVector.vectorX += elementVector.vectorX * weight;
@@ -140,8 +140,32 @@ ZombieVector DEAD_ZombieDirector::getMovementVector(double targetX,
   DEAD_Functions::normalizeVector(returnVector);
 
   // affect between zombies
+
   double zombiesAffectWeight = 0.1;
-  for (const std::unique_ptr<DEAD_Zombie> &zombie : this->zombies) {
+
+  std::set<DEAD_Zombie*> nearbyZombies;
+  int nearbyCheckSequence[9][2] = {
+    {0, 0},
+    {1, 0},
+    {-1, 0},
+    {0, 1},
+    {0, -1},
+    {1, 1},
+    {1, -1}, 
+    {-1, -1},
+    {-1, 1}
+  };
+  
+  for (int i = 0; i < 9; i++) {
+    ZombieMapLoc checkingLoc = {.x=(int)targetX+nearbyCheckSequence[i][0], .y=(int)targetY+nearbyCheckSequence[i][1]};
+    std::map<ZombieMapLoc, std::set<DEAD_Zombie*>>::iterator itr = this->zombiesMapped.find(checkingLoc);
+    if (itr == this->zombiesMapped.end()) break;
+    for (DEAD_Zombie* zombie : itr->second) {
+      nearbyZombies.insert(zombie);
+    }
+  }
+
+  for (DEAD_Zombie* zombie : nearbyZombies) {
     ZombieVector affectReverseDeltaUnitVector = {
         .vectorX = targetX - zombie->getPos().x,
         .vectorY = targetY - zombie->getPos().y};

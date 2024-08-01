@@ -27,6 +27,7 @@ public:
   std::vector<DEAD_Map::MapLocation> getPlayerPointLocs();
   DEAD_MapSpawner* getMapSpawner();
   void loadMap();
+  bool checkInMap(int x, int y);
 private:
   std::vector<std::vector<std::unique_ptr<DEAD_MapObjectBase>>> mapObjects;
   bool isSquare();
@@ -34,4 +35,5 @@ private:
   std::vector<DEAD_Map::MapLocation> playerPointLocs;
   std::unique_ptr<DEAD_MapSpawner> mapSpawner; 
   void initWithThis();
+  
 };
