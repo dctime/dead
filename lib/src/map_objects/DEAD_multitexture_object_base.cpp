@@ -10,14 +10,15 @@ DEAD_MultitextureObjectBase::DEAD_MultitextureObjectBase(
 DEAD_MultitextureObjectBase::~DEAD_MultitextureObjectBase() {}
 
 SDL_Rect DEAD_MultitextureObjectBase::getTextureRect() {
+  if (currentTextureRects.size() == 0)
+    this->currentTextureRects = this->getTextureRects();
 
-  std::vector<SDL_Rect> textureRects = this->getTextureRects();
   if (currentTextureIndex == -1) {
     std::random_device rd;
-    std::uniform_int_distribution<int> dis(0, textureRects.size() - 1);
+    std::uniform_int_distribution<int> dis(0, this->currentTextureRects.size() - 1);
     this->currentTextureIndex = dis(rd);
   }
-  return textureRects.at(this->currentTextureIndex);
+  return currentTextureRects.at(this->currentTextureIndex);
 }
 
 DEAD_MapObjectDirection DEAD_MultitextureObjectBase::getDirection() {
@@ -26,4 +27,9 @@ DEAD_MapObjectDirection DEAD_MultitextureObjectBase::getDirection() {
 
 void DEAD_MultitextureObjectBase::setDirection(DEAD_MapObjectDirection direction) {
   this->direction = direction;
+}
+
+void DEAD_MultitextureObjectBase::resetTextureRects() {
+  this->currentTextureRects.clear();
+  this->currentTextureIndex = -1;
 }

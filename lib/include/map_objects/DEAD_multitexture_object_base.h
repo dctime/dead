@@ -16,7 +16,9 @@ public:
   virtual std::vector<SDL_Rect> getTextureRects() = 0;
   DEAD_MapObjectDirection getDirection();
   void setDirection(DEAD_MapObjectDirection direction);
+  void resetTextureRects();
 private:
   int currentTextureIndex;
   DEAD_MapObjectDirection direction;
+  std::vector<SDL_Rect> currentTextureRects;
 };

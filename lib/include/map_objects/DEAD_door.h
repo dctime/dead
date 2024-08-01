@@ -8,6 +8,7 @@ public:
   bool isPlayerCollidable() override;
   bool isZombieCollidable() override;
   std::vector<SDL_Rect> getTextureRects() override;
+  void openDoor();
 private:
   bool isOpen;
   std::vector<SDL_Rect> closedTextureRects;

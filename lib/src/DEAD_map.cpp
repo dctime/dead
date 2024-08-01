@@ -185,3 +185,7 @@ std::vector<DEAD_Map::MapLocation> DEAD_Map::getPlayerPointLocs() {
 }
 
 DEAD_MapSpawner *DEAD_Map::getMapSpawner() { return this->mapSpawner.get(); }
+
+DEAD_MapObjectBase* DEAD_Map::getMapObject(int x, int y) {
+  return this->mapObjects.at(y).at(x).get();
+}

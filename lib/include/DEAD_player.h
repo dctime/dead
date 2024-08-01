@@ -13,17 +13,18 @@ public:
   DEAD_Player(DEAD_Game* game);
   ~DEAD_Player();
   SDL_Rect getTextureRect() override;
-  void pickupOrDrop();
   template <typename T> void summonWeapon() {
     this->holdItem = std::make_shared<T>(this);
   }
 
   void setGame(DEAD_Game* game) override = 0;
   void move(double x, double y) override;
-  void reloadGun();
 
 protected:
   void attack();
+  void reloadGun();
+  void useItem();
+  void pickupOrDrop();
 
 private:
   void pickupWeapon();

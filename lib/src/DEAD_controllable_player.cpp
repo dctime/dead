@@ -37,7 +37,7 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
       break;
     case SDLK_f:
       SDL_Log("use");
-      this->holdItem->use();
+      this->useItem();
       break;
     case SDLK_v:
       std::cout << "Zombie count: " << this->game->getZombieDirector()->getZombies().size() << std::endl;

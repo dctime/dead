@@ -23,6 +23,7 @@ public:
   ~DEAD_Map();
   void mapUpdateSizeAndInfo(); 
   std::vector<std::vector<std::unique_ptr<DEAD_MapObjectBase>>>& getMapObjects();
+  DEAD_MapObjectBase* getMapObject(int x, int y);
   MapSize getMapSize();
   std::vector<DEAD_Map::MapLocation> getPlayerPointLocs();
   DEAD_MapSpawner* getMapSpawner();

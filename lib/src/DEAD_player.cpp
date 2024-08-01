@@ -67,3 +67,8 @@ void DEAD_Player::reloadGun() {
 
   gun->reload();
 }
+
+void DEAD_Player::useItem() {
+  if (this->holdItem == nullptr) return;
+  this->holdItem->use();
+}

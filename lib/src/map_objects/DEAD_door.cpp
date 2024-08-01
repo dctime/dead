@@ -23,3 +23,9 @@ std::vector<SDL_Rect> DEAD_Door::getTextureRects() {
   if (isOpen) return this->openTextureRects; 
   return this->closedTextureRects;
 }
+
+void DEAD_Door::openDoor() {
+  if (this->isOpen == true) return;
+  this->isOpen = true;
+  this->resetTextureRects();
+}
