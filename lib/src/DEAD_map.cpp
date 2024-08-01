@@ -111,14 +111,10 @@ void DEAD_Map::loadMap() {
 
 template<typename T>
 void DEAD_Map::setHorizonVertical() {
-  std::cout << "height: " << this->mapSize.height << ", width:" << this->mapSize.width << std::endl;
   for (int y = 0; y < this->mapSize.height; y++) {
-    std::cout << "checkingY" << std::endl;
     for (int x = 0; x < this->mapSize.width; x++) {
-      std::cout << "checkingX" << std::endl;
       DEAD_MultitextureObjectBase* targetObject = dynamic_cast<T>(this->mapObjects.at(y).at(x).get()); 
       if (targetObject == nullptr) continue;
-      std::cout << "pass the test" << std::endl;
       int checkSequence[4][2] = {
         {1, 0},
         {-1, 0},
@@ -129,7 +125,6 @@ void DEAD_Map::setHorizonVertical() {
       for (int i = 0; i < 4; i++) {
         DEAD_MapObjectBase* checkObject = dynamic_cast<T>(this->mapObjects.at(y+checkSequence[i][0]).at(x+checkSequence[i][1]).get());
         if (checkObject == nullptr && !this->mapObjects.at(y+checkSequence[i][0]).at(x+checkSequence[i][1]).get()->isPlayerCollidable()) continue;
-        std::cout << "pass the test again!" << std::endl;
         if (i == 0 || i == 1) {
           targetObject->setDirection(DEAD_MapObjectDirection::VERTICAL);
         } else {

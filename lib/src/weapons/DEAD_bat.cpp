@@ -63,10 +63,3 @@ SDL_Rect DEAD_Bat::getItemTextureRect() {
   return rect;
 }
 
-std::shared_ptr<DEAD_ItemDrop> DEAD_Bat::getItemDrop() {
-  if (this->itemDrop == nullptr) {
-    this->itemDrop = std::make_shared<DEAD_ItemDrop>(shared_from_this(), this->getPlayer()->getPos());
-  }
-
-  return this->itemDrop;
-}

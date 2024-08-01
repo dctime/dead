@@ -16,6 +16,9 @@
 #include <iostream>
 #include <memory>
 #include <zombies/DEAD_zombie.h>
+#include <guns/DEAD_pistol.h>
+#include <weapons/DEAD_bat.h>
+
 const int DEAD_Game::BULLET_COLLISION_DELAY = 1000.0 / 60;
 const int DEAD_Game::MAIN_LOOP_DELAY = 1000.0 / 60;
 
@@ -57,6 +60,8 @@ DEAD_Game::DEAD_Game()
 
   this->soundDirector = std::make_unique<DEAD_SoundDirector>();
   this->map->loadMap();
+  this->itemDropLayer->summonItemDrop<DEAD_Pistol>(1.5, 1.5);
+  this->itemDropLayer->summonItemDrop<DEAD_Bat>(2.5, 1.5);
   this->player = std::make_unique<DEAD_ControllablePlayer>(this);
   std::vector<DEAD_Map::MapLocation> locs = this->map->getPlayerPointLocs();
   if (locs.size() > 0) {

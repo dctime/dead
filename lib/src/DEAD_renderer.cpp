@@ -87,7 +87,7 @@ DEAD_Renderer::~DEAD_Renderer() {
 void DEAD_Renderer::render() {
 
   SDL_SetRenderDrawBlendMode(this->renderer, SDL_BLENDMODE_BLEND);
-  SDL_SetRenderDrawColor(this->renderer, 50, 0, 48, 255);
+  SDL_SetRenderDrawColor(this->renderer, 10, 0, 10, 255);
   SDL_RenderClear(this->renderer);
 
   this->renderMapObjects();

@@ -10,7 +10,6 @@ public:
   virtual SDL_Rect getTextureRect() override = 0;
   virtual void attack() override = 0;
   virtual double getBarrelLength() = 0;
-  virtual std::shared_ptr<DEAD_ItemDrop> getItemDrop() override = 0;
   virtual SDL_Rect getItemTextureRect() override = 0;
   int getMagazineSize();
   bool removeAmmoFromMagazine(int count);

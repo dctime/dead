@@ -12,14 +12,11 @@ public:
   DEAD_Weapon(DEAD_Player* owner, const int COOLDOWN_TIME);
   virtual ~DEAD_Weapon();
   virtual SDL_Rect getTextureRect() override = 0;
-  DEAD_Player* getPlayer();
   virtual void attack() = 0;
-  virtual std::shared_ptr<DEAD_ItemDrop> getItemDrop() override = 0;
   virtual SDL_Rect getItemTextureRect() override = 0;
   double checkStillCooling();
 
 private:
-  DEAD_Player* owner;
   const int COOLDOWN_TIME;
   int startCoolingTicks;
 

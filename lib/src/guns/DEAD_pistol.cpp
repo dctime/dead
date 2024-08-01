@@ -46,14 +46,7 @@ double DEAD_Pistol::getBarrelLength() {
   return 0.4;
 }
 
-std::shared_ptr<DEAD_ItemDrop> DEAD_Pistol::getItemDrop() {
-  if (this->itemDrop == nullptr) {
-    this->itemDrop = std::make_shared<DEAD_ItemDrop>(shared_from_this(), this->getPlayer()->getPos());
-  }
 
-  return this->itemDrop;
-    
-}
 
 int DEAD_Pistol::getMagazineSize() {
   return 10;

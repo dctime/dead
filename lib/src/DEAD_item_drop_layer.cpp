@@ -1,5 +1,9 @@
+#include "DEAD_item.h"
 #include "DEAD_item_drop.h"
+#include "DEAD_player.h"
 #include <DEAD_item_drop_layer.h>
+#include <weapons/DEAD_bat.h>
+#include <guns/DEAD_pistol.h>
 #include <cmath>
 #include <functional>
 #include <iostream>
@@ -21,7 +25,7 @@ void DEAD_ItemDropLayer::drop(std::shared_ptr<DEAD_ItemDrop> itemDrop) {
 
 int DEAD_ItemDropLayer::getDropsCount() { return this->itemDrops.size(); }
 
-void DEAD_ItemDropLayer::getNearItemDrop(DEAD_Map::MapLocation loc, double radius, std::shared_ptr<DEAD_Item>& returnItem) {
+void DEAD_ItemDropLayer::getNearItemDrop(DEAD_Player* player, DEAD_Map::MapLocation loc, double radius, std::shared_ptr<DEAD_Item>& returnItem) {
   for (const std::shared_ptr<DEAD_ItemDrop>& itemDrop : this->itemDrops) {
     std::function<double(DEAD_Map::MapLocation, DEAD_Map::MapLocation)>
         calDistance =
@@ -31,7 +35,16 @@ void DEAD_ItemDropLayer::getNearItemDrop(DEAD_Map::MapLocation loc, double radiu
     if (calDistance(itemDrop->getLoc(), loc) <= radius) {
       returnItem = itemDrop->getItem();
       this->itemDrops.erase(itemDrop);
+      returnItem->setPlayer(player);
       break;
     }
   }
 }
+
+
+
+
+
+
+
+

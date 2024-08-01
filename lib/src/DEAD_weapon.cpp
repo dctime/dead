@@ -5,13 +5,8 @@
 DEAD_Weapon::~DEAD_Weapon() {}
 
 DEAD_Weapon::DEAD_Weapon(DEAD_Player* player, const int COOLDOWN_TIME)
-  : DEAD_Item(), COOLDOWN_TIME(COOLDOWN_TIME), 
+  : DEAD_Item(player), COOLDOWN_TIME(COOLDOWN_TIME), 
     startCoolingTicks(0) {
-  this->owner = player;
-}
-
-DEAD_Player* DEAD_Weapon::getPlayer() {
-  return this->owner;
 }
 
 void DEAD_Weapon::startCoolDown() {

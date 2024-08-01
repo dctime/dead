@@ -29,12 +29,13 @@ void DEAD_Player::pickupOrDrop() {
 }
 void DEAD_Player::dropWeapon() {
   this->getGame()->getItemDropLayer()->drop(this->holdItem->getItemDrop());
+  this->holdItem->setPlayer(nullptr);
   this->holdItem = nullptr;
   SDL_Log("Dropped Weapons Count: %d", this->getGame()->getItemDropLayer()->getDropsCount()); 
 }
 
 void DEAD_Player::pickupWeapon() {
-  this->getGame()->getItemDropLayer()->getNearItemDrop(this->getPos(), this->getPickItemRadius(), this->holdItem);
+  this->getGame()->getItemDropLayer()->getNearItemDrop(this, this->getPos(), this->getPickItemRadius(), this->holdItem);
   SDL_Log("Picked Up Weapon");
   if (this->holdItem == nullptr) return;
   this->holdItem->unbindItemDrop();
