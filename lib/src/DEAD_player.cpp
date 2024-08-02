@@ -8,7 +8,8 @@
 
 DEAD_Player::DEAD_Player(DEAD_Game* game) 
   : DEAD_Entity::DEAD_Entity(game, 10000, 0.8),
-  inventory(std::make_unique<DEAD_PlayerInventory>(this)) {
+  inventory(std::make_unique<DEAD_PlayerInventory>(this)),
+  zombieKillcount(0) {
 }
 
 void DEAD_Player::setHoldItem(std::shared_ptr<DEAD_Item> item) {
@@ -81,3 +82,12 @@ void DEAD_Player::useItem() {
   if (this->holdItem == nullptr) return;
   this->holdItem->use();
 }
+
+void DEAD_Player::incrementZombieKillCount() {
+  this->zombieKillcount++;
+}
+
+int DEAD_Player::getZombieKillCount() {
+  return this->zombieKillcount;
+}
+

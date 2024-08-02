@@ -32,6 +32,7 @@ public:
   void setHealth(int health);
   void damage(int health);
   bool checkIfInKnockback();
+  bool checkhealthIsDead();
 protected:
   std::shared_ptr<DEAD_Item> holdItem;
   DEAD_Game* game;

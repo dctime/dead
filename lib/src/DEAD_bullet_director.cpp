@@ -64,7 +64,10 @@ void DEAD_BulletDirector::getCollisionBullets(
       continue;
 
     this->game->getSoundDirector()->playHitWithBullet();
-    zombie->damage(bullet->getDamage());
+    zombie->damage(bullet->getDamage(), bullet->getOwner());
+
+    
+
     bullets.push_back(bullet.get());
     
   }

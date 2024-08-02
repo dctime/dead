@@ -40,6 +40,13 @@ int DEAD_Entity::getHealth() {
   return this->health;
 }
 
+bool DEAD_Entity::checkhealthIsDead() {
+  if (this->health <= 0) {
+    return true;
+  }
+  return false;
+}
+
 std::shared_ptr<DEAD_Item> DEAD_Entity::getHoldItem() {
   return this->holdItem;
 }

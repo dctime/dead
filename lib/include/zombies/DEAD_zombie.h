@@ -11,6 +11,7 @@ public:
   void bite(DEAD_Player* player);
   ZombieVector getMovingUnitVector();
   void setMovingUnitVector(ZombieVector vector);
+  void damage(int health, DEAD_Player* attacker);
 private:
   int lastTimeAttackTicks;
   int attackCoolDown;

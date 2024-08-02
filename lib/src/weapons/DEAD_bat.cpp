@@ -49,7 +49,7 @@ void DEAD_Bat::attack() {
     if (distance > effectDistance) continue;
     if (!((deltaAngle >= 0 && deltaAngle <= this->angleEffectRange/2) || (deltaAngle < 0 && deltaAngle >= -this->angleEffectRange/2))) continue;
     this->getPlayer()->getGame()->getSoundDirector()->playHitWithBat();
-    zombie->damage(this->damage);
+    zombie->damage(this->damage, this->getPlayer());
   }
 }
 

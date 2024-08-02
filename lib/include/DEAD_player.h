@@ -23,6 +23,8 @@ public:
   void move(double x, double y) override;
   void setHoldItem(std::shared_ptr<DEAD_Item> item);
   DEAD_PlayerInventory* getInventory();
+  void incrementZombieKillCount();
+  int getZombieKillCount();
 
 protected:
   void attack();
@@ -34,4 +36,5 @@ protected:
 private:
   void pickupItem();
   void dropHoldItem();
+  int zombieKillcount;
 };

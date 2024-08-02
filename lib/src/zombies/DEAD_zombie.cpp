@@ -1,14 +1,16 @@
+#include "DEAD_entity.h"
 #include <DEAD_player.h>
 #include <SDL2/SDL_rect.h>
 #include <SDL2/SDL_timer.h>
 #include <iostream>
 #include <memory>
 #include <zombies/DEAD_zombie.h>
+#include <DEAD_game.h>
 
-DEAD_Zombie::DEAD_Zombie(DEAD_Game* game)
+DEAD_Zombie::DEAD_Zombie(DEAD_Game *game)
     : DEAD_Entity::DEAD_Entity(game, 100, 0.8), lastTimeAttackTicks(0),
       attackCoolDown(1000) {
-  this->movingUnitVector = {.vectorX=0, .vectorY=0};
+  this->movingUnitVector = {.vectorX = 0, .vectorY = 0};
   std::cout << "Zombie Built" << std::endl;
 }
 
@@ -27,7 +29,7 @@ bool DEAD_Zombie::attackReady() {
   }
 }
 
-void DEAD_Zombie::bite(DEAD_Player* player) {
+void DEAD_Zombie::bite(DEAD_Player *player) {
   if (!this->getHitbox()->iscollideWithCircle(player->getHitbox()))
     return;
   if (!this->attackReady())
@@ -35,7 +37,6 @@ void DEAD_Zombie::bite(DEAD_Player* player) {
   player->damage(this->getAttackDamage());
   this->lastTimeAttackTicks = SDL_GetTicks64();
   std::cout << "Player health left: " << player->getHealth() << std::endl;
-
 }
 
 ZombieVector DEAD_Zombie::getMovingUnitVector() {
@@ -43,11 +44,12 @@ ZombieVector DEAD_Zombie::getMovingUnitVector() {
 }
 
 void DEAD_Zombie::setMovingUnitVector(ZombieVector vector) {
-  this->movingUnitVector = vector; 
+  this->movingUnitVector = vector;
 }
 
-
-
-
-
-
+void DEAD_Zombie::damage(int health, DEAD_Player* attacker) {
+  DEAD_Entity::damage(health);
+  if (this->checkhealthIsDead()) {
+    attacker->incrementZombieKillCount();
+  }
+}
