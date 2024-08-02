@@ -22,6 +22,7 @@ public:
   void setGame(DEAD_Game* game) override = 0;
   void move(double x, double y) override;
   void setHoldItem(std::shared_ptr<DEAD_Item> item);
+  DEAD_PlayerInventory* getInventory();
 
 protected:
   void attack();

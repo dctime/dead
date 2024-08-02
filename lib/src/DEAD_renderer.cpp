@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 #include <map_objects/DEAD_multitexture_object_base.h>
+#include <DEAD_player_inventory_renderer.h>
 
 void DEAD_Renderer::getTextureFromSurface(SDL_Texture *&texture,
                                           std::string filePath) {
@@ -53,7 +54,7 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window,
   if (this->renderer == NULL) {
     SDL_LogError(SDL_LOG_CATEGORY_RENDER, "[Renderer] %s", SDL_GetError());
   }
-
+  
   getTextureFromSurface(this->itemTexture, DEAD_FilePaths::ITEM_TEXTURE_PNG);
   getTextureFromSurface(this->mapObjectTexture,
                         DEAD_FilePaths::MAP_OBJECT_PNG_FILE_PATH);
@@ -73,6 +74,8 @@ void DEAD_Renderer::initWithSharedFromThis(
   DEAD_Renderer* renderer) {
   this->uiRenderer = std::make_unique<DEAD_UIRenderer>(renderer);
   this->particleRenderer = std::make_unique<DEAD_ParticleRenderer>(renderer);
+  this->playerInventoryRenderer = std::make_unique<DEAD_PlayerInventoryRenderer>(renderer, this->itemTexture);
+
 }
 
 DEAD_Renderer::~DEAD_Renderer() {
@@ -98,6 +101,7 @@ void DEAD_Renderer::render() {
   // this->drawZombieMovementMap();
   this->particleRenderer->render();
   this->uiRenderer->render();
+  this->playerInventoryRenderer->render();
   this->renderYouDied();
 
   SDL_RenderPresent(this->renderer);

@@ -15,7 +15,7 @@ bool DEAD_RectHitbox::isCollideWithCircle(DEAD_CircleHitbox* circleHitbox) {
 
 }
 
-bool DEAD_RectHitbox::isCollideWithCircle(DEAD_Map::MapLocation midLocCircle, double radius) {
+bool DEAD_RectHitbox::isCollideWithCircle(const DEAD_Map::MapLocation& midLocCircle, double radius) {
   double testX = midLocCircle.x;
   double testY = midLocCircle.y;
 

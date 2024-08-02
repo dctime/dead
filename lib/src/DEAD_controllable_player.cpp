@@ -45,7 +45,15 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
     case SDLK_r:
       this->reloadGun();
     }
-
+    break;
+  case SDL_MOUSEWHEEL:
+    if (event.wheel.y > 0) {
+      std::cout << "Scroll UP" << std::endl;
+      this->getInventory()->previousItemHotbar();
+    } else if (event.wheel.y < 0) {
+      std::cout << "Scroll Down" << std::endl;
+      this->getInventory()->nextItemHotbar();
+    }
     break;
   }
 }

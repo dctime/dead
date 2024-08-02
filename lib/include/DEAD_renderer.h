@@ -12,6 +12,7 @@
 class DEAD_Game;
 class DEAD_Player;
 class DEAD_Bullet;
+class DEAD_PlayerInventoryRenderer;
 
 struct RenderAnchor {
     double x;
@@ -19,6 +20,11 @@ struct RenderAnchor {
 };
 
 struct ScreenLocation {
+  int x;
+  int y;
+};
+
+struct DEAD_ScreenLocationFromLeftDown {
   int x;
   int y;
 };
@@ -50,6 +56,7 @@ private:
   SDL_Renderer* renderer;
   std::unique_ptr<DEAD_UIRenderer> uiRenderer;
   std::unique_ptr<DEAD_ParticleRenderer> particleRenderer;
+  std::unique_ptr<DEAD_PlayerInventoryRenderer> playerInventoryRenderer;
   int renderBlockSize;
   DEAD_Game* game;
   RenderAnchor renderAnchor = {.x=0, .y=0};

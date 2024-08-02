@@ -56,6 +56,10 @@ SDL_Rect DEAD_Player::getTextureRect() {
   return item->getTextureRect();
 }
 
+DEAD_PlayerInventory* DEAD_Player::getInventory() {
+  return this->inventory.get();
+}
+
 void DEAD_Player::attack() {
   const std::shared_ptr<DEAD_Weapon>& weapon = std::dynamic_pointer_cast<DEAD_Weapon>(this->holdItem);
   if (weapon == nullptr) {
