@@ -6,7 +6,13 @@
 #include <SDL2/SDL_log.h>
 #include <memory>
 
-DEAD_Player::DEAD_Player(DEAD_Game* game) : DEAD_Entity::DEAD_Entity(game, 10000, 0.8) {
+DEAD_Player::DEAD_Player(DEAD_Game* game) 
+  : DEAD_Entity::DEAD_Entity(game, 10000, 0.8),
+  inventory(std::make_unique<DEAD_PlayerInventory>(this)) {
+}
+
+void DEAD_Player::setHoldItem(std::shared_ptr<DEAD_Item> item) {
+  this->holdItem = item;
 }
 
 DEAD_Player::~DEAD_Player() {}
@@ -21,24 +27,23 @@ void DEAD_Player::move(double x, double y) {
 
 void DEAD_Player::pickupOrDrop() {
   if (this->holdItem != nullptr) {
-    this->dropWeapon();
+    this->dropHoldItem();
   } else {
-    this->pickupWeapon();
+    this->pickupItem();
   }
 
 }
-void DEAD_Player::dropWeapon() {
-  this->getGame()->getItemDropLayer()->drop(this->holdItem->getItemDrop());
-  this->holdItem->setPlayer(nullptr);
-  this->holdItem = nullptr;
-  SDL_Log("Dropped Weapons Count: %d", this->getGame()->getItemDropLayer()->getDropsCount()); 
+void DEAD_Player::dropHoldItem() {
+  this->inventory->dropHoldItem(); 
 }
 
-void DEAD_Player::pickupWeapon() {
-  this->getGame()->getItemDropLayer()->getNearItemDrop(this, this->getPos(), this->getPickItemRadius(), this->holdItem);
+void DEAD_Player::pickupItem() {
+  std::shared_ptr<DEAD_Item> tempItem;
+  this->getGame()->getItemDropLayer()->getNearItemDrop(this, this->getPos(), this->getPickItemRadius(), tempItem);
   SDL_Log("Picked Up Weapon");
-  if (this->holdItem == nullptr) return;
-  this->holdItem->unbindItemDrop();
+  if (tempItem == nullptr) return;
+  tempItem->unbindItemDrop();
+  this->inventory->replaceHoldItem(tempItem);
 }
 
 SDL_Rect DEAD_Player::getTextureRect() {

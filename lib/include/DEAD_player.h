@@ -5,6 +5,7 @@
 #include "DEAD_map.h"
 #include "DEAD_weapon.h"
 #include "hitbox/DEAD_circle_hitbox.h"
+#include "DEAD_player_inventory.h"
 #include <memory>
 class DEAD_Game;
 
@@ -13,20 +14,23 @@ public:
   DEAD_Player(DEAD_Game* game);
   ~DEAD_Player();
   SDL_Rect getTextureRect() override;
+
   template <typename T> void summonWeapon() {
-    this->holdItem = std::make_shared<T>(this);
+    inventory->replaceHoldItem(std::make_shared<T>(this));
   }
 
   void setGame(DEAD_Game* game) override = 0;
   void move(double x, double y) override;
+  void setHoldItem(std::shared_ptr<DEAD_Item> item);
 
 protected:
   void attack();
   void reloadGun();
   void useItem();
   void pickupOrDrop();
+  std::unique_ptr<DEAD_PlayerInventory> inventory;
 
 private:
-  void pickupWeapon();
-  void dropWeapon();
+  void pickupItem();
+  void dropHoldItem();
 };
