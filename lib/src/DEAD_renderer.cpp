@@ -1,5 +1,5 @@
 #include "DEAD_item_drop.h"
-#include "DEAD_ui_renderer.h"
+#include <subrenderers/DEAD_ui_renderer.h>
 #include "DEAD_zombie_director.h"
 #include "map_objects/DEAD_map_object_base.h"
 #include "zombies/DEAD_zombie.h"
@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 #include <map_objects/DEAD_multitexture_object_base.h>
-#include <DEAD_player_inventory_renderer.h>
+#include <subrenderers/DEAD_player_inventory_renderer.h>
 
 void DEAD_Renderer::getTextureFromSurface(SDL_Texture *&texture,
                                           std::string filePath) {

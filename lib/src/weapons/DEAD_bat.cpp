@@ -7,7 +7,7 @@
 #include <weapons/DEAD_bat.h>
 #include <DEAD_player.h>
 #include <DEAD_game.h>
-#include <DEAD_particle_renderer.h>
+#include <subrenderers/DEAD_particle_renderer.h>
 #include <DEAD_zombie_director.h>
 #include <DEAD_sound_director.h>
 #include <DEAD_functions.h>

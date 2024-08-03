@@ -1,7 +1,7 @@
 #include "DEAD_player_inventory.h"
 #include "DEAD_renderer.h"
 #include <DEAD_game.h>
-#include <DEAD_player_inventory_renderer.h>
+#include <subrenderers/DEAD_player_inventory_renderer.h>
 #include <SDL2/SDL_render.h>
 
 DEAD_PlayerInventoryRenderer::DEAD_PlayerInventoryRenderer(

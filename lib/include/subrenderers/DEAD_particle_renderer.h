@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <set>
-#include "particles/DEAD_particle_base.h"
+#include "../particles/DEAD_particle_base.h"
 
 class DEAD_Renderer;
 

@@ -6,8 +6,8 @@
 #include <string>
 #include "DEAD_entity.h"
 #include "DEAD_zombie_director.h"
-#include "DEAD_ui_renderer.h"
-#include "DEAD_particle_renderer.h"
+#include "subrenderers/DEAD_ui_renderer.h"
+#include "subrenderers/DEAD_particle_renderer.h"
 
 class DEAD_Game;
 class DEAD_Player;

@@ -1,4 +1,5 @@
-#include "DEAD_renderer.h"
+#include "../DEAD_renderer.h"
+
 
 class DEAD_Renderer;
 

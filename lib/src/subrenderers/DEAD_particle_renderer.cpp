@@ -1,4 +1,4 @@
-#include <DEAD_particle_renderer.h>
+#include <subrenderers/DEAD_particle_renderer.h>
 #include <memory>
 #include <vector>
 #include <particles/DEAD_particle_base.h>

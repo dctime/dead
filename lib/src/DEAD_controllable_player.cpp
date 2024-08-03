@@ -12,8 +12,7 @@
 #include <DEAD_game.h>
 #include <weapons/DEAD_bat.h>
 #include <iostream>
-#include <memory>
-#include <DEAD_particle_renderer.h>
+#include <subrenderers/DEAD_particle_renderer.h>
 
 DEAD_ControllablePlayer::DEAD_ControllablePlayer(DEAD_Game* game)
     : DEAD_Player::DEAD_Player(game), baseSpeed(0.01 * DEAD_Game::MAIN_LOOP_DELAY / 10) {
