@@ -11,6 +11,7 @@ public:
   DEAD_Map::MapLocation getLoc();
   void setLoc(DEAD_Map::MapLocation newLoc);
   bool iscollideWithCircle(DEAD_CircleHitbox* circleHitbox);
+  bool pointInHitbox(DEAD_Map::MapLocation loc) override;
 private:
   double radius;
   DEAD_Map::MapLocation loc;

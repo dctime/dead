@@ -5,6 +5,8 @@
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_render.h>
 #include <subrenderers/DEAD_decoration_renderer.h>
+#include <DEAD_game.h>
+#include <DEAD_controllable_player.h>
 
 DEAD_DecorationRenderer::DEAD_DecorationRenderer(DEAD_Renderer *renderer,
                                                  DEAD_DecorationLayer *layer)
@@ -31,9 +33,14 @@ void DEAD_DecorationRenderer::render() {
         .h = (int)(deco->getHeight() * this->renderer->getRenderBlockSize())};
 
     SDL_Rect textureRect = deco->getTextureRect();
+    DEAD_ControllablePlayer* player = dynamic_cast<DEAD_ControllablePlayer*>(this->renderer->getGame()->getPlayer());
+    if (player != nullptr && player->getCurrentDestoryingDeco() == deco.get())
+      SDL_SetTextureAlphaMod(this->decorationTexture, 255 * (1-deco->getDestroyPercentage()));
+
     SDL_RenderCopyEx(this->renderer->getSDLRenderer(), this->decorationTexture,
                      &textureRect, &renderRect, deco->getRotationAngle(), NULL,
                      SDL_RendererFlip::SDL_FLIP_NONE);
+    SDL_SetTextureAlphaMod(this->decorationTexture, 255);
   }
 }
 

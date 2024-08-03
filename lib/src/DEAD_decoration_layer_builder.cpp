@@ -2,7 +2,6 @@
 #include "DEAD_functions.h"
 #include <DEAD_decoration_layer_builder.h>
 #include <DEAD_map.h>
-#include <algorithm>
 #include <decorations/DEAD_pile_of_paper.h>
 #include <iostream>
 #include <memory>
@@ -11,7 +10,7 @@
 DEAD_DecorationLayerBuilder::DEAD_DecorationLayerBuilder()
     : decorationLayer(std::make_unique<DEAD_DecorationLayer>()) {
   DEAD_Map::MapLocation loc = {.x = 4.5, .y = 28.5};
-  this->addPileOfPaperCluster(loc, 0.2, 3, 3);
+  this->addPileOfPaperCluster(loc, 0.5, 3, 3);
 }
 
 void DEAD_DecorationLayerBuilder::build(
@@ -32,6 +31,6 @@ void DEAD_DecorationLayerBuilder::addPileOfPaperCluster(
     tempLoc.y = DEAD_Functions::boundNumber(disY(rd), loc.y-maxHeight/2.0, loc.y+maxHeight/2.0);
     std::cout << tempLoc.x << ", ";
     std::cout << tempLoc.y << std::endl;
-    this->decorationLayer->decorations.insert(std::make_unique<DEAD_PileOfPaper>(tempLoc, rotationAngle(rd)));
+    this->decorationLayer->decorations.push_back(std::make_unique<DEAD_PileOfPaper>(tempLoc, rotationAngle(rd)));
   }
 }

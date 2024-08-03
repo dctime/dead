@@ -8,7 +8,7 @@
 
 DEAD_Entity::DEAD_Entity(DEAD_Game* game, int maxHealth, double size)
     : speed(3), position({.x = 0, .y = 0}), rotation(0), size(size), maxHealth(maxHealth), health(maxHealth),
-      lastTimeBeenHitTicks(0), knockBackCooldown(300) {
+      lastTimeBeenHitTicks(0), knockBackCooldown(300), holdItem(nullptr) {
   this->hitbox = std::make_unique<DEAD_CircleHitbox>(size / 2,
                                                      this->position);
   this->setGame(game);

@@ -1,6 +1,7 @@
 #include "DEAD_map.h"
 #include <cmath>
 #include <hitbox/DEAD_circle_hitbox.h>
+#include <DEAD_functions.h>
 #include <iostream>
 #include <memory>
 
@@ -29,3 +30,9 @@ bool DEAD_CircleHitbox::iscollideWithCircle(
 void DEAD_CircleHitbox::setRadius(double radius) {
   this->radius = radius;
 }
+
+bool DEAD_CircleHitbox::pointInHitbox(DEAD_Map::MapLocation loc) {
+  if (DEAD_Functions::calDistance(loc.x, loc.y, this->loc.x, this->loc.y) <= this->radius) return true;
+  return false;
+}
+

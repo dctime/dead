@@ -6,6 +6,7 @@
 #include "DEAD_weapon.h"
 #include "hitbox/DEAD_circle_hitbox.h"
 #include "DEAD_player_inventory.h"
+#include "decorations/DEAD_decoration_base.h"
 #include <memory>
 class DEAD_Game;
 
@@ -25,16 +26,20 @@ public:
   DEAD_PlayerInventory* getInventory();
   void incrementZombieKillCount();
   int getZombieKillCount();
+  DEAD_DecorationBase* getCurrentDestoryingDeco();
 
 protected:
   void attack();
   void reloadGun();
   void useItem();
   void pickupOrDrop();
+  void interactWithDecoration(int pressTimeIntervalTicks);
   std::unique_ptr<DEAD_PlayerInventory> inventory;
 
 private:
   void pickupItem();
   void dropHoldItem();
+  DEAD_DecorationBase* getDecorationInFrontof(double range, double precision);
   int zombieKillcount;
+  DEAD_DecorationBase* currentDestroyingDeco;
 };

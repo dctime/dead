@@ -6,6 +6,7 @@
 #include <SDL2/SDL_log.h>
 #include <SDL2/SDL_mouse.h>
 #include <SDL2/SDL_scancode.h>
+#include <SDL2/SDL_timer.h>
 #include <cmath>
 #include <guns/DEAD_pistol.h>
 #include <DEAD_controllable_player.h>
@@ -35,8 +36,7 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
       this->pickupOrDrop();
       break;
     case SDLK_f:
-      SDL_Log("use");
-      this->useItem();
+        this->useItem();
       break;
     case SDLK_v:
       std::cout << "Zombie count: " << this->game->getZombieDirector()->getZombies().size() << std::endl;
@@ -91,6 +91,7 @@ void DEAD_ControllablePlayer::handlePlayerRotation() {
 
 void DEAD_ControllablePlayer::handleKeyState() {
   const Uint8 *state = SDL_GetKeyboardState(NULL);
+  this->isPressingUseKey = false;
   double moveTickDistance = this->baseSpeed * this->getSpeed();
   bool moved = false;
 
@@ -116,4 +117,31 @@ void DEAD_ControllablePlayer::handleKeyState() {
   if (state[SDL_SCANCODE_D]) {
     this->move(moveTickDistance, 0);
   }
+  
+  if (state[SDL_SCANCODE_F] && this->holdItem == nullptr) {
+    this->isPressingUseKey = true;    
+    this->interactWithDecoration(this->pressTimeTicks);
+  }
+
+  this->updatePressUseTimeTicks();
+
 }
+
+void DEAD_ControllablePlayer::updatePressUseTimeTicks() {
+  if (!this->isPressingUseKey) this->lastTimePressTicks = SDL_GetTicks64();
+  this->pressTimeTicks = SDL_GetTicks64() - this->lastTimePressTicks;
+}
+
+bool DEAD_ControllablePlayer::getIsPressingUseKey() {
+  return this->isPressingUseKey;
+}
+
+void DEAD_ControllablePlayer::resetLastTimePressTicks() {
+  this->lastTimePressTicks = SDL_GetTicks64();
+}
+
+
+
+
+
+

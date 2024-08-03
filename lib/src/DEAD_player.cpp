@@ -1,9 +1,13 @@
+#include "DEAD_functions.h"
 #include "DEAD_item_drop.h"
+#include "decorations/DEAD_decoration_base.h"
+#include "DEAD_controllable_player.h"
 #include <DEAD_game.h>
 #include <DEAD_player.h>
 #include <DEAD_weapon.h>
 #include <guns/DEAD_pistol.h>
 #include <SDL2/SDL_log.h>
+#include <iostream>
 #include <memory>
 
 DEAD_Player::DEAD_Player(DEAD_Game* game) 
@@ -90,4 +94,43 @@ void DEAD_Player::incrementZombieKillCount() {
 int DEAD_Player::getZombieKillCount() {
   return this->zombieKillcount;
 }
+
+void DEAD_Player::interactWithDecoration(int pressTimeInterval) {
+  std::cout << "time Interval: " << pressTimeInterval << std::endl;
+  DEAD_DecorationBase* interactingDeco = this->getDecorationInFrontof(1, 0.1);
+  DEAD_ControllablePlayer* player = dynamic_cast<DEAD_ControllablePlayer*>(this);
+  
+  if (this->currentDestroyingDeco != interactingDeco) {
+    this->currentDestroyingDeco = interactingDeco;
+    // Reset Interval
+    player->resetLastTimePressTicks();
+  }
+
+  if (interactingDeco == nullptr) return;
+  if (player == nullptr) return;
+  if (interactingDeco->destroying(pressTimeInterval, player)) {
+    this->getGame()->getDecorationLayer()->deleteDeco(interactingDeco);
+    player->resetLastTimePressTicks();
+  }
+}
+
+DEAD_DecorationBase* DEAD_Player::getDecorationInFrontof(double range, double precision) {
+  DEAD_Vector facingVector = DEAD_Functions::calUnitVector(this->getRotation());
+  DEAD_Map::MapLocation playerLoc = this->getPos();
+  for (double tempRange = 0; tempRange <= range; tempRange+=precision) {
+    DEAD_Map::MapLocation checkingLoc = {.x=playerLoc.x + facingVector.x * tempRange, .y=playerLoc.y + facingVector.y * tempRange};
+    DEAD_DecorationBase* returnDeco = this->getGame()->getDecorationLayer()->getFirstDecorationByLoc(checkingLoc);
+    if (returnDeco != nullptr) return returnDeco;
+  }
+  return nullptr;
+}
+
+DEAD_DecorationBase* DEAD_Player::getCurrentDestoryingDeco() {
+  DEAD_ControllablePlayer* player = dynamic_cast<DEAD_ControllablePlayer*>(this);
+  if (player == nullptr) return nullptr;
+  if (!player->getIsPressingUseKey()) return nullptr;
+  return player->currentDestroyingDeco;
+}
+
+
 
