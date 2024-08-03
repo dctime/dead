@@ -7,4 +7,5 @@ public:
   void build(std::unique_ptr<DEAD_DecorationLayer>& layer);
 private:
   std::unique_ptr<DEAD_DecorationLayer> decorationLayer;
+  void addPileOfPaperCluster(DEAD_Map::MapLocation loc, double sigma, double maxWidth, double maxHeight);
 };

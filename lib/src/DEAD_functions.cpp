@@ -70,5 +70,12 @@ double DEAD_Functions::calDistance(const ZombieVector& vector) {
   return DEAD_Functions::calDistance(0, 0, vector.vectorX, vector.vectorY);
 }
 
+double DEAD_Functions::boundNumber(double value, double min, double max) {
+  if (value < min) return min;
+  if (value > max) return max;
+  return value;
+}
+
+
 
 

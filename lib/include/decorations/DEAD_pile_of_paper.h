@@ -3,7 +3,7 @@
 
 class DEAD_PileOfPaper : public DEAD_DecorationBase {
 public:
-  DEAD_PileOfPaper(DEAD_Map::MapLocation loc);
+  DEAD_PileOfPaper(DEAD_Map::MapLocation loc, double rotationAngle);
   SDL_Rect getTextureRect() override;
 private:
 };

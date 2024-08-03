@@ -13,4 +13,5 @@ public:
   static DEAD_Vector calUnitVector(double angle);
   static void normalizeVector(DEAD_Vector &vector);
   static void normalizeVector(ZombieVector &vector);
+  static double boundNumber(double value, double min, double max);
 };
