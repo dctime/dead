@@ -6,6 +6,7 @@
 #include <string>
 #include "DEAD_entity.h"
 #include "DEAD_zombie_director.h"
+#include "subrenderers/DEAD_subrenderer_base.h"
 #include "subrenderers/DEAD_ui_renderer.h"
 #include "subrenderers/DEAD_particle_renderer.h"
 
@@ -13,6 +14,7 @@ class DEAD_Game;
 class DEAD_Player;
 class DEAD_Bullet;
 class DEAD_PlayerInventoryRenderer;
+class DEAD_DecorationRenderer;
 
 struct RenderAnchor {
     double x;
@@ -57,6 +59,7 @@ private:
   std::unique_ptr<DEAD_UIRenderer> uiRenderer;
   std::unique_ptr<DEAD_ParticleRenderer> particleRenderer;
   std::unique_ptr<DEAD_PlayerInventoryRenderer> playerInventoryRenderer;
+  std::unique_ptr<DEAD_DecorationRenderer> decorationRenderer;
   int renderBlockSize;
   DEAD_Game* game;
   RenderAnchor renderAnchor = {.x=0, .y=0};

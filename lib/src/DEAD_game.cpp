@@ -29,7 +29,9 @@ DEAD_Game::DEAD_Game()
                               SDL_WINDOWPOS_CENTERED, this->SCREEN_WIDTH,
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
       map(std::make_unique<DEAD_Map>()),
-      itemDropLayer(std::make_unique<DEAD_ItemDropLayer>()), running(true),
+      itemDropLayer(std::make_unique<DEAD_ItemDropLayer>()),
+      decorationLayerBuilder(std::make_unique<DEAD_DecorationLayerBuilder>()),
+      running(true),
       ticking(true) {
 
   SDL_Log("Game Init");
@@ -64,6 +66,8 @@ DEAD_Game::DEAD_Game()
   this->itemDropLayer->summonItemDrop<DEAD_Pistol>(7.5, 28.5);
   this->itemDropLayer->summonItemDrop<DEAD_Bat>(7.5, 27.5);
   this->itemDropLayer->summonItemDrop<DEAD_HouseKey>(7.5, 29.5);
+  this->decorationLayerBuilder->build(this->decorationLayer);
+
   this->player = std::make_unique<DEAD_ControllablePlayer>(this);
   std::vector<DEAD_Map::MapLocation> locs = this->map->getPlayerPointLocs();
   if (locs.size() > 0) {
@@ -137,6 +141,11 @@ DEAD_CollisionDirector *DEAD_Game::getCollisionDirector() {
 
 DEAD_ItemDropLayer *DEAD_Game::getItemDropLayer() {
   return this->itemDropLayer.get();
+}
+
+
+DEAD_DecorationLayer* DEAD_Game::getDecorationLayer() {
+  return this->decorationLayer.get();
 }
 
 DEAD_ZombieDirector *DEAD_Game::getZombieDirector() {

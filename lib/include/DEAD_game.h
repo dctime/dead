@@ -13,6 +13,8 @@
 #include "DEAD_item_drop_layer.h"
 #include "DEAD_zombie_director.h"
 #include "DEAD_sound_director.h"
+#include "DEAD_decoration_layer.h"
+#include "DEAD_decoration_layer_builder.h"
 
 class DEAD_ControllablePlayer;
 
@@ -29,6 +31,7 @@ public:
   DEAD_BulletDirector* getBulletDirector();
   DEAD_CollisionDirector* getCollisionDirector();
   DEAD_ItemDropLayer* getItemDropLayer();
+  DEAD_DecorationLayer* getDecorationLayer();
   DEAD_ZombieDirector* getZombieDirector();
   DEAD_SoundDirector* getSoundDirector();
   const int SCREEN_WIDTH = 720;
@@ -47,6 +50,8 @@ private:
   std::unique_ptr<DEAD_BulletDirector> bulletDirector;
   std::unique_ptr<DEAD_CollisionDirector> collisionDirector;
   std::unique_ptr<DEAD_ItemDropLayer> itemDropLayer;
+  std::unique_ptr<DEAD_DecorationLayerBuilder> decorationLayerBuilder;
+  std::unique_ptr<DEAD_DecorationLayer> decorationLayer;
   std::unique_ptr<DEAD_ZombieDirector> zombieDirector;
   std::unique_ptr<DEAD_SoundDirector> soundDirector;
   SDL_TimerID bulletCollisionID;

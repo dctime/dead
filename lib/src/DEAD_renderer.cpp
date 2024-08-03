@@ -25,6 +25,7 @@
 #include <vector>
 #include <map_objects/DEAD_multitexture_object_base.h>
 #include <subrenderers/DEAD_player_inventory_renderer.h>
+#include <subrenderers/DEAD_decoration_renderer.h>
 
 void DEAD_Renderer::getTextureFromSurface(SDL_Texture *&texture,
                                           std::string filePath) {
@@ -75,7 +76,7 @@ void DEAD_Renderer::initWithSharedFromThis(
   this->uiRenderer = std::make_unique<DEAD_UIRenderer>(renderer);
   this->particleRenderer = std::make_unique<DEAD_ParticleRenderer>(renderer);
   this->playerInventoryRenderer = std::make_unique<DEAD_PlayerInventoryRenderer>(renderer, this->itemTexture);
-
+  this->decorationRenderer = std::make_unique<DEAD_DecorationRenderer>(renderer, this->game->getDecorationLayer());
 }
 
 DEAD_Renderer::~DEAD_Renderer() {
@@ -94,6 +95,7 @@ void DEAD_Renderer::render() {
   SDL_RenderClear(this->renderer);
 
   this->renderMapObjects();
+  this->decorationRenderer->render();
   this->renderItemDropLayer();
   this->renderBullets();
   this->renderPlayer(this->game->getPlayer());

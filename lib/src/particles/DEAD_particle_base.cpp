@@ -3,8 +3,11 @@
 #include <memory>
 #include <particles/DEAD_particle_base.h>
 #include <DEAD_renderer.h>
+#include <SDL2/SDL_render.h>
 
-DEAD_ParticleBase::~DEAD_ParticleBase() {}
+DEAD_ParticleBase::~DEAD_ParticleBase() {
+  SDL_DestroyTexture(this->particleTexture); 
+}
 
 DEAD_ParticleBase::DEAD_ParticleBase(DEAD_Renderer* renderer)
   : renderer(renderer) {
