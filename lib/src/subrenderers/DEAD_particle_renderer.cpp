@@ -1,3 +1,4 @@
+#include "subrenderers/DEAD_subrenderer_base.h"
 #include <subrenderers/DEAD_particle_renderer.h>
 #include <memory>
 #include <vector>
@@ -6,7 +7,7 @@
 
 DEAD_ParticleRenderer::DEAD_ParticleRenderer(
     DEAD_Renderer* renderer)
-    : renderer(renderer) {}
+    : DEAD_SubRendererBase(renderer) {}
 
 void DEAD_ParticleRenderer::playSwordAttackParticle(DEAD_Map::MapLocation loc,
                                                     double angle) {

@@ -1,12 +1,13 @@
 #include "DEAD_player_inventory.h"
 #include "DEAD_renderer.h"
+#include "subrenderers/DEAD_subrenderer_base.h"
 #include <DEAD_game.h>
 #include <subrenderers/DEAD_player_inventory_renderer.h>
 #include <SDL2/SDL_render.h>
 
 DEAD_PlayerInventoryRenderer::DEAD_PlayerInventoryRenderer(
     DEAD_Renderer *renderer, SDL_Texture *itemTexture)
-    : frameWidth(renderer->getGame()->SCREEN_WIDTH / 20),
+    : DEAD_SubRendererBase(renderer), frameWidth(renderer->getGame()->SCREEN_WIDTH / 20),
       itemTexture(itemTexture) {
   this->frameLeftDownLoc = {.x = 20, .y = 20};
   this->renderer = renderer;
