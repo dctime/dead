@@ -43,7 +43,7 @@ void DEAD_Renderer::getTextureFromFont(std::string fontFilePath,
 
 DEAD_Renderer::DEAD_Renderer(SDL_Window *window,
                              DEAD_Game* game)
-    : renderBlockSize(50), renderAnchor({.x = 0, .y = 0}), youDiedAlpha(0),
+    : renderBlockSize(25), renderAnchor({.x = 0, .y = 0}), youDiedAlpha(0),
       playingYouDied(false), startYouDiedTicks(0) {
 
   if (window == NULL) {

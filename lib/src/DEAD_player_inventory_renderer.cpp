@@ -6,7 +6,7 @@
 
 DEAD_PlayerInventoryRenderer::DEAD_PlayerInventoryRenderer(
     DEAD_Renderer *renderer, SDL_Texture *itemTexture)
-    : frameWidth(renderer->getRenderBlockSize() * 1.5),
+    : frameWidth(renderer->getGame()->SCREEN_WIDTH / 20),
       itemTexture(itemTexture) {
   this->frameLeftDownLoc = {.x = 20, .y = 20};
   this->renderer = renderer;
