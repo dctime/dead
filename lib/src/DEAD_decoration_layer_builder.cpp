@@ -13,6 +13,9 @@ DEAD_DecorationLayerBuilder::DEAD_DecorationLayerBuilder(DEAD_Game* game)
       game(game) {
   DEAD_Map::MapLocation loc = {.x = 4.5, .y = 28.5};
   this->addPileOfPaperCluster(loc, 0.5, 3, 3, 10, 1);
+  this->addPileOfPaperCluster({.x=14.5, .y=28.5}, 0.5, 3, 3, 10, 1);
+  this->addPileOfPaperCluster({.x=14.5, .y=23.5}, 0.5, 3, 3, 10, 1);
+  this->addPileOfPaperCluster({.x=6.5, .y=22.5}, 0.5, 3, 3, 10, 1);
 }
 
 void DEAD_DecorationLayerBuilder::build(
