@@ -1,8 +1,8 @@
 #include "decorations/DEAD_decoration_base.h"
 #include <decorations/DEAD_pile_of_paper.h>
 
-DEAD_PileOfPaper::DEAD_PileOfPaper(DEAD_Map::MapLocation loc, double rotationAngle) 
-  : DEAD_DecorationBase(loc, 1, 1, rotationAngle, 0.3) {
+DEAD_PileOfPaper::DEAD_PileOfPaper(DEAD_Map::MapLocation loc, double rotationAngle, bool hasItemDrops, DEAD_Game* game) 
+  : DEAD_DecorationBase(loc, 1, 1, rotationAngle, 0.3, hasItemDrops, game) {
 }
 
 SDL_Rect DEAD_PileOfPaper::getTextureRect() {
@@ -10,5 +10,5 @@ SDL_Rect DEAD_PileOfPaper::getTextureRect() {
 }
 
 double DEAD_PileOfPaper::destroyRequireTicks() {
-  return 5000;
+  return 500;
 }

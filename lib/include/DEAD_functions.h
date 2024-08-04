@@ -1,5 +1,6 @@
 #pragma once
 #include "DEAD_zombie_movement_maps.h"
+#include <map>
 struct DEAD_Vector {
   double x;
   double y;
@@ -14,4 +15,5 @@ public:
   static void normalizeVector(DEAD_Vector &vector);
   static void normalizeVector(ZombieVector &vector);
   static double boundNumber(double value, double min, double max);
+  static void getRandomNumbersFromZeroToN(int n, std::map<int, bool>& returnMap, int returnSize);
 };

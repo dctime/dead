@@ -30,7 +30,7 @@ DEAD_Game::DEAD_Game()
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
       map(std::make_unique<DEAD_Map>()),
       itemDropLayer(std::make_unique<DEAD_ItemDropLayer>()),
-      decorationLayerBuilder(std::make_unique<DEAD_DecorationLayerBuilder>()),
+      decorationLayerBuilder(std::make_unique<DEAD_DecorationLayerBuilder>(this)),
       running(true),
       ticking(true) {
 

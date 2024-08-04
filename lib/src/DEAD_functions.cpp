@@ -1,5 +1,7 @@
 #include <DEAD_functions.h>
+#include <algorithm>
 #include <cmath>
+#include <map>
 
 double DEAD_Functions::calDistance(double x1, double y1, double x2, double y2) {
   return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
@@ -76,6 +78,16 @@ double DEAD_Functions::boundNumber(double value, double min, double max) {
   return value;
 }
 
-
+void DEAD_Functions::getRandomNumbersFromZeroToN(int n, std::map<int, bool>& returnMap, int returnSize) {
+  int temp[n];
+  for (int i = 0; i < n; i++) {
+    temp[i] = i;
+    returnMap.insert(std::pair<int, bool>(i, false));
+  }
+  std::random_shuffle(temp, temp+n);
+  for (int i = 0; i < returnSize; i++) {
+    returnMap[i] = true; 
+  }
+}
 
 

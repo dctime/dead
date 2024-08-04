@@ -13,7 +13,6 @@ public:
   DEAD_Map::MapLocation getLeftUpLoc();
   virtual bool isPlayerCollidable() = 0;
   virtual bool isZombieCollidable() = 0;
-  // TODO: Implement this function to every child
   virtual SDL_Rect getTextureRect();
 private:
   DEAD_Map::MapLocation leftUpLoc;
