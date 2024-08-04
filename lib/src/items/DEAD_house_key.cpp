@@ -18,13 +18,14 @@ SDL_Rect DEAD_HouseKey::getItemTextureRect() {
   return {.x=200, .y=0, .w=100, .h=100}; 
 }
 
-void DEAD_HouseKey::use() {
+bool DEAD_HouseKey::use() {
   std::cout << "using the key" << std::endl;
   double angle = this->getPlayer()->getRotation();
   DEAD_Vector targetVector = DEAD_Functions::calUnitVector(angle);
   DEAD_Map::MapLocation targetLoc = {.x=targetVector.x + this->getPlayer()->getPos().x, .y=targetVector.y + this->getPlayer()->getPos().y};
   DEAD_MapObjectBase* targetObject = this->getPlayer()->getGame()->getMap()->getMapObject((int)targetLoc.x, (int)targetLoc.y);
   DEAD_Door* door = dynamic_cast<DEAD_Door*>(targetObject);
-  if (door == nullptr) return;
+  if (door == nullptr) return false;
   door->openDoor();
+  return true;
 }

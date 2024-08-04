@@ -84,7 +84,8 @@ void DEAD_Player::reloadGun() {
 
 void DEAD_Player::useItem() {
   if (this->holdItem == nullptr) return;
-  this->holdItem->use();
+  if (this->holdItem->use() == false) return;
+  this->getInventory()->replaceHoldItem(nullptr);
 }
 
 void DEAD_Player::incrementZombieKillCount() {

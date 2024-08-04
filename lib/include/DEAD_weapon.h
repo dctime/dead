@@ -15,7 +15,7 @@ public:
   virtual void attack() = 0;
   virtual SDL_Rect getItemTextureRect() override = 0;
   double checkStillCooling();
-  void use() override {}
+  bool use() override { return false; };
 
 private:
   const int COOLDOWN_TIME;
