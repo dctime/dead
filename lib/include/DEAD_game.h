@@ -65,6 +65,8 @@ private:
   static void checkAndDeleteCollisionBullets(DEAD_Game* game);
   static void mainLoop(DEAD_Game* game);
   static void zombieSpawn(DEAD_Game* game);
+  int passTicks;
+  int lastTimeLoopTicks;
   
   friend class DEAD_GameBuilder;
 };

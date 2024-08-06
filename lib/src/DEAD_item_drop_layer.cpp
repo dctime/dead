@@ -30,7 +30,7 @@ void DEAD_ItemDropLayer::getNearItemDrop(
     DEAD_Player *player, DEAD_Map::MapLocation loc, double radius,
     std::shared_ptr<DEAD_Item> &returnItem) {
   double minDistance = -1;
-  std::shared_ptr<DEAD_ItemDrop> nearestItemDrop;
+  std::shared_ptr<DEAD_ItemDrop> nearestItemDrop = nullptr;
 
   for (const std::shared_ptr<DEAD_ItemDrop> &itemDrop : this->itemDrops) {
     std::function<double(DEAD_Map::MapLocation, DEAD_Map::MapLocation)>
@@ -44,7 +44,10 @@ void DEAD_ItemDropLayer::getNearItemDrop(
       minDistance = distance;
     }
   }
-
+  if (nearestItemDrop == nullptr) {
+    returnItem = nullptr;
+    return;
+  }
   returnItem = nearestItemDrop->getItem();
   this->itemDrops.erase(nearestItemDrop);
   returnItem->setPlayer(player);

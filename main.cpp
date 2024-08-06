@@ -19,18 +19,24 @@
 #include <mysql_driver.h>
 #include <string>
 
-int main(int argc, char **argv) {
+
+namespace dead {
   sql::mysql::MySQL_Driver *driver;
   sql::Connection *conn;
   sql::ConnectOptionsMap connectionProperties;
-
+  bool pressedPlay = false;
+  void playButtonPressed();
   void onMainWindowDestory(GtkWidget * window);
   void onPlayButtonClicked(GtkButton * window);
+}
 
-  driver = sql::mysql::get_mysql_driver_instance();
-  conn = driver->connect("sql12.freemysqlhosting.net", "sql12724310",
+int main(int argc, char **argv) {
+  
+
+  dead::driver = sql::mysql::get_mysql_driver_instance();
+  dead::conn = dead::driver->connect("sql12.freemysqlhosting.net", "sql12724310",
                          "xffMZcQICr");
-  conn->setSchema("sql12724310");
+  dead::conn->setSchema("sql12724310");
 
   GError *err = NULL;
   GtkWidget *window;
@@ -52,8 +58,8 @@ int main(int argc, char **argv) {
   window = GTK_WIDGET(gtk_builder_get_object(builder, "mainWindow"));
   playButton = GTK_BUTTON(gtk_builder_get_object(builder, "playButton"));
 
-  g_signal_connect(window, "destroy", G_CALLBACK(onMainWindowDestory), NULL);
-  g_signal_connect(playButton, "clicked", G_CALLBACK(onPlayButtonClicked),
+  g_signal_connect(window, "destroy", G_CALLBACK(dead::onMainWindowDestory), NULL);
+  g_signal_connect(playButton, "clicked", G_CALLBACK(dead::onPlayButtonClicked),
                    NULL);
 
   gtk_builder_connect_signals(builder, NULL);
@@ -75,7 +81,7 @@ int main(int argc, char **argv) {
 
   std::cout << "TIME FOR SQL" << std::endl;
 
-  std::unique_ptr<sql::Statement> statement(conn->createStatement());
+  std::unique_ptr<sql::Statement> statement(dead::conn->createStatement());
   std::unique_ptr<sql::ResultSet> resultSet(statement->executeQuery(
       "SELECT * FROM LongestSurvivalTime ORDER BY TimeInSeconds DESC LIMIT 10"));
   std::string name;
@@ -105,21 +111,32 @@ int main(int argc, char **argv) {
 
   gtk_widget_show_all(window);
   gtk_main();
+  GtkWindow* realWindow = GTK_WINDOW(gtk_builder_get_object(builder, "mainWindow"));
+  gtk_window_close(realWindow);
 
-  // std::shared_ptr<DEAD_GameBuilder> gameBuilder =
-  //     std::make_shared<DEAD_GameBuilder>();
-  // std::shared_ptr<DEAD_Game> game = gameBuilder->build();
-  //
-  // game->run();
-  delete conn;
+  delete dead::conn;
+
+  if (dead::pressedPlay == true) {
+    std::shared_ptr<DEAD_GameBuilder> gameBuilder =
+        std::make_shared<DEAD_GameBuilder>();
+    std::shared_ptr<DEAD_Game> game = gameBuilder->build();
+
+    game->run();  
+  }
+  
 }
 
-void onMainWindowDestory(GtkWidget *window) {
+void dead::onMainWindowDestory(GtkWidget *window) {
   std::cout << "Hello!" << std::endl;
   gtk_main_quit();
 }
 
-void onPlayButtonClicked(GtkButton *window) {
+void dead::onPlayButtonClicked(GtkButton *window) {
   std::cout << "Button Activated" << std::endl;
+  dead::playButtonPressed();
   gtk_main_quit();
+}
+
+void dead::playButtonPressed() {
+  dead::pressedPlay = true;
 }

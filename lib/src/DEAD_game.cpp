@@ -32,7 +32,7 @@ DEAD_Game::DEAD_Game()
       itemDropLayer(std::make_unique<DEAD_ItemDropLayer>()),
       decorationLayerBuilder(std::make_unique<DEAD_DecorationLayerBuilder>(this)),
       running(true),
-      ticking(true) {
+      ticking(true), passTicks(0) {
 
   SDL_Log("Game Init");
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
@@ -86,6 +86,7 @@ DEAD_Game::DEAD_Game()
   this->mainLoopID = SDL_AddTimer(DEAD_Game::MAIN_LOOP_DELAY,
                                   this->playerMovementCallback, this);
   this->zombieSpawnID = SDL_AddTimer(500, this->spawnZombieCallback, this);
+  this->lastTimeLoopTicks = SDL_GetTicks64();
 }
 
 DEAD_Game::~DEAD_Game() {
@@ -160,6 +161,7 @@ void DEAD_Game::checkPlayerDied() {
   if (this->getPlayer()->getHealth() > 0)
     return;
   std::cout << "YOU DIED!" << std::endl;
+  std::cout << "You Survived " << this->passTicks/1000 << " seconds" << std::endl;
   this->renderer->startYouDied();
   this->soundDirector->playYouDiedSound();
   ticking = false;
@@ -217,6 +219,8 @@ int DEAD_Game::getSecretNumber() { return 7; }
 
 void DEAD_Game::mainLoop(DEAD_Game *game) {
   if (game->ticking) {
+    game->passTicks += SDL_GetTicks64() - game->lastTimeLoopTicks;
+    game->lastTimeLoopTicks = SDL_GetTicks64();
     game->player->handleKeyState();
     game->player->handlePlayerRotation();
     game->bulletDirector->tickBullets();

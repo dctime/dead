@@ -34,6 +34,7 @@ void DEAD_Player::pickupOrDrop() {
   if (this->holdItem != nullptr) {
     this->dropHoldItem();
   } else {
+    std::cout << "Pickup item" << std::endl;
     this->pickupItem();
   }
 
@@ -46,7 +47,8 @@ void DEAD_Player::pickupItem() {
   std::shared_ptr<DEAD_Item> tempItem;
   this->getGame()->getItemDropLayer()->getNearItemDrop(this, this->getPos(), this->getPickItemRadius(), tempItem);
   SDL_Log("Picked Up Weapon");
-  if (tempItem == nullptr) return;
+  if (tempItem.get() == nullptr) return;
+  std::cout << "You Shall Not Pass" << std::endl;
   tempItem->unbindItemDrop();
   this->inventory->replaceHoldItem(tempItem);
 }
