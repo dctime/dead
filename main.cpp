@@ -18,16 +18,26 @@
 #include <mysql_connection.h>
 #include <mysql_driver.h>
 #include <string>
-
+#include <unistd.h>
 
 namespace dead {
   sql::mysql::MySQL_Driver *driver;
   sql::Connection *conn;
   sql::ConnectOptionsMap connectionProperties;
   bool pressedPlay = false;
+  GtkWidget *window;
+  GtkListStore *liststoreLongest;
+  GtkTreeViewColumn *columnLongestName;
+  GtkTreeViewColumn *columnLongestTime;
+  GtkCellRenderer *cellRendererLongestName;
+  GtkCellRenderer *cellRendererLongestTime;
+  GtkButton *playButton;
+  GtkEntry *enterYourNameEntry;
+  GtkBuilder *builder;
   void playButtonPressed();
   void onMainWindowDestory(GtkWidget * window);
   void onPlayButtonClicked(GtkButton * window);
+  bool stringHasText(std::string text);
 }
 
 int main(int argc, char **argv) {
@@ -39,44 +49,38 @@ int main(int argc, char **argv) {
   dead::conn->setSchema("sql12724310");
 
   GError *err = NULL;
-  GtkWidget *window;
-  GtkListStore *liststoreLongest;
-  GtkTreeViewColumn *columnLongestName;
-  GtkTreeViewColumn *columnLongestTime;
-  GtkCellRenderer *cellRendererLongestName;
-  GtkCellRenderer *cellRendererLongestTime;
-  GtkButton *playButton;
-  GtkBuilder *builder;
+  
   gtk_init(&argc, &argv);
 
-  builder = gtk_builder_new();
-  gtk_builder_add_from_file(builder, "assets/glade/Test.glade", &err);
+  dead::builder = gtk_builder_new();
+  gtk_builder_add_from_file(dead::builder, "assets/glade/Test.glade", &err);
   if (err != NULL) {
     std::cout << "Error: " << err->message << std::endl;
   }
 
-  window = GTK_WIDGET(gtk_builder_get_object(builder, "mainWindow"));
-  playButton = GTK_BUTTON(gtk_builder_get_object(builder, "playButton"));
+  dead::window = GTK_WIDGET(gtk_builder_get_object(dead::builder, "mainWindow"));
+  dead::playButton = GTK_BUTTON(gtk_builder_get_object(dead::builder, "playButton"));
+  dead::enterYourNameEntry = GTK_ENTRY(gtk_builder_get_object(dead::builder, "enterYourNameEntry"));
 
-  g_signal_connect(window, "destroy", G_CALLBACK(dead::onMainWindowDestory), NULL);
-  g_signal_connect(playButton, "clicked", G_CALLBACK(dead::onPlayButtonClicked),
+  g_signal_connect(dead::window, "destroy", G_CALLBACK(dead::onMainWindowDestory), NULL);
+  g_signal_connect(dead::playButton, "clicked", G_CALLBACK(dead::onPlayButtonClicked),
                    NULL);
 
-  gtk_builder_connect_signals(builder, NULL);
+  gtk_builder_connect_signals(dead::builder, NULL);
 
-  liststoreLongest =
-      GTK_LIST_STORE(gtk_builder_get_object(builder, "liststoreLongest"));
-  columnLongestName = GTK_TREE_VIEW_COLUMN(
-      gtk_builder_get_object(builder, "columnLongestName"));
-  columnLongestTime = GTK_TREE_VIEW_COLUMN(
-      gtk_builder_get_object(builder, "columnLongestTime"));
-  cellRendererLongestName = GTK_CELL_RENDERER(
-      gtk_builder_get_object(builder, "cellRendererLongestName"));
-  cellRendererLongestTime = GTK_CELL_RENDERER(
-      gtk_builder_get_object(builder, "cellRendererLongestTime"));
-  gtk_tree_view_column_add_attribute(columnLongestName, cellRendererLongestName,
+  dead::liststoreLongest =
+      GTK_LIST_STORE(gtk_builder_get_object(dead::builder, "liststoreLongest"));
+  dead::columnLongestName = GTK_TREE_VIEW_COLUMN(
+      gtk_builder_get_object(dead::builder, "columnLongestName"));
+  dead::columnLongestTime = GTK_TREE_VIEW_COLUMN(
+      gtk_builder_get_object(dead::builder, "columnLongestTime"));
+  dead::cellRendererLongestName = GTK_CELL_RENDERER(
+      gtk_builder_get_object(dead::builder, "cellRendererLongestName"));
+  dead::cellRendererLongestTime = GTK_CELL_RENDERER(
+      gtk_builder_get_object(dead::builder, "cellRendererLongestTime"));
+  gtk_tree_view_column_add_attribute(dead::columnLongestName, dead::cellRendererLongestName,
                                      "text", 0);
-  gtk_tree_view_column_add_attribute(columnLongestTime, cellRendererLongestTime,
+  gtk_tree_view_column_add_attribute(dead::columnLongestTime, dead::cellRendererLongestTime,
                                      "text", 1);
 
   std::cout << "TIME FOR SQL" << std::endl;
@@ -97,9 +101,9 @@ int main(int argc, char **argv) {
       const char *timeFormattedChars = timeFormatted.c_str();
       std::cout << "Name: " << nameChars << ", TimeInSeconds: " << timeInSeconds
                 << std::endl;
-      gtk_list_store_append(liststoreLongest, &iterLongest);
-      gtk_list_store_set(liststoreLongest, &iterLongest, 0, nameChars, -1);
-      gtk_list_store_set(liststoreLongest, &iterLongest, 1, timeFormattedChars,
+      gtk_list_store_append(dead::liststoreLongest, &iterLongest);
+      gtk_list_store_set(dead::liststoreLongest, &iterLongest, 0, nameChars, -1);
+      gtk_list_store_set(dead::liststoreLongest, &iterLongest, 1, timeFormattedChars,
                          -1);
       std::cout << "added a row" << std::endl;
     }
@@ -109,21 +113,21 @@ int main(int argc, char **argv) {
     std::cout << ", SQL_STATE: " << e.getSQLState() << " )" << std::endl;
   }
 
-  gtk_widget_show_all(window);
+  gtk_widget_show_all(dead::window);
   gtk_main();
-  GtkWindow* realWindow = GTK_WINDOW(gtk_builder_get_object(builder, "mainWindow"));
-  gtk_window_close(realWindow);
 
-  delete dead::conn;
-
+ std::shared_ptr<DEAD_Game> game;
   if (dead::pressedPlay == true) {
     std::shared_ptr<DEAD_GameBuilder> gameBuilder =
         std::make_shared<DEAD_GameBuilder>();
-    std::shared_ptr<DEAD_Game> game = gameBuilder->build();
+    game = gameBuilder->build();
 
-    game->run();  
   }
-  
+
+  delete dead::conn;
+
+  game->run();  
+   
 }
 
 void dead::onMainWindowDestory(GtkWidget *window) {
@@ -131,12 +135,22 @@ void dead::onMainWindowDestory(GtkWidget *window) {
   gtk_main_quit();
 }
 
-void dead::onPlayButtonClicked(GtkButton *window) {
-  std::cout << "Button Activated" << std::endl;
-  dead::playButtonPressed();
-  gtk_main_quit();
-}
+void dead::onPlayButtonClicked(GtkButton *button) {
+  std::string nameText (gtk_entry_get_text(dead::enterYourNameEntry));
+  std::cout << "Entry Text: " << nameText << std::endl;
+  if (dead::stringHasText(nameText)) {
+    dead::playButtonPressed();
+    gtk_main_quit();
+  }
+}  
 
 void dead::playButtonPressed() {
   dead::pressedPlay = true;
+}
+
+bool dead::stringHasText(std::string text) {
+  for (const char c : text) {
+    if (c != ' ') return true; 
+  } 
+  return false;
 }

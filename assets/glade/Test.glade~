@@ -36,7 +36,7 @@
             <property name="visible">True</property>
             <property name="can-focus">True</property>
             <property name="receives-default">True</property>
-            <signal name="activate" handler="onPlayButtonActivate" swapped="no"/>
+            <signal name="clicked" handler="onPlayButtonClicked" swapped="no"/>
           </object>
           <packing>
             <property name="x">140</property>
