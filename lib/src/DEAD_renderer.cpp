@@ -349,6 +349,16 @@ void DEAD_Renderer::renderYouDied() {
   rect.x = this->getGame()->SCREEN_WIDTH / 2 - rect.w / 2;
   rect.h = rect.h / 2;
   SDL_RenderCopy(this->renderer, this->youDiedFontTexture, NULL, &rect);
+
+  SDL_Texture* infoTexture;
+  std::string infoText = this->getGame()->getPlayer()->getEntityName() + " survived " + std::to_string(this->game->getPassTicks()/1000) + " second(s)"; 
+  this->getTextureFromFont(DEAD_FilePaths::YOU_DIED_FONT, infoTexture, infoText, 12, {255, 255, 255, 255});
+  SDL_SetTextureAlphaMod(infoTexture, this->youDiedAlpha);
+  SDL_Rect infoRenderRect = {.x=this->getGame()->SCREEN_WIDTH/2, .y=rect.y+rect.h+this->getGame()->SCREEN_HEIGHT/20, .w=0, .h=0};
+  SDL_QueryTexture(infoTexture, NULL, NULL, &infoRenderRect.w, &infoRenderRect.h);
+  infoRenderRect.x -= infoRenderRect.w/2;
+  SDL_RenderCopy(this->renderer, infoTexture, NULL, &infoRenderRect);
+  
 }
 
 void DEAD_Renderer::startYouDied() {

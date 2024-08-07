@@ -21,7 +21,7 @@ class DEAD_ControllablePlayer;
 class DEAD_Game
   : public std::enable_shared_from_this<DEAD_Game> {
 public:
-  DEAD_Game();
+  DEAD_Game(std::string playerName);
   ~DEAD_Game();
   void mapTick();
   void run();
@@ -34,6 +34,7 @@ public:
   DEAD_DecorationLayer* getDecorationLayer();
   DEAD_ZombieDirector* getZombieDirector();
   DEAD_SoundDirector* getSoundDirector();
+  int getPassTicks();
   const int SCREEN_WIDTH = 720;
   const int SCREEN_HEIGHT = 480;
 

@@ -15,8 +15,10 @@
 #include <iostream>
 #include <subrenderers/DEAD_particle_renderer.h>
 
-DEAD_ControllablePlayer::DEAD_ControllablePlayer(DEAD_Game* game)
+DEAD_ControllablePlayer::DEAD_ControllablePlayer(DEAD_Game* game, std::string playerName)
     : DEAD_Player::DEAD_Player(game), baseSpeed(0.01 * DEAD_Game::MAIN_LOOP_DELAY / 10) {
+  this->setEntityName(playerName);
+  std::cout << "Controllable Player Name: " << playerName << std::endl;
 }
 
 DEAD_ControllablePlayer::~DEAD_ControllablePlayer() {}

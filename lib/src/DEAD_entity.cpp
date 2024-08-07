@@ -8,7 +8,7 @@
 
 DEAD_Entity::DEAD_Entity(DEAD_Game* game, int maxHealth, double size)
     : speed(3), position({.x = 0, .y = 0}), rotation(0), size(size), maxHealth(maxHealth), health(maxHealth),
-      lastTimeBeenHitTicks(0), knockBackCooldown(300), holdItem(nullptr) {
+      lastTimeBeenHitTicks(0), knockBackCooldown(300), holdItem(nullptr), entityName("") {
   this->hitbox = std::make_unique<DEAD_CircleHitbox>(size / 2,
                                                      this->position);
   this->setGame(game);
@@ -45,6 +45,14 @@ bool DEAD_Entity::checkhealthIsDead() {
     return true;
   }
   return false;
+}
+
+void DEAD_Entity::setEntityName(std::string name) {
+  this->entityName = name;
+}
+
+std::string DEAD_Entity::getEntityName() {
+  return this->entityName;
 }
 
 std::shared_ptr<DEAD_Item> DEAD_Entity::getHoldItem() {

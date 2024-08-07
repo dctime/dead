@@ -38,6 +38,7 @@ namespace dead {
   void onMainWindowDestory(GtkWidget * window);
   void onPlayButtonClicked(GtkButton * window);
   bool stringHasText(std::string text);
+  std::string textFromNameEntry = "";
 }
 
 int main(int argc, char **argv) {
@@ -119,7 +120,7 @@ int main(int argc, char **argv) {
  std::shared_ptr<DEAD_Game> game;
   if (dead::pressedPlay == true) {
     std::shared_ptr<DEAD_GameBuilder> gameBuilder =
-        std::make_shared<DEAD_GameBuilder>();
+        std::make_shared<DEAD_GameBuilder>(dead::textFromNameEntry);
     game = gameBuilder->build();
 
   }
@@ -139,6 +140,7 @@ void dead::onPlayButtonClicked(GtkButton *button) {
   std::string nameText (gtk_entry_get_text(dead::enterYourNameEntry));
   std::cout << "Entry Text: " << nameText << std::endl;
   if (dead::stringHasText(nameText)) {
+    dead::textFromNameEntry = nameText;
     dead::playButtonPressed();
     gtk_main_quit();
   }

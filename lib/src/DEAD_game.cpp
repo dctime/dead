@@ -23,7 +23,7 @@
 const int DEAD_Game::BULLET_COLLISION_DELAY = 1000.0 / 60;
 const int DEAD_Game::MAIN_LOOP_DELAY = 1000.0 / 60;
 
-DEAD_Game::DEAD_Game()
+DEAD_Game::DEAD_Game(std::string playerName)
     : SCREEN_WIDTH(1080), SCREEN_HEIGHT(760),
       window(SDL_CreateWindow("DEAD", SDL_WINDOWPOS_CENTERED,
                               SDL_WINDOWPOS_CENTERED, this->SCREEN_WIDTH,
@@ -68,7 +68,7 @@ DEAD_Game::DEAD_Game()
   this->itemDropLayer->summonItemDrop<DEAD_HouseKey>(7.5, 29.5);
   this->decorationLayerBuilder->build(this->decorationLayer);
 
-  this->player = std::make_unique<DEAD_ControllablePlayer>(this);
+  this->player = std::make_unique<DEAD_ControllablePlayer>(this, playerName);
   std::vector<DEAD_Map::MapLocation> locs = this->map->getPlayerPointLocs();
   if (locs.size() > 0) {
     // set the first player point
@@ -155,6 +155,10 @@ DEAD_ZombieDirector *DEAD_Game::getZombieDirector() {
 
 DEAD_SoundDirector *DEAD_Game::getSoundDirector() {
   return this->soundDirector.get();
+}
+
+int DEAD_Game::getPassTicks() {
+  return this->passTicks;
 }
 
 void DEAD_Game::checkPlayerDied() {

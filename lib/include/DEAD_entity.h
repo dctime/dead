@@ -33,6 +33,8 @@ public:
   void damage(int health);
   bool checkIfInKnockback();
   bool checkhealthIsDead();
+  void setEntityName(std::string name);
+  std::string getEntityName();
 protected:
   std::shared_ptr<DEAD_Item> holdItem;
   DEAD_Game* game;
@@ -46,4 +48,5 @@ private:
   int maxHealth;
   int lastTimeBeenHitTicks;
   int knockBackCooldown;
+  std::string entityName;
 };
