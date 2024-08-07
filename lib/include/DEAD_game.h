@@ -15,6 +15,7 @@
 #include "DEAD_sound_director.h"
 #include "DEAD_decoration_layer.h"
 #include "DEAD_decoration_layer_builder.h"
+#include "DEAD_data_base_connector.h"
 
 class DEAD_ControllablePlayer;
 
@@ -34,6 +35,7 @@ public:
   DEAD_DecorationLayer* getDecorationLayer();
   DEAD_ZombieDirector* getZombieDirector();
   DEAD_SoundDirector* getSoundDirector();
+  DEAD_DataBaseConnector* getDataBaseConnector();
   int getPassTicks();
   const int SCREEN_WIDTH = 720;
   const int SCREEN_HEIGHT = 480;
@@ -55,6 +57,7 @@ private:
   std::unique_ptr<DEAD_DecorationLayer> decorationLayer;
   std::unique_ptr<DEAD_ZombieDirector> zombieDirector;
   std::unique_ptr<DEAD_SoundDirector> soundDirector;
+  std::unique_ptr<DEAD_DataBaseConnector> dataBaseConnector;
   SDL_TimerID bulletCollisionID;
   SDL_TimerID mainLoopID;
   SDL_TimerID zombieSpawnID;

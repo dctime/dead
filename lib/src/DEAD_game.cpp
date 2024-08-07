@@ -31,6 +31,7 @@ DEAD_Game::DEAD_Game(std::string playerName)
       map(std::make_unique<DEAD_Map>()),
       itemDropLayer(std::make_unique<DEAD_ItemDropLayer>()),
       decorationLayerBuilder(std::make_unique<DEAD_DecorationLayerBuilder>(this)),
+      dataBaseConnector(std::make_unique<DEAD_DataBaseConnector>()),
       running(true),
       ticking(true), passTicks(0) {
 
@@ -157,6 +158,10 @@ DEAD_SoundDirector *DEAD_Game::getSoundDirector() {
   return this->soundDirector.get();
 }
 
+DEAD_DataBaseConnector* DEAD_Game::getDataBaseConnector() {
+  return this->dataBaseConnector.get();
+}
+
 int DEAD_Game::getPassTicks() {
   return this->passTicks;
 }
@@ -168,6 +173,7 @@ void DEAD_Game::checkPlayerDied() {
   std::cout << "You Survived " << this->passTicks/1000 << " seconds" << std::endl;
   this->renderer->startYouDied();
   this->soundDirector->playYouDiedSound();
+  this->dataBaseConnector->sendDataToDataBase(this->player->getEntityName(), this->getPassTicks()/1000);
   ticking = false;
 }
 

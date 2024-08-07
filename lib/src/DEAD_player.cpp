@@ -11,7 +11,7 @@
 #include <memory>
 
 DEAD_Player::DEAD_Player(DEAD_Game *game)
-    : DEAD_Entity::DEAD_Entity(game, 10000, 0.8),
+    : DEAD_Entity::DEAD_Entity(game, 100, 0.8),
       inventory(std::make_unique<DEAD_PlayerInventory>(this)),
       zombieKillcount(0) {}
 
