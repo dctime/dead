@@ -39,4 +39,8 @@ public:
   static const std::string HIT_WITH_BULLET_1;
   static const std::string HIT_WITH_BULLET_2;
   static const std::string HIT_WITH_BULLET_3;
+
+  static const std::string DEAD_QUOTE_FOLDER;
+  static const std::string DEAD_QUOTE_FILE;
+  static const std::string DEAD_QUOTE_GEN;
 };

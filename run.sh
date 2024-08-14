@@ -4,3 +4,5 @@ cd build;
 
 make;
 
+./dead DCtime
+

@@ -2,6 +2,7 @@
 #include <cstring>
 
 const std::string DEAD_FilePaths::ASSETS_FILE_PATH = "assets";
+
 const std::string DEAD_FilePaths::MAP_FILE_PATH = ASSETS_FILE_PATH + "/data/map";
 const std::string DEAD_FilePaths::MAP_OBJECT_PNG_FILE_PATH = ASSETS_FILE_PATH + "/imgs/map_objects.png";
 const std::string DEAD_FilePaths::PLAYER_TEXTURE_PNG = ASSETS_FILE_PATH + "/imgs/player.png";
@@ -37,4 +38,7 @@ const std::string DEAD_FilePaths::HIT_WITH_BULLET_1 = ASSETS_FILE_PATH + "/sound
 const std::string DEAD_FilePaths::HIT_WITH_BULLET_2 = ASSETS_FILE_PATH + "/sounds/hit_with_bullet_2.wav";
 const std::string DEAD_FilePaths::HIT_WITH_BULLET_3 = ASSETS_FILE_PATH + "/sounds/hit_with_bullet_3.wav";
 
+const std::string DEAD_FilePaths::DEAD_QUOTE_FOLDER = "quotes";
+const std::string DEAD_FilePaths::DEAD_QUOTE_FILE = "dead_quote";
+const std::string DEAD_FilePaths::DEAD_QUOTE_GEN = DEAD_QUOTE_FOLDER + "/dead_quote_gen";
 

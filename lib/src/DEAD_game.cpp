@@ -19,6 +19,7 @@
 #include <memory>
 #include <weapons/DEAD_bat.h>
 #include <zombies/DEAD_zombie.h>
+#include <DEAD_filepaths.h>
 
 const int DEAD_Game::BULLET_COLLISION_DELAY = 1000.0 / 60;
 const int DEAD_Game::MAIN_LOOP_DELAY = 1000.0 / 60;
@@ -36,6 +37,9 @@ DEAD_Game::DEAD_Game(std::string playerName)
       ticking(true), passTicks(0) {
 
   SDL_Log("Game Init");
+
+
+  int genStatus = system(("./" + DEAD_FilePaths::DEAD_QUOTE_GEN + " &").c_str());
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
     SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
   }

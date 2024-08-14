@@ -16,14 +16,23 @@ add_subdirectory(lib)
 add_executable(${PROJECT_NAME} main.cpp)
 
 
-add_custom_target(copy_folders ALL
+add_custom_target(copy_assets ALL
   COMMAND ${CMAKE_COMMAND} -E copy_directory 
   ${PROJECT_SOURCE_DIR}/assets
   ${PROJECT_BINARY_DIR}/assets
   COMMENT "Copy Assets to build ..."
 )
 
-add_dependencies(dead copy_folders)
+add_dependencies(dead copy_assets)
+
+add_custom_target(copy_quotes ALL
+  COMMAND ${CMAKE_COMMAND} -E copy_directory 
+  ${PROJECT_SOURCE_DIR}/quotes
+  ${PROJECT_BINARY_DIR}/quotes
+  COMMENT "Copy Quotes to build ..."
+)
+
+add_dependencies(dead copy_quotes)
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/lib/include)
 

@@ -1,5 +1,4 @@
 #include "DEAD_item_drop.h"
-#include <subrenderers/DEAD_ui_renderer.h>
 #include "DEAD_zombie_director.h"
 #include "map_objects/DEAD_map_object_base.h"
 #include "zombies/DEAD_zombie.h"
@@ -18,14 +17,16 @@
 #include <SDL2/SDL_surface.h>
 #include <SDL2/SDL_timer.h>
 #include <SDL2/SDL_ttf.h>
+#include <fstream>
 #include <iostream>
+#include <map_objects/DEAD_multitexture_object_base.h>
 #include <memory>
 #include <set>
 #include <string>
-#include <vector>
-#include <map_objects/DEAD_multitexture_object_base.h>
-#include <subrenderers/DEAD_player_inventory_renderer.h>
 #include <subrenderers/DEAD_decoration_renderer.h>
+#include <subrenderers/DEAD_player_inventory_renderer.h>
+#include <subrenderers/DEAD_ui_renderer.h>
+#include <vector>
 
 void DEAD_Renderer::getTextureFromSurface(SDL_Texture *&texture,
                                           std::string filePath) {
@@ -42,8 +43,7 @@ void DEAD_Renderer::getTextureFromFont(std::string fontFilePath,
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
 }
 
-DEAD_Renderer::DEAD_Renderer(SDL_Window *window,
-                             DEAD_Game* game)
+DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
     : renderBlockSize(50), renderAnchor({.x = 0, .y = 0}), youDiedAlpha(0),
       playingYouDied(false), startYouDiedTicks(0) {
 
@@ -55,7 +55,7 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window,
   if (this->renderer == NULL) {
     SDL_LogError(SDL_LOG_CATEGORY_RENDER, "[Renderer] %s", SDL_GetError());
   }
-  
+
   getTextureFromSurface(this->itemTexture, DEAD_FilePaths::ITEM_TEXTURE_PNG);
   getTextureFromSurface(this->mapObjectTexture,
                         DEAD_FilePaths::MAP_OBJECT_PNG_FILE_PATH);
@@ -71,12 +71,14 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window,
   this->game = game;
 }
 
-void DEAD_Renderer::initWithSharedFromThis(
-  DEAD_Renderer* renderer) {
+void DEAD_Renderer::initWithSharedFromThis(DEAD_Renderer *renderer) {
   this->uiRenderer = std::make_unique<DEAD_UIRenderer>(renderer);
   this->particleRenderer = std::make_unique<DEAD_ParticleRenderer>(renderer);
-  this->playerInventoryRenderer = std::make_unique<DEAD_PlayerInventoryRenderer>(renderer, this->itemTexture);
-  this->decorationRenderer = std::make_unique<DEAD_DecorationRenderer>(renderer, this->game->getDecorationLayer());
+  this->playerInventoryRenderer =
+      std::make_unique<DEAD_PlayerInventoryRenderer>(renderer,
+                                                     this->itemTexture);
+  this->decorationRenderer = std::make_unique<DEAD_DecorationRenderer>(
+      renderer, this->game->getDecorationLayer());
 }
 
 DEAD_Renderer::~DEAD_Renderer() {
@@ -111,21 +113,21 @@ void DEAD_Renderer::render() {
 
 SDL_Renderer *DEAD_Renderer::getSDLRenderer() { return this->renderer; }
 
-DEAD_Game* DEAD_Renderer::getGame() { return this->game; }
+DEAD_Game *DEAD_Renderer::getGame() { return this->game; }
 
 int DEAD_Renderer::getRenderBlockSize() { return this->renderBlockSize; }
 
-DEAD_ParticleRenderer* DEAD_Renderer::getParticleRenderer() {
+DEAD_ParticleRenderer *DEAD_Renderer::getParticleRenderer() {
   return this->particleRenderer.get();
 }
 
 void DEAD_Renderer::renderMapObjects() {
-  DEAD_Map* map = this->game->getMap();
+  DEAD_Map *map = this->game->getMap();
 
   float windowWidthMid = this->game->SCREEN_WIDTH / 2.0;
   float windowHeightMid = this->game->SCREEN_HEIGHT / 2.0;
 
-  std::vector<std::vector<std::unique_ptr<DEAD_MapObjectBase>>>& mapObjects =
+  std::vector<std::vector<std::unique_ptr<DEAD_MapObjectBase>>> &mapObjects =
       map->getMapObjects();
 
   for (int i = 0; i < mapObjects.size(); ++i) {
@@ -136,8 +138,8 @@ void DEAD_Renderer::renderMapObjects() {
       int angle = 0;
 
       // Get Angle
-      DEAD_MultitextureObjectBase* mapObjectMultiTexture = 
-        dynamic_cast<DEAD_MultitextureObjectBase*>(mapObjects[i][j].get());
+      DEAD_MultitextureObjectBase *mapObjectMultiTexture =
+          dynamic_cast<DEAD_MultitextureObjectBase *>(mapObjects[i][j].get());
       if (mapObjectMultiTexture != nullptr) {
         switch (mapObjectMultiTexture->getDirection()) {
         case DEAD_MapObjectDirection::HORIZONTAL:
@@ -162,18 +164,18 @@ void DEAD_Renderer::renderMapObjects() {
       if (!isAir) {
 
         SDL_RenderCopyEx(this->renderer, this->mapObjectTexture,
-                       &objectTextureRect, &renderRect, angle, NULL, SDL_RendererFlip::SDL_FLIP_NONE);
+                         &objectTextureRect, &renderRect, angle, NULL,
+                         SDL_RendererFlip::SDL_FLIP_NONE);
       }
     }
   }
 }
 
-void DEAD_Renderer::renderPlayer(DEAD_Player* player) {
+void DEAD_Renderer::renderPlayer(DEAD_Player *player) {
   this->renderEntity(player, this->playerTexture);
 }
 
-void DEAD_Renderer::renderEntity(DEAD_Entity* entity,
-                                 SDL_Texture *texture) {
+void DEAD_Renderer::renderEntity(DEAD_Entity *entity, SDL_Texture *texture) {
   DEAD_Map::MapLocation pos = entity->getPos();
   SDL_Rect rect = entity->getTextureRect();
 
@@ -187,10 +189,10 @@ void DEAD_Renderer::renderEntity(DEAD_Entity* entity,
                    entity->getRotation(), NULL, SDL_FLIP_NONE);
 }
 
-void DEAD_Renderer::renderZombies(
-    DEAD_ZombieDirector* zombieDirector) {
-  std::set<DEAD_Zombie*> knockbackingZombies;
-  for (const std::unique_ptr<DEAD_Zombie>& zombie : zombieDirector->getZombies()) {
+void DEAD_Renderer::renderZombies(DEAD_ZombieDirector *zombieDirector) {
+  std::set<DEAD_Zombie *> knockbackingZombies;
+  for (const std::unique_ptr<DEAD_Zombie> &zombie :
+       zombieDirector->getZombies()) {
     if (zombie->checkIfInKnockback())
       SDL_SetTextureColorMod(this->zombiesTexture, 100, 100, 100);
     else
@@ -199,9 +201,8 @@ void DEAD_Renderer::renderZombies(
   }
 }
 
-ScreenLocation
-DEAD_Renderer::getEntityRenderLocation(DEAD_Entity* entity,
-                                       bool mid) {
+ScreenLocation DEAD_Renderer::getEntityRenderLocation(DEAD_Entity *entity,
+                                                      bool mid) {
   ScreenLocation loc;
   loc.x = (entity->getPos().x - renderAnchor.x) * this->renderBlockSize -
           (entity->getSize() * this->renderBlockSize) / 2.0 +
@@ -218,11 +219,10 @@ DEAD_Renderer::getEntityRenderLocation(DEAD_Entity* entity,
 }
 
 void DEAD_Renderer::renderBullets() {
-  DEAD_BulletDirector* director =
-      this->game->getBulletDirector();
-  std::set<std::unique_ptr<DEAD_Bullet>>& bullets = director->getBullets();
+  DEAD_BulletDirector *director = this->game->getBulletDirector();
+  std::set<std::unique_ptr<DEAD_Bullet>> &bullets = director->getBullets();
 
-  for (const std::unique_ptr<DEAD_Bullet>& bullet : bullets) {
+  for (const std::unique_ptr<DEAD_Bullet> &bullet : bullets) {
     SDL_Rect textureRect = bullet->getBulletTextureRect();
     SDL_Rect renderRect = {
         .x = this->getBulletRenderLocation(bullet.get()).x,
@@ -234,8 +234,7 @@ void DEAD_Renderer::renderBullets() {
   }
 }
 
-ScreenLocation
-DEAD_Renderer::getBulletRenderLocation(DEAD_Bullet* bullet) {
+ScreenLocation DEAD_Renderer::getBulletRenderLocation(DEAD_Bullet *bullet) {
   ScreenLocation loc;
   loc.x =
       (bullet->getMapLocation().x - renderAnchor.x) * this->renderBlockSize -
@@ -250,12 +249,11 @@ DEAD_Renderer::getBulletRenderLocation(DEAD_Bullet* bullet) {
 }
 
 void DEAD_Renderer::renderItemDropLayer() {
-  DEAD_ItemDropLayer* itemDropLayer =
-      this->game->getItemDropLayer();
-  const std::set<std::shared_ptr<DEAD_ItemDrop>>& itemDrops =
+  DEAD_ItemDropLayer *itemDropLayer = this->game->getItemDropLayer();
+  const std::set<std::shared_ptr<DEAD_ItemDrop>> &itemDrops =
       itemDropLayer->getItemDrops();
 
-  for (const std::shared_ptr<DEAD_ItemDrop>& itemDrop : itemDrops) {
+  for (const std::shared_ptr<DEAD_ItemDrop> &itemDrop : itemDrops) {
     SDL_Rect textureRect = itemDrop->getItem()->getItemTextureRect();
     SDL_Rect renderRect = {
         .x = this->getItemDropRenderLocation(itemDrop).x,
@@ -268,7 +266,7 @@ void DEAD_Renderer::renderItemDropLayer() {
 }
 
 ScreenLocation DEAD_Renderer::getItemDropRenderLocation(
-    const std::shared_ptr<DEAD_ItemDrop>& itemDrop) {
+    const std::shared_ptr<DEAD_ItemDrop> &itemDrop) {
   ScreenLocation loc;
   loc.x = (itemDrop->getLoc().x - renderAnchor.x) * this->renderBlockSize -
           itemDrop->getSize() * this->renderBlockSize / 2.0 +
@@ -281,13 +279,13 @@ ScreenLocation DEAD_Renderer::getItemDropRenderLocation(
 }
 
 void DEAD_Renderer::drawZombieMovementMap() {
-  DEAD_ZombieDirector* zombieDirector =
-      this->game->getZombieDirector();
+  DEAD_ZombieDirector *zombieDirector = this->game->getZombieDirector();
   DEAD_Map::MapLocation playerLoc = this->getGame()->getPlayer()->getPos();
   for (int y = 0; y < this->game->getMap()->getMapSize().height; y++) {
     for (int x = 0; x < this->game->getMap()->getMapSize().width; x++) {
       ZombieVector drawingVector =
-          zombieDirector->getZombieMovementMaps()->getMovementGradient(playerLoc.x, playerLoc.y, x, y);
+          zombieDirector->getZombieMovementMaps()->getMovementGradient(
+              playerLoc.x, playerLoc.y, x, y);
       ScreenLocation startLoc = this->getPointRenderLocation(x + 0.5, y + 0.5);
       ScreenLocation endLoc = this->getPointRenderLocation(
           x + 0.5 + drawingVector.vectorX, y + 0.5 + drawingVector.vectorY);
@@ -297,13 +295,12 @@ void DEAD_Renderer::drawZombieMovementMap() {
     }
   }
 
-  for (const std::unique_ptr<DEAD_Zombie>& zombie :
+  for (const std::unique_ptr<DEAD_Zombie> &zombie :
        this->game->getZombieDirector()->getZombies()) {
     ScreenLocation zombieLoc =
         this->getPointRenderLocation(zombie->getPos().x, zombie->getPos().y);
-    ZombieVector zombieMoveVec =
-        zombieDirector->getMovementVector(zombie->getPos().x,
-                                          zombie->getPos().y);
+    ZombieVector zombieMoveVec = zombieDirector->getMovementVector(
+        zombie->getPos().x, zombie->getPos().y);
     ScreenLocation zombieMoveEndScreen = this->getPointRenderLocation(
         zombieMoveVec.vectorX + zombie->getPos().x,
         zombieMoveVec.vectorY + zombie->getPos().y);
@@ -348,17 +345,52 @@ void DEAD_Renderer::renderYouDied() {
   rect.w -= rect.w / 1.7;
   rect.x = this->getGame()->SCREEN_WIDTH / 2 - rect.w / 2;
   rect.h = rect.h / 2;
-  SDL_RenderCopy(this->renderer, this->youDiedFontTexture, NULL, &rect);
 
-  SDL_Texture* infoTexture;
-  std::string infoText = this->getGame()->getPlayer()->getEntityName() + " survived " + std::to_string(this->game->getPassTicks()/1000) + " second(s)"; 
-  this->getTextureFromFont(DEAD_FilePaths::YOU_DIED_FONT, infoTexture, infoText, 12, {255, 255, 255, 255});
+  std::ifstream quoteFile(DEAD_FilePaths::DEAD_QUOTE_FILE);
+  std::string line;
+
+  while (getline(quoteFile, line))
+    ;
+
+  std::cout << "The Quote: " << std::endl;
+  std::cout << line << std::endl;
+
+  SDL_Texture *infoTexture;
+  std::string infoText =
+      this->getGame()->getPlayer()->getEntityName() + " survived " +
+      std::to_string(this->game->getPassTicks() / 1000) + " second(s)\n";
+  this->getTextureFromFont(DEAD_FilePaths::YOU_DIED_FONT, infoTexture, infoText,
+                           12, {255, 255, 255, 255});
   SDL_SetTextureAlphaMod(infoTexture, this->youDiedAlpha);
-  SDL_Rect infoRenderRect = {.x=this->getGame()->SCREEN_WIDTH/2, .y=rect.y+rect.h+this->getGame()->SCREEN_HEIGHT/20, .w=0, .h=0};
-  SDL_QueryTexture(infoTexture, NULL, NULL, &infoRenderRect.w, &infoRenderRect.h);
-  infoRenderRect.x -= infoRenderRect.w/2;
+  SDL_Rect infoRenderRect = {.x = this->getGame()->SCREEN_WIDTH / 2,
+                             .y = rect.y + rect.h +
+                                  this->getGame()->SCREEN_HEIGHT / 20,
+                             .w = 0,
+                             .h = 0};
+  SDL_QueryTexture(infoTexture, NULL, NULL, &infoRenderRect.w,
+                   &infoRenderRect.h);
+  infoRenderRect.x -= infoRenderRect.w / 2;
+
+  SDL_Texture *quoteTexture;
+  std::string quoteText = line;
+  this->getTextureFromFont(DEAD_FilePaths::YOU_DIED_FONT, quoteTexture, quoteText,
+                           12, {255, 255, 255, 255});
+  SDL_SetTextureAlphaMod(quoteTexture, this->youDiedAlpha);
+  SDL_Rect quoteRenderRect = {.x = this->getGame()->SCREEN_WIDTH / 2,
+                             .y = infoRenderRect.y + infoRenderRect.h +
+                                  this->getGame()->SCREEN_HEIGHT / 20,
+                             .w = 0,
+                             .h = 0};
+  SDL_QueryTexture(quoteTexture, NULL, NULL, &quoteRenderRect.w,
+                   &quoteRenderRect.h);
+  quoteRenderRect.x -= quoteRenderRect.w / 2;
+
+  SDL_RenderCopy(this->renderer, this->youDiedFontTexture, NULL, &rect);
   SDL_RenderCopy(this->renderer, infoTexture, NULL, &infoRenderRect);
-  
+  SDL_RenderCopy(this->renderer, quoteTexture, NULL, &quoteRenderRect);
+
+  SDL_DestroyTexture(infoTexture);
+  SDL_DestroyTexture(quoteTexture);
 }
 
 void DEAD_Renderer::startYouDied() {
