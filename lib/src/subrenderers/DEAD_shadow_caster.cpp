@@ -24,7 +24,7 @@ void DEAD_ShadowCaster::render() {
   // make a square mask
 
   SDL_BlendMode whiteToMask = SDL_ComposeCustomBlendMode(
-      SDL_BLENDFACTOR_ZERO, SDL_BLENDFACTOR_SRC_COLOR, SDL_BLENDOPERATION_ADD,
+      SDL_BLENDFACTOR_ONE, SDL_BLENDFACTOR_ZERO, SDL_BLENDOPERATION_ADD,
       SDL_BLENDFACTOR_ONE_MINUS_DST_ALPHA, SDL_BLENDFACTOR_ZERO,
       SDL_BLENDOPERATION_ADD);
 
@@ -32,15 +32,25 @@ void DEAD_ShadowCaster::render() {
       this->renderer->getSDLRenderer(), SDL_PIXELFORMAT_RGBA8888,
       SDL_TEXTUREACCESS_TARGET, this->renderer->getGame()->SCREEN_WIDTH,
       this->renderer->getGame()->SCREEN_HEIGHT);
+
   SDL_SetRenderTarget(this->renderer->getSDLRenderer(), shadowMask);
   Sint16 polygonX[] = {300, 600, 600, 300};
   Sint16 polygonY[] = {300, 300, 600, 600};
+
+  // only alpha matters color doesnt matter
   filledPolygonRGBA(this->renderer->getSDLRenderer(), polygonX, polygonY, 4,
                     255, 255, 255, 255);
+  
+
+  // draw full screen black with mask blendmode
   SDL_SetRenderDrawBlendMode(this->renderer->getSDLRenderer(),
                              whiteToMask);
-  SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), 0, 0, 0, 255);
+
+  // r,g,b => mask color a=>shadow strength
+  int shadowStrength = 255;
+  SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), 0, 0, 0, shadowStrength);
   SDL_RenderFillRect(this->renderer->getSDLRenderer(), NULL);
+  SDL_SetRenderDrawBlendMode(this->renderer->getSDLRenderer(), SDL_BLENDMODE_BLEND);
 
   SDL_SetRenderTarget(this->renderer->getSDLRenderer(), NULL);
   SDL_SetTextureBlendMode(shadowMask, SDL_BLENDMODE_BLEND);
