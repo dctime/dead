@@ -81,6 +81,7 @@ void DEAD_Renderer::initWithSharedFromThis(DEAD_Renderer *renderer) {
                                                      this->itemTexture);
   this->decorationRenderer = std::make_unique<DEAD_DecorationRenderer>(
       renderer, this->game->getDecorationLayer());
+  this->shadowCaster = std::make_unique<DEAD_ShadowCaster>(this);
 }
 
 DEAD_Renderer::~DEAD_Renderer() {
@@ -99,6 +100,7 @@ void DEAD_Renderer::render() {
   SDL_RenderClear(this->renderer);
 
   this->renderMapObjects();
+  this->shadowCaster->render();
   this->decorationRenderer->render();
   this->renderItemDropLayer();
   this->renderBullets();

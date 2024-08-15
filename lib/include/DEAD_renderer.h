@@ -5,10 +5,12 @@
 #include <memory>
 #include <string>
 #include "DEAD_entity.h"
+#include "DEAD_map.h"
 #include "DEAD_zombie_director.h"
 #include "subrenderers/DEAD_subrenderer_base.h"
 #include "subrenderers/DEAD_ui_renderer.h"
 #include "subrenderers/DEAD_particle_renderer.h"
+#include "subrenderers/DEAD_shadow_caster.h"
 
 class DEAD_Game;
 class DEAD_Player;
@@ -56,6 +58,7 @@ public:
 private:
   void renderMapObjects();
   SDL_Renderer* renderer;
+  std::unique_ptr<DEAD_ShadowCaster> shadowCaster;
   std::unique_ptr<DEAD_UIRenderer> uiRenderer;
   std::unique_ptr<DEAD_ParticleRenderer> particleRenderer;
   std::unique_ptr<DEAD_PlayerInventoryRenderer> playerInventoryRenderer;

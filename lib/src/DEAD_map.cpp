@@ -25,7 +25,7 @@ DEAD_Map::DEAD_Map() {
   this->mapSpawner = std::make_unique<DEAD_MapSpawner>();
 }
 
-DEAD_Map::~DEAD_Map() { SDL_Log("Map Destoryed"); }
+DEAD_Map::~DEAD_Map() { SDL_Log("Map Destroyed"); }
 
 bool DEAD_Map::checkInMap(int x, int y) {
   if (x < 0 || x >= this->mapSize.width || y < 0 || y >= this->mapSize.height)
