@@ -41,6 +41,8 @@ void DEAD_Renderer::getTextureFromFont(std::string fontFilePath,
   TTF_Font *font = TTF_OpenFont(fontFilePath.c_str(), fontSize);
   SDL_Surface *surface = TTF_RenderText_Blended(font, text.c_str(), color);
   texture = SDL_CreateTextureFromSurface(this->renderer, surface);
+  SDL_FreeSurface(surface);
+  TTF_CloseFont(font);
 }
 
 DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
@@ -377,8 +379,7 @@ void DEAD_Renderer::renderYouDied() {
                            12, {255, 255, 255, 255});
   SDL_SetTextureAlphaMod(quoteTexture, this->youDiedAlpha);
   SDL_Rect quoteRenderRect = {.x = this->getGame()->SCREEN_WIDTH / 2,
-                             .y = infoRenderRect.y + infoRenderRect.h +
-                                  this->getGame()->SCREEN_HEIGHT / 20,
+                             .y = infoRenderRect.y + infoRenderRect.h,
                              .w = 0,
                              .h = 0};
   SDL_QueryTexture(quoteTexture, NULL, NULL, &quoteRenderRect.w,
