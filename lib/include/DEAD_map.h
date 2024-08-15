@@ -8,6 +8,8 @@
 
 class DEAD_CursedDirt;
 class DEAD_MapObjectBase;
+class DEAD_LabelBase;
+
 struct MapSize {
   int width;
   int height;

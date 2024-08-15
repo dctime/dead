@@ -26,6 +26,7 @@
 #include <subrenderers/DEAD_decoration_renderer.h>
 #include <subrenderers/DEAD_player_inventory_renderer.h>
 #include <subrenderers/DEAD_ui_renderer.h>
+#include <subrenderers/DEAD_label_renderer.h>
 #include <vector>
 
 void DEAD_Renderer::getTextureFromSurface(SDL_Texture *&texture,
@@ -82,6 +83,7 @@ void DEAD_Renderer::initWithSharedFromThis(DEAD_Renderer *renderer) {
   this->decorationRenderer = std::make_unique<DEAD_DecorationRenderer>(
       renderer, this->game->getDecorationLayer());
   this->shadowCaster = std::make_unique<DEAD_ShadowCaster>(this);
+  this->labelRenderer = std::make_unique<DEAD_LabelRenderer>(this);
 }
 
 DEAD_Renderer::~DEAD_Renderer() {
@@ -108,6 +110,7 @@ void DEAD_Renderer::render() {
   this->renderZombies(this->game->getZombieDirector());
   // this->drawZombieMovementMap();
   this->particleRenderer->render();
+  this->labelRenderer->render();
   this->uiRenderer->render();
   this->playerInventoryRenderer->render();
   this->renderYouDied();

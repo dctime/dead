@@ -16,6 +16,7 @@ file(GLOB SOURCES
   "src/items/*.cpp"
   "src/decorations/*.cpp"
   "src/subrenderers/*.cpp"
+  "src/labels/*.cpp"
 )
 
 add_library(${PROJECT_NAME} ${SOURCES})

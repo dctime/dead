@@ -12,6 +12,7 @@ public:
   static const std::string ZOMBIES_TEXTURE_PNG;
   static const std::string PARTICLE_TEXTURE_PNG;
   static const std::string DECORATION_TEXTURE_PNG;
+  static const std::string LABEL_TEXTURE_PNG;
 
   static const std::string YOU_DIED_FONT;
 
