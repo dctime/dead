@@ -1,3 +1,5 @@
 CompileFlags:
   Add:
     - "-I../../include"
+    - "-I../../SDL2_gfx-1.0.4"
+    - "-I/usr/include/SDL2"

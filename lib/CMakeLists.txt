@@ -17,11 +17,15 @@ file(GLOB SOURCES
   "src/decorations/*.cpp"
   "src/subrenderers/*.cpp"
   "src/labels/*.cpp"
+  "SDL2_gfx-1.0.4/*.c"
 )
 
 add_library(${PROJECT_NAME} ${SOURCES})
 
 target_include_directories(${PROJECT_NAME} PUBLIC include)
-target_link_libraries(${PROJECT_NAME} SDL2 SDL2main SDL2_ttf SDL2_mixer)
+target_include_directories(${PROJECT_NAME} PUBLIC /usr/include/SDL2)
+target_include_directories(${PROJECT_NAME} PUBLIC SDL2_gfx-1.0.4)
+
+target_link_libraries(${PROJECT_NAME} SDL2 SDL2main SDL2_ttf SDL2_mixer SDL2_image mysqlcppconn)
 
 

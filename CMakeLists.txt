@@ -38,7 +38,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/lib/includ
 
 
 target_link_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/lib/src)
-target_link_libraries(${PROJECT_NAME} SDL2 SDL2main DEAD_lib SDL2_image mysqlcppconn)
+target_link_libraries(${PROJECT_NAME} DEAD_lib)
 
 
 
