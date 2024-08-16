@@ -16,14 +16,12 @@
 
 DEAD_ShadowCaster::DEAD_ShadowCaster(DEAD_Renderer *renderer)
     : DEAD_SubRendererBase(renderer), map(renderer->getGame()->getMap()),
-      labelRenderer(std::make_unique<DEAD_LabelRenderer>(renderer)) {}
+      labelRenderer(std::make_unique<DEAD_LabelRenderer>(renderer)) {
+  updateShadowCaster();
+}
 
 void DEAD_ShadowCaster::render() {
-  ScreenLocation testLoc = this->renderer->getPointRenderLocation(1, 1);
-  std::unique_ptr<DEAD_LabelBase> testPoint =
-      std::make_unique<DEAD_PointLabel>(3, 28, 0.3, this->renderer);
-  this->labelRenderer->addLabel(testPoint);
-  this->labelRenderer->render();
+
   // make a square mask
 
   SDL_BlendMode whiteToMask = SDL_ComposeCustomBlendMode(
@@ -58,46 +56,32 @@ void DEAD_ShadowCaster::render() {
   SDL_SetRenderTarget(this->renderer->getSDLRenderer(), NULL);
   SDL_SetTextureBlendMode(shadowMask, SDL_BLENDMODE_BLEND);
 
+  SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), 255, 0, 0, 255);
+
+  for (DEAD_Map::MapLine line : lines) {
+    ScreenLocation loc1 =
+        this->renderer->getPointRenderLocation(line.point1.x, line.point1.y);
+    ScreenLocation loc2 =
+        this->renderer->getPointRenderLocation(line.point2.x, line.point2.y);
+    SDL_RenderDrawLine(this->renderer->getSDLRenderer(), loc1.x, loc1.y, loc2.x,
+                       loc2.y);
+  }
+
   // SDL_RenderCopy(this->renderer->getSDLRenderer(), shadowMask, NULL, NULL);
+  for (DEAD_Map::MapLocation point : points) {
+    ScreenLocation loc = this->renderer->getPointRenderLocation(point.x, point.y);
+    filledCircleRGBA(this->renderer->getSDLRenderer(), loc.x, loc.y, 3, 255, 0, 0, 255);
+  }
 
-  struct LineStatus {
-    int leftLineIndex = -1;
-    int rightLineIndex = -1;
-    int upLineIndex = -1;
-    int downLineIndex = -1;
-  };
 
-  class LocLineStatus {
-  public:
-    LocLineStatus(DEAD_Map *map) {
-      for (int y = 0; y < map->getMapSize().height; y++) {
-        std::vector<LineStatus> temp;
-        for (int x = 0; x < map->getMapSize().width; x++) {
-          LineStatus status;
-          temp.push_back(status);
-        }
-        lineStatus.push_back(temp);
-      }
-    }
+  // find all points sorted in angle
+  // find a way to render a polygon mask
+  // complete all stuff
+}
 
-    LineStatus getLineStatus(int x, int y, DEAD_Map *map) {
-      if ((x < 0 || x >= map->getMapSize().width) || y < 0 ||
-          y >= map->getMapSize().height) {
-        LineStatus status;
-        return status;
-      }
 
-      return lineStatus.at(y).at(x);
-    }
-
-    LineStatus &setLineStatus(int x, int y) { return lineStatus.at(y).at(x); }
-
-  private:
-    std::vector<std::vector<LineStatus>> lineStatus;
-  };
-
+void DEAD_ShadowCaster::updateShadowCaster() {
   LocLineStatus locLineStatus(this->map);
-  std::vector<DEAD_Map::MapLine> lines;
 
   for (int y = 0; y < this->map->getMapSize().height; y++) {
     for (int x = 0; x < this->map->getMapSize().width; x++) {
@@ -110,12 +94,6 @@ void DEAD_ShadowCaster::render() {
       DEAD_MapObjectBase *upObject = this->map->getMapObject(x, y - 1);
       DEAD_MapObjectBase *rightObject = this->map->getMapObject(x + 1, y);
       DEAD_MapObjectBase *downObject = this->map->getMapObject(x, y + 1);
-      DEAD_MapObjectBase *leftUpObject = this->map->getMapObject(x - 1, y - 1);
-      DEAD_MapObjectBase *leftDownObject =
-          this->map->getMapObject(x - 1, y + 1);
-      DEAD_MapObjectBase *rightUpObject = this->map->getMapObject(x + 1, y - 1);
-      DEAD_MapObjectBase *rightDownObject =
-          this->map->getMapObject(x + 1, y + 1);
 
       // check left side
       // check if solid target
@@ -156,24 +134,24 @@ void DEAD_ShadowCaster::render() {
         // check if there a already drawn target
         if (upObject != nullptr && upObject->isZombieCollidable()) {
           int rightLineIndex =
-              locLineStatus.getLineStatus(x, y-1, this->map).rightLineIndex;
+              locLineStatus.getLineStatus(x, y - 1, this->map).rightLineIndex;
           if (rightLineIndex != -1) {
-            lines.at(rightLineIndex).point2 = {.x = (double)(x+1),
-                                              .y = (double)(y + 1)};
+            lines.at(rightLineIndex).point2 = {.x = (double)(x + 1),
+                                               .y = (double)(y + 1)};
             locLineStatus.setLineStatus(x, y).rightLineIndex = rightLineIndex;
           } else {
             int index = lines.size();
             DEAD_Map::MapLine line = {
-                .point1 = {.x = (double)x+1, .y = (double)y},
-                .point2 = {.x = (double)x+1, .y = (double)(y + 1)}};
+                .point1 = {.x = (double)x + 1, .y = (double)y},
+                .point2 = {.x = (double)x + 1, .y = (double)(y + 1)}};
             lines.push_back(line);
             locLineStatus.setLineStatus(x, y).rightLineIndex = index;
           }
         } else {
           int index = lines.size();
           DEAD_Map::MapLine line = {
-              .point1 = {.x = (double)x+1, .y = (double)y},
-              .point2 = {.x = (double)x+1, .y = (double)(y + 1)}};
+              .point1 = {.x = (double)x + 1, .y = (double)y},
+              .point2 = {.x = (double)x + 1, .y = (double)(y + 1)}};
           lines.push_back(line);
           locLineStatus.setLineStatus(x, y).rightLineIndex = index;
         }
@@ -187,16 +165,16 @@ void DEAD_ShadowCaster::render() {
         // check if there a already drawn target
         if (leftObject != nullptr && leftObject->isZombieCollidable()) {
           int upLineIndex =
-              locLineStatus.getLineStatus(x-1, y, this->map).upLineIndex;
+              locLineStatus.getLineStatus(x - 1, y, this->map).upLineIndex;
           if (upLineIndex != -1) {
-            lines.at(upLineIndex).point2 = {.x = (double)(x+1),
-                                              .y = (double)(y)};
+            lines.at(upLineIndex).point2 = {.x = (double)(x + 1),
+                                            .y = (double)(y)};
             locLineStatus.setLineStatus(x, y).upLineIndex = upLineIndex;
           } else {
             int index = lines.size();
             DEAD_Map::MapLine line = {
                 .point1 = {.x = (double)x, .y = (double)y},
-                .point2 = {.x = (double)x+1, .y = (double)(y)}};
+                .point2 = {.x = (double)x + 1, .y = (double)(y)}};
             lines.push_back(line);
             locLineStatus.setLineStatus(x, y).upLineIndex = index;
           }
@@ -204,7 +182,7 @@ void DEAD_ShadowCaster::render() {
           int index = lines.size();
           DEAD_Map::MapLine line = {
               .point1 = {.x = (double)x, .y = (double)y},
-              .point2 = {.x = (double)x+1, .y = (double)(y)}};
+              .point2 = {.x = (double)x + 1, .y = (double)(y)}};
           lines.push_back(line);
           locLineStatus.setLineStatus(x, y).upLineIndex = index;
         }
@@ -218,44 +196,47 @@ void DEAD_ShadowCaster::render() {
         // check if there a already drawn target
         if (leftObject != nullptr && leftObject->isZombieCollidable()) {
           int downLineIndex =
-              locLineStatus.getLineStatus(x-1, y, this->map).downLineIndex;
+              locLineStatus.getLineStatus(x - 1, y, this->map).downLineIndex;
           if (downLineIndex != -1) {
-            lines.at(downLineIndex).point2 = {.x = (double)(x+1),
-                                              .y = (double)(y+1)};
+            lines.at(downLineIndex).point2 = {.x = (double)(x + 1),
+                                              .y = (double)(y + 1)};
             locLineStatus.setLineStatus(x, y).downLineIndex = downLineIndex;
           } else {
             int index = lines.size();
             DEAD_Map::MapLine line = {
-                .point1 = {.x = (double)x, .y = (double)y+1},
-                .point2 = {.x = (double)x+1, .y = (double)(y+1)}};
+                .point1 = {.x = (double)x, .y = (double)y + 1},
+                .point2 = {.x = (double)x + 1, .y = (double)(y + 1)}};
             lines.push_back(line);
             locLineStatus.setLineStatus(x, y).downLineIndex = index;
           }
         } else {
           int index = lines.size();
           DEAD_Map::MapLine line = {
-              .point1 = {.x = (double)x, .y = (double)y+1},
-              .point2 = {.x = (double)x+1, .y = (double)(y+1)}};
+              .point1 = {.x = (double)x, .y = (double)y + 1},
+              .point2 = {.x = (double)x + 1, .y = (double)(y + 1)}};
           lines.push_back(line);
           locLineStatus.setLineStatus(x, y).downLineIndex = index;
         }
       }
-
     }
   }
 
-  SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), 255, 0, 0, 255);
+  
+
   for (DEAD_Map::MapLine line : lines) {
-    ScreenLocation loc1 = this->renderer->getPointRenderLocation(
-        line.point1.x, line.point1.y);
-    ScreenLocation loc2 = this->renderer->getPointRenderLocation(
-        line.point2.x, line.point2.y);
-    SDL_RenderDrawLine(this->renderer->getSDLRenderer(), loc1.x, loc1.y,
-                       loc2.x, loc2.y);
+    points.insert(line.point1);
+    points.insert(line.point2);
   }
 
-      // find all points sorted in angle
-      // find all edges
-      // find a way to render a polygon mask
-      // complete all stuff
+  int mapPoints[][2] = {
+      {0, 0},
+      {0, this->map->getMapSize().height},
+      {this->map->getMapSize().width, 0},
+      {this->map->getMapSize().width, this->map->getMapSize().height}};
+
+  for (int element = 0; element < 4; element++) {
+    DEAD_Map::MapLocation loc = {.x = (double)mapPoints[element][0],
+                                 .y = (double)mapPoints[element][1]};
+    points.insert(loc);
+  }
 }

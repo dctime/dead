@@ -9,7 +9,7 @@ public:
   DEAD_LabelRenderer(DEAD_Renderer* renderer);
   virtual ~DEAD_LabelRenderer();
   void render() override;
-  void addLabel(std::unique_ptr<DEAD_LabelBase>& label);
+  void addPointLabel(double mapX, double mapY, double radius);
 private:
   std::vector<std::unique_ptr<DEAD_LabelBase>> labels;
 };

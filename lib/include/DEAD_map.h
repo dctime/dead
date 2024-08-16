@@ -3,6 +3,7 @@
 #include <map>
 #include <memory>
 #include <set>
+#include <system_error>
 #include <vector>
 #include "DEAD_map_spawner.h"
 
@@ -20,6 +21,11 @@ public:
   struct MapLocation {
     double x;
     double y;
+
+    bool operator<(const MapLocation& loc) const {
+      return this->x < loc.x || (this->x == loc.x && this->y < loc.y); 
+    }
+
   };
 
   struct MapLine {

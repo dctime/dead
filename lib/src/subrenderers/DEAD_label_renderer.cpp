@@ -8,8 +8,9 @@ DEAD_LabelRenderer::DEAD_LabelRenderer(DEAD_Renderer* renderer) :
   DEAD_SubRendererBase(renderer) {
 }
 
-void DEAD_LabelRenderer::addLabel(std::unique_ptr<DEAD_LabelBase>& label) {
-  this->labels.push_back(std::move(label));
+void DEAD_LabelRenderer::addPointLabel(double mapX, double mapY, double radius) {
+  std::unique_ptr<DEAD_PointLabel> testPoint =
+      std::make_unique<DEAD_PointLabel>(mapX, mapY, radius, this->renderer); 
 }
 
 DEAD_LabelRenderer::~DEAD_LabelRenderer() {}
