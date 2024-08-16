@@ -21,6 +21,12 @@ public:
     double x;
     double y;
   };
+
+  struct MapLine {
+    MapLocation point1;
+    MapLocation point2;
+  };
+
   DEAD_Map();
   ~DEAD_Map();
   void mapUpdateSizeAndInfo(); 
