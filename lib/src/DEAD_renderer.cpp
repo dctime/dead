@@ -107,8 +107,8 @@ void DEAD_Renderer::render() {
   this->renderPlayer(this->game->getPlayer());
   this->renderZombies(this->game->getZombieDirector());
   // this->drawZombieMovementMap();
-  this->particleRenderer->render();
   this->shadowCaster->render();
+  this->particleRenderer->render();
   this->uiRenderer->render();
   this->playerInventoryRenderer->render();
   this->renderYouDied();

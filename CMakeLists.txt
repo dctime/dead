@@ -8,7 +8,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-Ofast -rdynamic")
 
 project(dead)
 
-set(CMAKE_C_STANDARD 20)
+set(CMAKE_CXX_STANDARD 20)
 
 
 add_subdirectory(lib)

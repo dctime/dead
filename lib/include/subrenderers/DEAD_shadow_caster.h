@@ -51,5 +51,7 @@ private:
   std::unique_ptr<DEAD_LabelRenderer> labelRenderer;
   std::vector<DEAD_Map::MapLine> lines;
   std::set<DEAD_Map::MapLocation> points;
+  SDL_Texture *shadowMask;
+  SDL_Texture *shadowOutwardMask;
   
 };

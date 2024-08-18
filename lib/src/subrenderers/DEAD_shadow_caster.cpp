@@ -19,6 +19,14 @@ DEAD_ShadowCaster::DEAD_ShadowCaster(DEAD_Renderer *renderer)
     : DEAD_SubRendererBase(renderer), map(renderer->getGame()->getMap()),
       labelRenderer(std::make_unique<DEAD_LabelRenderer>(renderer)) {
   updateShadowCaster();
+  this->shadowMask = SDL_CreateTexture(
+      this->renderer->getSDLRenderer(), SDL_PIXELFORMAT_RGBA8888,
+      SDL_TEXTUREACCESS_TARGET, this->renderer->getGame()->SCREEN_WIDTH,
+      this->renderer->getGame()->SCREEN_HEIGHT);
+  this->shadowOutwardMask = SDL_CreateTexture(
+      this->renderer->getSDLRenderer(), SDL_PIXELFORMAT_RGBA8888,
+      SDL_TEXTUREACCESS_TARGET, this->renderer->getGame()->SCREEN_WIDTH,
+      this->renderer->getGame()->SCREEN_HEIGHT);
 }
 
 void DEAD_ShadowCaster::render() {
@@ -45,7 +53,6 @@ void DEAD_ShadowCaster::render() {
 
   // render data
   std::vector<double> directions;
-  std::vector<DEAD_Vector> intersections;
 
   // get all angles
   DEAD_Map::MapLocation playerLoc =
@@ -65,6 +72,7 @@ void DEAD_ShadowCaster::render() {
   // ray it each with three lines get all intersection
   double playerDistance = DEAD_Functions::calDistance(
       0, this->map->getMapSize().width, this->map->getMapSize().height, 0);
+  std::vector<DEAD_Vector> intersections;
 
   for (double direction : directions) {
     DEAD_Line ray;
@@ -78,8 +86,8 @@ void DEAD_ShadowCaster::render() {
     ScreenLocation point2Loc =
         this->renderer->getPointRenderLocation(ray.point2.x, ray.point2.y);
 
-    // SDL_RenderDrawLine(this->renderer->getSDLRenderer(), point1Loc.x,
-    // point1Loc.y, point2Loc.x, point2Loc.y);
+    SDL_RenderDrawLine(this->renderer->getSDLRenderer(), point1Loc.x,
+                       point1Loc.y, point2Loc.x, point2Loc.y);
 
     DEAD_Vector closestIntersection;
     double closestIntersectionDistance = MAXFLOAT;
@@ -109,36 +117,34 @@ void DEAD_ShadowCaster::render() {
   }
 
   // test intersections
-  //
-  // for (const DEAD_Vector& intersection : intersections) {
-  //   ScreenLocation loc =
-  //   this->renderer->getPointRenderLocation(intersection.x, intersection.y);
-  //   filledCircleRGBA(this->renderer->getSDLRenderer(), loc.x, loc.y, 3, 0, 0,
-  //   255, 255);
-  // }
+
+  for (const DEAD_Vector &intersection : intersections) {
+    ScreenLocation loc =
+        this->renderer->getPointRenderLocation(intersection.x, intersection.y);
+    SDL_Rect rect = {.x = loc.x - 5, .y = loc.y - 5, .w = 10, .h = 10};
+    SDL_RenderFillRect(this->renderer->getSDLRenderer(), &rect);
+  }
 
   SDL_BlendMode whiteToMask = SDL_ComposeCustomBlendMode(
       SDL_BLENDFACTOR_ONE, SDL_BLENDFACTOR_ZERO, SDL_BLENDOPERATION_ADD,
       SDL_BLENDFACTOR_ONE_MINUS_DST_ALPHA, SDL_BLENDFACTOR_ZERO,
       SDL_BLENDOPERATION_ADD);
 
-  SDL_Texture *shadowMask = SDL_CreateTexture(
-      this->renderer->getSDLRenderer(), SDL_PIXELFORMAT_RGBA8888,
-      SDL_TEXTUREACCESS_TARGET, this->renderer->getGame()->SCREEN_WIDTH,
-      this->renderer->getGame()->SCREEN_HEIGHT);
-
-  SDL_SetRenderTarget(this->renderer->getSDLRenderer(), shadowMask);
   ScreenLocation playerScreenLoc =
       this->renderer->getPointRenderLocation(playerLoc.x, playerLoc.y);
 
-  DEAD_Vector indexLoc;
-  DEAD_Vector nextIndexLoc;
+  // /* ============ inner mask render ================ */
 
-  ScreenLocation indexScreenLoc;
-  ScreenLocation nextIndexScreenLoc;
-
+  SDL_SetRenderTarget(this->renderer->getSDLRenderer(), this->shadowMask);
+  SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), 0, 0, 0, 0);
+  SDL_RenderClear(this->renderer->getSDLRenderer());
 
   for (int index = 0; index < intersections.size(); index++) {
+    DEAD_Vector indexLoc;
+    DEAD_Vector nextIndexLoc;
+
+    ScreenLocation indexScreenLoc;
+    ScreenLocation nextIndexScreenLoc;
 
     int nextIndex = index + 1;
     if (nextIndex == intersections.size()) {
@@ -177,7 +183,7 @@ void DEAD_ShadowCaster::render() {
   SDL_SetRenderDrawBlendMode(this->renderer->getSDLRenderer(), whiteToMask);
 
   // r,g,b => mask color a=>shadow strength
-  int shadowStrength = 255;
+  int shadowStrength = 128;
   SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), 0, 0, 0,
                          shadowStrength);
   SDL_RenderFillRect(this->renderer->getSDLRenderer(), NULL);
@@ -185,9 +191,10 @@ void DEAD_ShadowCaster::render() {
                              SDL_BLENDMODE_BLEND);
 
   SDL_SetRenderTarget(this->renderer->getSDLRenderer(), NULL);
-  SDL_SetTextureBlendMode(shadowMask, SDL_BLENDMODE_BLEND);
+  SDL_SetTextureBlendMode(this->shadowMask, SDL_BLENDMODE_BLEND);
 
-  SDL_RenderCopy(this->renderer->getSDLRenderer(), shadowMask, NULL, NULL);
+  SDL_RenderCopy(this->renderer->getSDLRenderer(), this->shadowMask, NULL,
+                 NULL);
 }
 
 void DEAD_ShadowCaster::updateShadowCaster() {
