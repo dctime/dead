@@ -3,11 +3,12 @@
 #include "labels/DEAD_label_base.h"
 #include "map_objects/DEAD_map_object_base.h"
 #include "subrenderers/DEAD_subrenderer_base.h"
+#include <DEAD_functions.h>
 #include <DEAD_game.h>
 #include <DEAD_renderer.h>
 #include <SDL2/SDL_blendmode.h>
 #include <SDL2/SDL_render.h>
-#include <SDL2_gfxPrimitives.h>
+#include <cmath>
 #include <cstdint>
 #include <labels/DEAD_point_label.h>
 #include <memory>
@@ -24,6 +25,98 @@ void DEAD_ShadowCaster::render() {
 
   // make a square mask
 
+  SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), 255, 0, 0, 255);
+
+  for (DEAD_Map::MapLine line : lines) {
+    ScreenLocation loc1 =
+        this->renderer->getPointRenderLocation(line.point1.x, line.point1.y);
+    ScreenLocation loc2 =
+        this->renderer->getPointRenderLocation(line.point2.x, line.point2.y);
+    // SDL_RenderDrawLine(this->renderer->getSDLRenderer(), loc1.x, loc1.y,
+    // loc2.x,
+    //                    loc2.y);
+  }
+
+  // for (DEAD_Map::MapLocation point : points) {
+  //   ScreenLocation loc = this->renderer->getPointRenderLocation(point.x,
+  //   point.y); filledCircleRGBA(this->renderer->getSDLRenderer(), loc.x,
+  //   loc.y, 3, 255, 0, 0, 255);
+  // }
+
+  // render data
+  std::vector<double> directions;
+  std::vector<DEAD_Vector> intersections;
+
+  // get all angles
+  DEAD_Map::MapLocation playerLoc =
+      this->renderer->getGame()->getPlayer()->getPos();
+  double deltaAngle = 0.0001;
+
+  for (const DEAD_Map::MapLocation &point : points) {
+    double angle =
+        DEAD_Functions::calAngle(playerLoc.x, playerLoc.y, point.x, point.y);
+    directions.push_back(angle - deltaAngle);
+    directions.push_back(angle);
+    directions.push_back(angle + deltaAngle);
+  }
+
+  std::sort(directions.begin(), directions.end());
+
+  // ray it each with three lines get all intersection
+  double playerDistance = DEAD_Functions::calDistance(
+      0, this->map->getMapSize().width, this->map->getMapSize().height, 0);
+
+  for (double direction : directions) {
+    DEAD_Line ray;
+    ray.point1 = {.x = playerLoc.x, .y = playerLoc.y};
+    DEAD_Vector targetVector = DEAD_Functions::calUnitVector(direction);
+    ray.point2 = {.x = playerLoc.x + targetVector.x * playerDistance,
+                  .y = playerLoc.y + targetVector.y * playerDistance};
+
+    ScreenLocation point1Loc =
+        this->renderer->getPointRenderLocation(ray.point1.x, ray.point1.y);
+    ScreenLocation point2Loc =
+        this->renderer->getPointRenderLocation(ray.point2.x, ray.point2.y);
+
+    // SDL_RenderDrawLine(this->renderer->getSDLRenderer(), point1Loc.x,
+    // point1Loc.y, point2Loc.x, point2Loc.y);
+
+    DEAD_Vector closestIntersection;
+    double closestIntersectionDistance = MAXFLOAT;
+
+    for (const DEAD_Map::MapLine &line : this->lines) {
+      DEAD_Line boarderLine;
+      boarderLine.point1.x = line.point1.x;
+      boarderLine.point1.y = line.point1.y;
+      boarderLine.point2.x = line.point2.x;
+      boarderLine.point2.y = line.point2.y;
+
+      DEAD_Vector tempIntersection;
+      if (DEAD_Functions::linesIntersection(boarderLine, ray,
+                                            tempIntersection)) {
+        // std::cout << tempIntersection.x << " | " << tempIntersection.y <<
+        // std::endl;
+        double tempDistance = DEAD_Functions::calDistance(
+            playerLoc.x, playerLoc.y, tempIntersection.x, tempIntersection.y);
+        if (closestIntersectionDistance > tempDistance) {
+          closestIntersection = tempIntersection;
+          closestIntersectionDistance = tempDistance;
+        }
+      }
+    }
+
+    intersections.push_back(closestIntersection);
+  }
+
+  // test intersections
+  //
+  // for (const DEAD_Vector& intersection : intersections) {
+  //   ScreenLocation loc =
+  //   this->renderer->getPointRenderLocation(intersection.x, intersection.y);
+  //   filledCircleRGBA(this->renderer->getSDLRenderer(), loc.x, loc.y, 3, 0, 0,
+  //   255, 255);
+  // }
+
   SDL_BlendMode whiteToMask = SDL_ComposeCustomBlendMode(
       SDL_BLENDFACTOR_ONE, SDL_BLENDFACTOR_ZERO, SDL_BLENDOPERATION_ADD,
       SDL_BLENDFACTOR_ONE_MINUS_DST_ALPHA, SDL_BLENDFACTOR_ZERO,
@@ -35,12 +128,50 @@ void DEAD_ShadowCaster::render() {
       this->renderer->getGame()->SCREEN_HEIGHT);
 
   SDL_SetRenderTarget(this->renderer->getSDLRenderer(), shadowMask);
-  Sint16 polygonX[] = {300, 500, 600, 300};
-  Sint16 polygonY[] = {300, 300, 600, 800};
+  ScreenLocation playerScreenLoc =
+      this->renderer->getPointRenderLocation(playerLoc.x, playerLoc.y);
 
-  // only alpha matters color doesnt matter
-  filledPolygonRGBA(this->renderer->getSDLRenderer(), polygonX, polygonY, 4,
-                    255, 255, 255, 255);
+  DEAD_Vector indexLoc;
+  DEAD_Vector nextIndexLoc;
+
+  ScreenLocation indexScreenLoc;
+  ScreenLocation nextIndexScreenLoc;
+
+
+  for (int index = 0; index < intersections.size(); index++) {
+
+    int nextIndex = index + 1;
+    if (nextIndex == intersections.size()) {
+      nextIndex = 0;
+    }
+
+    indexLoc = intersections.at(index);
+    nextIndexLoc = intersections.at(nextIndex);
+
+    indexScreenLoc =
+        this->renderer->getPointRenderLocation(indexLoc.x, indexLoc.y);
+    nextIndexScreenLoc =
+        this->renderer->getPointRenderLocation(nextIndexLoc.x, nextIndexLoc.y);
+
+    SDL_Vertex vertex_1 = {{(float)indexScreenLoc.x, (float)indexScreenLoc.y},
+                           {255, 255, 255, 255},
+                           {1, 1}};
+    SDL_Vertex vertex_2 = {{(float)playerScreenLoc.x, (float)playerScreenLoc.y},
+                           {255, 255, 255, 255},
+                           {1, 1}};
+    SDL_Vertex vertex_3 = {
+        {(float)nextIndexScreenLoc.x, (float)nextIndexScreenLoc.y},
+        {255, 255, 255, 255},
+        {1, 1}};
+
+    SDL_Vertex vertices[] = {vertex_1, vertex_2, vertex_3};
+
+    SDL_Texture *texture;
+    // only alpha matters, color doesnt matter
+    SDL_RenderGeometry(this->renderer->getSDLRenderer(), texture, vertices, 3,
+                       NULL, 0);
+    SDL_DestroyTexture(texture);
+  }
 
   // draw full screen black with mask blendmode
   SDL_SetRenderDrawBlendMode(this->renderer->getSDLRenderer(), whiteToMask);
@@ -56,31 +187,12 @@ void DEAD_ShadowCaster::render() {
   SDL_SetRenderTarget(this->renderer->getSDLRenderer(), NULL);
   SDL_SetTextureBlendMode(shadowMask, SDL_BLENDMODE_BLEND);
 
-  SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), 255, 0, 0, 255);
-
-  for (DEAD_Map::MapLine line : lines) {
-    ScreenLocation loc1 =
-        this->renderer->getPointRenderLocation(line.point1.x, line.point1.y);
-    ScreenLocation loc2 =
-        this->renderer->getPointRenderLocation(line.point2.x, line.point2.y);
-    SDL_RenderDrawLine(this->renderer->getSDLRenderer(), loc1.x, loc1.y, loc2.x,
-                       loc2.y);
-  }
-
-  // SDL_RenderCopy(this->renderer->getSDLRenderer(), shadowMask, NULL, NULL);
-  for (DEAD_Map::MapLocation point : points) {
-    ScreenLocation loc = this->renderer->getPointRenderLocation(point.x, point.y);
-    filledCircleRGBA(this->renderer->getSDLRenderer(), loc.x, loc.y, 3, 255, 0, 0, 255);
-  }
-
-
-  // find all points sorted in angle
-  // find a way to render a polygon mask
-  // complete all stuff
+  SDL_RenderCopy(this->renderer->getSDLRenderer(), shadowMask, NULL, NULL);
 }
 
-
 void DEAD_ShadowCaster::updateShadowCaster() {
+  this->lines.clear();
+  this->points.clear();
   LocLineStatus locLineStatus(this->map);
 
   for (int y = 0; y < this->map->getMapSize().height; y++) {
@@ -220,8 +332,6 @@ void DEAD_ShadowCaster::updateShadowCaster() {
       }
     }
   }
-
-  
 
   for (DEAD_Map::MapLine line : lines) {
     points.insert(line.point1);

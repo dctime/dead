@@ -90,4 +90,36 @@ void DEAD_Functions::getRandomNumbersFromZeroToN(int n, std::map<int, bool>& ret
   }
 }
 
+bool DEAD_Functions::linesIntersection(DEAD_Line& line1, DEAD_Line& line2, DEAD_Vector& intersectPoint) {
+  double x1 = line1.point1.x;
+  double x2 = line1.point2.x;
+  double x3 = line2.point1.x;
+  double x4 = line2.point2.x;
+
+  double y1 = line1.point1.y;
+  double y2 = line1.point2.y;
+  double y3 = line2.point1.y;
+  double y4 = line2.point2.y;
+
+  double a = (x4-x3)*(y3-y1)-(y4-y3)*(x3-x1);
+  double b = (x4-x3)*(y2-y1)-(y4-y3)*(x2-x1);
+  double c = (x2-x1)*(y3-y1)-(y2-y1)*(x3-x1);
+  
+  if (b==0) { return false; }
+
+  double alpha = a/b;
+  double beta = c/b;
+
+  if ((alpha < 0 || alpha > 1) || (beta < 0 || beta > 1)) {
+    return false;
+  }
+
+  intersectPoint.x = x1+alpha*(x2-x1);
+  intersectPoint.y = y1+alpha*(y2-y1);
+  return true;
+}
+
+
+
+
 
