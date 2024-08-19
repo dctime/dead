@@ -29,6 +29,7 @@ void DEAD_Player::move(double x, double y) {
     return;
   } else {
     this->setPos(this->getPos().x + x, this->getPos().y + y);
+    this->getGame()->getMap()->updateMemoryObjects((int)this->getPos().x, (int)this->getPos().y, 2);
   }
 }
 

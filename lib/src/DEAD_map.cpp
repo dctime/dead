@@ -1,5 +1,6 @@
 #include "DEAD_map_spawner.h"
 #include "map_objects/DEAD_map_object_base.h"
+#include "map_objects/DEAD_player_memorable_object_interface.h"
 #include <DEAD_filepaths.h>
 #include <DEAD_map.h>
 #include <SDL2/SDL.h>
@@ -108,7 +109,14 @@ void DEAD_Map::loadMap() {
 
   this->setHorizonVertical<DEAD_Door*>();
   
-  
+  for (int y = 0; y < this->mapSize.height; y++) {
+    std::vector<DEAD_IPlayerMemoriableObject*> objects;
+    for (int x = 0; x < this->mapSize.width; x++) {
+      DEAD_IPlayerMemoriableObject* object = dynamic_cast<DEAD_IPlayerMemoriableObject*>(this->getMapObject(x, y));
+      objects.push_back(object);
+    }
+    this->playerMemoriableObjects.push_back(objects);
+  }
 }
 
 template<typename T>
@@ -190,4 +198,21 @@ DEAD_MapObjectBase* DEAD_Map::getMapObject(int x, int y) {
   if (x < 0 || x >= this->mapSize.width) { return nullptr; }
   if (y < 0 || y >= this->mapSize.height) { return nullptr; }
   return this->mapObjects.at(y).at(x).get();
+}
+
+DEAD_IPlayerMemoriableObject* DEAD_Map::getPlayerMemoriableObject(int x, int y) {
+  if (x < 0 || x >= this->mapSize.width) { return nullptr; }
+  if (y < 0 || y >= this->mapSize.height) { return nullptr; }
+  return this->playerMemoriableObjects.at(y).at(x);
+}
+
+
+void DEAD_Map::updateMemoryObjects(int x, int y, int halfSize) {
+  for (int yIndex = y - halfSize; yIndex <= y+halfSize; yIndex++) {
+    for (int xIndex = x - halfSize; xIndex <= x+halfSize; xIndex++) {
+      DEAD_IPlayerMemoriableObject* object = this->getPlayerMemoriableObject(xIndex, yIndex);
+      if (object == nullptr) { continue; }
+      object->setToVisible();
+    }
+  }
 }

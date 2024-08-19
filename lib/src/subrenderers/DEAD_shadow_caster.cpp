@@ -86,8 +86,8 @@ void DEAD_ShadowCaster::render() {
     ScreenLocation point2Loc =
         this->renderer->getPointRenderLocation(ray.point2.x, ray.point2.y);
 
-    SDL_RenderDrawLine(this->renderer->getSDLRenderer(), point1Loc.x,
-                       point1Loc.y, point2Loc.x, point2Loc.y);
+    // SDL_RenderDrawLine(this->renderer->getSDLRenderer(), point1Loc.x,
+    //                    point1Loc.y, point2Loc.x, point2Loc.y);
 
     DEAD_Vector closestIntersection;
     double closestIntersectionDistance = MAXFLOAT;
@@ -118,12 +118,12 @@ void DEAD_ShadowCaster::render() {
 
   // test intersections
 
-  for (const DEAD_Vector &intersection : intersections) {
-    ScreenLocation loc =
-        this->renderer->getPointRenderLocation(intersection.x, intersection.y);
-    SDL_Rect rect = {.x = loc.x - 5, .y = loc.y - 5, .w = 10, .h = 10};
-    SDL_RenderFillRect(this->renderer->getSDLRenderer(), &rect);
-  }
+  // for (const DEAD_Vector &intersection : intersections) {
+  //   ScreenLocation loc =
+  //       this->renderer->getPointRenderLocation(intersection.x, intersection.y);
+  //   SDL_Rect rect = {.x = loc.x - 5, .y = loc.y - 5, .w = 10, .h = 10};
+  //   SDL_RenderFillRect(this->renderer->getSDLRenderer(), &rect);
+  // }
 
   SDL_BlendMode whiteToMask = SDL_ComposeCustomBlendMode(
       SDL_BLENDFACTOR_ONE, SDL_BLENDFACTOR_ZERO, SDL_BLENDOPERATION_ADD,
@@ -183,7 +183,7 @@ void DEAD_ShadowCaster::render() {
   SDL_SetRenderDrawBlendMode(this->renderer->getSDLRenderer(), whiteToMask);
 
   // r,g,b => mask color a=>shadow strength
-  int shadowStrength = 128;
+  int shadowStrength = 255;
   SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), 0, 0, 0,
                          shadowStrength);
   SDL_RenderFillRect(this->renderer->getSDLRenderer(), NULL);

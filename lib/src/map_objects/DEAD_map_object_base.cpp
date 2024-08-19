@@ -14,3 +14,4 @@ DEAD_MapObjectBase::~DEAD_MapObjectBase() {
 DEAD_Map::MapLocation DEAD_MapObjectBase::getLeftUpLoc() { return this->leftUpLoc; }
 DEAD_RectHitbox* DEAD_MapObjectBase::getHitBox() { return this->hitbox.get(); }
 SDL_Rect DEAD_MapObjectBase::getTextureRect() { return {.x=0, .y=0, .w=0, .h=0}; }
+

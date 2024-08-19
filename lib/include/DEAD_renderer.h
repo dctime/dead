@@ -59,7 +59,6 @@ public:
   int polygon(SDL_Renderer * renderer, const Sint16 * vx, const Sint16 * vy, int n);
 
 private:
-  void renderMapObjects();
   SDL_Renderer* renderer;
   std::unique_ptr<DEAD_ShadowCaster> shadowCaster;
   std::unique_ptr<DEAD_UIRenderer> uiRenderer;
@@ -76,12 +75,14 @@ private:
   SDL_Texture* itemTexture;
   SDL_Texture* zombiesTexture;
   SDL_Texture* youDiedFontTexture;
+  void renderMapObjects();
   void renderPlayer(DEAD_Player* player);
   void renderZombies(DEAD_ZombieDirector* zombieDirector);
   void renderEntity(DEAD_Entity* entity, SDL_Texture* texture);
   void renderItemDropLayer();
   void renderBullets();
   void renderYouDied();
+  void renderPlayerMemoriable();
   void drawZombieMovementMap();
   void getTextureFromSurface(SDL_Texture*& texture, std::string filePath);
   void getTextureFromFont(std::string fontFilePath, SDL_Texture*& texture, std::string text, int fontSize, SDL_Color color);

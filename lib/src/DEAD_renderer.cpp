@@ -20,6 +20,7 @@
 #include <fstream>
 #include <iostream>
 #include <map_objects/DEAD_multitexture_object_base.h>
+#include <map_objects/DEAD_player_memorable_object_interface.h>
 #include <memory>
 #include <set>
 #include <string>
@@ -108,6 +109,7 @@ void DEAD_Renderer::render() {
   this->renderZombies(this->game->getZombieDirector());
   // this->drawZombieMovementMap();
   this->shadowCaster->render();
+  this->renderPlayerMemoriable();
   this->particleRenderer->render();
   this->uiRenderer->render();
   this->playerInventoryRenderer->render();
@@ -221,6 +223,28 @@ ScreenLocation DEAD_Renderer::getEntityRenderLocation(DEAD_Entity *entity,
     loc.y = loc.y + (entity->getSize() * this->renderBlockSize) / 2.0;
   }
   return loc;
+}
+
+void DEAD_Renderer::renderPlayerMemoriable() {
+  MapSize mapSize = this->game->getMap()->getMapSize();
+  DEAD_Map* map = this->game->getMap();
+  for (int y = 0; y < mapSize.height; y++) {
+    for (int x = 0; x < mapSize.width; x++) {
+      DEAD_IPlayerMemoriableObject* memoriableObject = map->getPlayerMemoriableObject(x, y);
+
+      if (memoriableObject == nullptr) { continue; }
+
+      std::cout << "Render! Visible! " << memoriableObject->isVisible() << std::endl;
+      if (!memoriableObject->isVisible()) { continue; }
+
+      DEAD_MapObjectBase* object = map->getMapObject(x, y);
+      ScreenLocation loc = this->getPointRenderLocation(x, y);
+      SDL_Rect renderRect = {.x=loc.x, .y=loc.y, .w=this->renderBlockSize, .h=this->renderBlockSize};
+      SDL_Rect textureRect = object->getTextureRect();
+      
+      SDL_RenderCopy(this->renderer, this->mapObjectTexture, &textureRect, &renderRect);
+    }
+  }
 }
 
 void DEAD_Renderer::renderBullets() {
