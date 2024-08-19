@@ -1,6 +1,6 @@
 #include "DEAD_map_spawner.h"
 #include "map_objects/DEAD_map_object_base.h"
-#include "map_objects/DEAD_player_memorable_object_interface.h"
+#include <map_objects/DEAD_player_memoriable_object.h>
 #include <DEAD_filepaths.h>
 #include <DEAD_map.h>
 #include <SDL2/SDL.h>
@@ -212,7 +212,7 @@ void DEAD_Map::updateMemoryObjects(int x, int y, int halfSize) {
     for (int xIndex = x - halfSize; xIndex <= x+halfSize; xIndex++) {
       DEAD_IPlayerMemoriableObject* object = this->getPlayerMemoriableObject(xIndex, yIndex);
       if (object == nullptr) { continue; }
-      object->setToVisible();
+      object->getMemoryManager()->setToVisible();
     }
   }
 }

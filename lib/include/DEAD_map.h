@@ -6,7 +6,7 @@
 #include <system_error>
 #include <vector>
 #include "DEAD_map_spawner.h"
-#include "map_objects/DEAD_player_memorable_object_interface.h"
+#include "map_objects/DEAD_player_memoriable_object.h"
 
 class DEAD_CursedDirt;
 class DEAD_MapObjectBase;

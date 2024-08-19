@@ -20,7 +20,7 @@
 #include <fstream>
 #include <iostream>
 #include <map_objects/DEAD_multitexture_object_base.h>
-#include <map_objects/DEAD_player_memorable_object_interface.h>
+#include <map_objects/DEAD_player_memoriable_object.h>
 #include <memory>
 #include <set>
 #include <string>
@@ -234,15 +234,18 @@ void DEAD_Renderer::renderPlayerMemoriable() {
 
       if (memoriableObject == nullptr) { continue; }
 
-      std::cout << "Render! Visible! " << memoriableObject->isVisible() << std::endl;
-      if (!memoriableObject->isVisible()) { continue; }
+      if (!memoriableObject->getMemoryManager()->isVisible()) { continue; }
 
       DEAD_MapObjectBase* object = map->getMapObject(x, y);
       ScreenLocation loc = this->getPointRenderLocation(x, y);
       SDL_Rect renderRect = {.x=loc.x, .y=loc.y, .w=this->renderBlockSize, .h=this->renderBlockSize};
       SDL_Rect textureRect = object->getTextureRect();
       
+      SDL_SetTextureAlphaMod(this->mapObjectTexture, memoriableObject->getMemoryManager()->getAlpha());
       SDL_RenderCopy(this->renderer, this->mapObjectTexture, &textureRect, &renderRect);
+      SDL_SetTextureAlphaMod(this->mapObjectTexture, 255);
+
+      memoriableObject->getMemoryManager()->gainAlpha(5);
     }
   }
 }

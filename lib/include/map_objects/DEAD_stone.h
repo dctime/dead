@@ -1,5 +1,6 @@
 #include "DEAD_map_object_base.h"
-#include "DEAD_player_memorable_object_interface.h"
+#include "DEAD_player_memoriable_object.h"
+#include <memory>
 
 class DEAD_Stone : public DEAD_MapObjectBase, public DEAD_IPlayerMemoriableObject {
 public:
@@ -8,8 +9,7 @@ public:
   bool isPlayerCollidable() override;
   bool isZombieCollidable() override;
   SDL_Rect getTextureRect() override;
-  bool isVisible() override;
-  void setToVisible() override;
+  DEAD_PlayerMemoriableManager * getMemoryManager() override;
 private:
-  bool visible;
+  std::unique_ptr<DEAD_PlayerMemoriableManager> memoryManager;
 };

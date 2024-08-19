@@ -3,8 +3,9 @@
 #include <SDL2/SDL_rect.h>
 #include <map_objects/DEAD_wood.h>
 #include <SDL2/SDL.h>
+#include <memory>
 DEAD_Wood::DEAD_Wood(DEAD_Map::MapLocation loc) 
-  : DEAD_MapObjectBase(loc), visible(false) {
+  : DEAD_MapObjectBase(loc), memoryMamanger(std::make_unique<DEAD_PlayerMemoriableManager>()) {
   
 }
 
@@ -16,12 +17,9 @@ SDL_Rect DEAD_Wood::getTextureRect() {
   return rect;
 }
 
-bool DEAD_Wood::isVisible() {
-  return this->visible; 
+DEAD_PlayerMemoriableManager * DEAD_Wood::getMemoryManager() {
+  return this->memoryMamanger.get();
 }
 
-void DEAD_Wood::setToVisible() {
-  this->visible = true; 
-}
 
 

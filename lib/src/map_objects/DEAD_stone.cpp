@@ -1,10 +1,11 @@
 #include "map_objects/DEAD_map_object_base.h"
 #include <SDL2/SDL_rect.h>
 #include <map_objects/DEAD_stone.h>
+#include <memory>
 
 
 DEAD_Stone::DEAD_Stone(DEAD_Map::MapLocation loc) :
-  DEAD_MapObjectBase(loc), visible(false) {}
+  DEAD_MapObjectBase(loc), memoryManager(std::make_unique<DEAD_PlayerMemoriableManager>()) {}
 char DEAD_Stone::getChar() { return 's'; }
 bool DEAD_Stone::isPlayerCollidable() { return true; }
 bool DEAD_Stone::isZombieCollidable() { return true; }
@@ -13,11 +14,8 @@ SDL_Rect DEAD_Stone::getTextureRect() {
   return rect;
 }
 
-bool DEAD_Stone::isVisible() {
-  return this->visible;
+DEAD_PlayerMemoriableManager * DEAD_Stone::getMemoryManager() {
+  return this->memoryManager.get();
 }
 
-void DEAD_Stone::setToVisible() {
-  this->visible = true;
-}
 
