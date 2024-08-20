@@ -51,6 +51,7 @@ public:
   ScreenLocation getBulletRenderLocation(DEAD_Bullet* bullet);
   ScreenLocation getPointRenderLocation(double x, double y);
   DEAD_ParticleRenderer* getParticleRenderer();
+  SDL_Texture* getMapObjectTexture();
   SDL_Renderer* getSDLRenderer();
   int getRenderBlockSize();
   void initWithSharedFromThis(DEAD_Renderer* renderer);
@@ -77,6 +78,7 @@ private:
   SDL_Texture* itemTexture;
   SDL_Texture* zombiesTexture;
   SDL_Texture* youDiedFontTexture;
+  
   void renderMapObjects();
   void renderPlayer(DEAD_Player* player);
   void renderZombies(DEAD_ZombieDirector* zombieDirector);

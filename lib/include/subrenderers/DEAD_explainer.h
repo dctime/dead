@@ -11,6 +11,9 @@ public:
 private:
   DEAD_Map* map;
   DEAD_DecorationLayer* decorationLayer;
-  FC_Font* font;
-
+  FC_Font* noteFont;
+  FC_Font* nameFont;
+  SDL_Texture* mapObjectTexture;
+  SDL_Texture* decorationTexture;
+  char* noteTextTemp;
 };

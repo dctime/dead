@@ -76,6 +76,10 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
   this->game = game;
 }
 
+SDL_Texture* DEAD_Renderer::getMapObjectTexture() {
+  return this->mapObjectTexture;
+}
+
 void DEAD_Renderer::initWithSharedFromThis(DEAD_Renderer *renderer) {
   this->uiRenderer = std::make_unique<DEAD_UIRenderer>(renderer);
   this->particleRenderer = std::make_unique<DEAD_ParticleRenderer>(renderer);
