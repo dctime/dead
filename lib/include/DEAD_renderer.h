@@ -18,6 +18,7 @@ class DEAD_PlayerInventoryRenderer;
 class DEAD_DecorationRenderer;
 class DEAD_LabelRenderer;
 class DEAD_ShadowCaster;
+class DEAD_Explainer;
 
 struct RenderAnchor {
     double x;
@@ -65,6 +66,7 @@ private:
   std::unique_ptr<DEAD_ParticleRenderer> particleRenderer;
   std::unique_ptr<DEAD_PlayerInventoryRenderer> playerInventoryRenderer;
   std::unique_ptr<DEAD_DecorationRenderer> decorationRenderer;
+  std::unique_ptr<DEAD_Explainer> explainer;
   int renderBlockSize;
   DEAD_Game* game;
   RenderAnchor renderAnchor = {.x=0, .y=0};

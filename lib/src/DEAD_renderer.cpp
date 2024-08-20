@@ -28,6 +28,7 @@
 #include <subrenderers/DEAD_player_inventory_renderer.h>
 #include <subrenderers/DEAD_ui_renderer.h>
 #include <subrenderers/DEAD_shadow_caster.h>
+#include <subrenderers/DEAD_explainer.h>
 #include <vector>
 
 void DEAD_Renderer::getTextureFromSurface(SDL_Texture *&texture,
@@ -84,6 +85,7 @@ void DEAD_Renderer::initWithSharedFromThis(DEAD_Renderer *renderer) {
   this->decorationRenderer = std::make_unique<DEAD_DecorationRenderer>(
       renderer, this->game->getDecorationLayer());
   this->shadowCaster = std::make_unique<DEAD_ShadowCaster>(this);
+  this->explainer = std::make_unique<DEAD_Explainer>(this, this->game->getMap(), this->game->getDecorationLayer());
 }
 
 DEAD_Renderer::~DEAD_Renderer() {
@@ -113,6 +115,7 @@ void DEAD_Renderer::render() {
   this->particleRenderer->render();
   this->uiRenderer->render();
   this->playerInventoryRenderer->render();
+  this->explainer->render();
   this->renderYouDied();
 
   SDL_RenderPresent(this->renderer);
@@ -161,7 +164,6 @@ void DEAD_Renderer::renderMapObjects() {
       this->renderRect.x =
           (j - this->renderAnchor.x) * this->renderBlockSize + windowWidthMid;
 
-      const SDL_Rect *locationRect;
       bool isAir = false;
 
       SDL_Rect objectTextureRect = mapObjects[i][j]->getTextureRect();

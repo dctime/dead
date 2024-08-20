@@ -172,11 +172,9 @@ void DEAD_ShadowCaster::render() {
 
     SDL_Vertex vertices[] = {vertex_1, vertex_2, vertex_3};
 
-    SDL_Texture *texture;
     // only alpha matters, color doesnt matter
-    SDL_RenderGeometry(this->renderer->getSDLRenderer(), texture, vertices, 3,
+    SDL_RenderGeometry(this->renderer->getSDLRenderer(), NULL, vertices, 3,
                        NULL, 0);
-    SDL_DestroyTexture(texture);
   }
 
   // draw full screen black with mask blendmode
@@ -340,7 +338,7 @@ void DEAD_ShadowCaster::updateShadowCaster() {
     }
   }
 
-  for (DEAD_Map::MapLine line : lines) {
+  for (const DEAD_Map::MapLine& line : lines) {
     points.insert(line.point1);
     points.insert(line.point2);
   }

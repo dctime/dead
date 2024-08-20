@@ -90,7 +90,7 @@ DEAD_Game::DEAD_Game(std::string playerName)
                     this->bulletCheckCollisionCallback, this));
   this->mainLoopID = SDL_AddTimer(DEAD_Game::MAIN_LOOP_DELAY,
                                   this->playerMovementCallback, this);
-  this->zombieSpawnID = SDL_AddTimer(500, this->spawnZombieCallback, this);
+  this->zombieSpawnID = SDL_AddTimer(1000, this->spawnZombieCallback, this);
   this->lastTimeLoopTicks = SDL_GetTicks64();
 }
 

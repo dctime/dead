@@ -4,6 +4,7 @@ project(DEAD_lib)
 
 file(GLOB SOURCES 
   "src/*.cpp"
+  "src/*.c"
   "src/map_objects/*.cpp"
   "src/hitbox/*.cpp"
   "src/bullets/*.cpp"
