@@ -14,6 +14,8 @@ public:
   virtual bool isZombieCollidable() override = 0;
   SDL_Rect getTextureRect() override final;
   virtual std::vector<SDL_Rect> getTextureRects() = 0;
+  virtual std::string getName() override = 0;
+  virtual std::string getNote() override = 0;
   DEAD_MapObjectDirection getDirection();
   void setDirection(DEAD_MapObjectDirection direction);
   void resetTextureRects();

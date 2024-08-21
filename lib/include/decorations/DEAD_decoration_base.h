@@ -24,6 +24,8 @@ public:
   bool destroying(int ticksInterval, DEAD_ControllablePlayer *player);
   double getDestroyPercentage();
   void itemDropsWhenDestroyed();
+  virtual std::string getName() = 0;
+  virtual std::string getNote() = 0;
 
 private:
   DEAD_Game* game;

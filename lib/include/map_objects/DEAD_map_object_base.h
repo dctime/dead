@@ -14,6 +14,8 @@ public:
   virtual bool isPlayerCollidable() = 0;
   virtual bool isZombieCollidable() = 0;
   virtual SDL_Rect getTextureRect();
+  virtual std::string getName() = 0;
+  virtual std::string getNote() = 0;
 private:
   DEAD_Map::MapLocation leftUpLoc;
   std::unique_ptr<DEAD_RectHitbox> hitbox;  

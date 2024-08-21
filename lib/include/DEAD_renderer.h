@@ -50,8 +50,10 @@ public:
   ScreenLocation getEntityRenderLocation(DEAD_Entity* entity, bool mid);
   ScreenLocation getBulletRenderLocation(DEAD_Bullet* bullet);
   ScreenLocation getPointRenderLocation(double x, double y);
+  DEAD_Map::MapLocation getMapLocFromScreenLoc(ScreenLocation loc);
   DEAD_ParticleRenderer* getParticleRenderer();
   SDL_Texture* getMapObjectTexture();
+  SDL_Texture* getDecorationTexture();
   SDL_Renderer* getSDLRenderer();
   int getRenderBlockSize();
   void initWithSharedFromThis(DEAD_Renderer* renderer);
@@ -78,6 +80,7 @@ private:
   SDL_Texture* itemTexture;
   SDL_Texture* zombiesTexture;
   SDL_Texture* youDiedFontTexture;
+  SDL_Texture* decorationTexture;
   
   void renderMapObjects();
   void renderPlayer(DEAD_Player* player);

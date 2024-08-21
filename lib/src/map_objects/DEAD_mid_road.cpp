@@ -11,3 +11,10 @@ bool DEAD_MidRoad::isPlayerCollidable() { return false; }
 bool DEAD_MidRoad::isZombieCollidable() { return false; }
 SDL_Rect DEAD_MidRoad::getTextureRect() { return {.x=0, .y=100, .w=100, .h=100}; }
 
+std::string DEAD_MidRoad::getName() {
+  return "Road";
+}
+std::string DEAD_MidRoad::getNote() {
+  return "";
+}
+

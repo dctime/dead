@@ -21,5 +21,13 @@ DEAD_PlayerMemoriableManager * DEAD_Wood::getMemoryManager() {
   return this->memoryMamanger.get();
 }
 
+std::string DEAD_Wood::getName() {
+  return "Wood";
+}
+
+std::string DEAD_Wood::getNote() {
+  return "";
+}
+
 
 

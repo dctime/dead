@@ -6,4 +6,6 @@ public:
   char getChar() override;
   bool isPlayerCollidable() override;
   bool isZombieCollidable() override;
+  std::string getName() override;
+  std::string getNote() override;
 };

@@ -30,6 +30,7 @@
 #include <subrenderers/DEAD_shadow_caster.h>
 #include <subrenderers/DEAD_explainer.h>
 #include <vector>
+#include <DEAD_functions.h>
 
 void DEAD_Renderer::getTextureFromSurface(SDL_Texture *&texture,
                                           std::string filePath) {
@@ -70,6 +71,8 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game)
                         DEAD_FilePaths::BULLET_TEXTURE_PNG);
   getTextureFromSurface(this->zombiesTexture,
                         DEAD_FilePaths::ZOMBIES_TEXTURE_PNG);
+  getTextureFromSurface(this->decorationTexture,
+                        DEAD_FilePaths::DECORATION_TEXTURE_PNG);
   SDL_Color color = {200, 0, 0, 255};
   getTextureFromFont(DEAD_FilePaths::YOU_DIED_FONT, this->youDiedFontTexture,
                      "You Died", 72, color);
@@ -80,6 +83,12 @@ SDL_Texture* DEAD_Renderer::getMapObjectTexture() {
   return this->mapObjectTexture;
 }
 
+SDL_Texture* DEAD_Renderer::getDecorationTexture() {
+  return this->decorationTexture;
+}
+
+
+
 void DEAD_Renderer::initWithSharedFromThis(DEAD_Renderer *renderer) {
   this->uiRenderer = std::make_unique<DEAD_UIRenderer>(renderer);
   this->particleRenderer = std::make_unique<DEAD_ParticleRenderer>(renderer);
@@ -87,7 +96,7 @@ void DEAD_Renderer::initWithSharedFromThis(DEAD_Renderer *renderer) {
       std::make_unique<DEAD_PlayerInventoryRenderer>(renderer,
                                                      this->itemTexture);
   this->decorationRenderer = std::make_unique<DEAD_DecorationRenderer>(
-      renderer, this->game->getDecorationLayer());
+      renderer, this->game->getDecorationLayer(), this->decorationTexture);
   this->shadowCaster = std::make_unique<DEAD_ShadowCaster>(this);
   this->explainer = std::make_unique<DEAD_Explainer>(this, this->game->getMap(), this->game->getDecorationLayer());
 }
@@ -349,12 +358,20 @@ void DEAD_Renderer::drawZombieMovementMap() {
 
 ScreenLocation DEAD_Renderer::getPointRenderLocation(double x, double y) {
   ScreenLocation loc;
-  loc.x = (x - renderAnchor.x) * this->renderBlockSize +
-          this->game->SCREEN_WIDTH / 2.0;
-  loc.y = (y - renderAnchor.y) * this->renderBlockSize +
-          this->game->SCREEN_HEIGHT / 2.0;
+  loc.x = (int)((x - renderAnchor.x) * this->renderBlockSize +
+          this->game->SCREEN_WIDTH / 2.0);
+  loc.y = (int)((y - renderAnchor.y) * this->renderBlockSize +
+          this->game->SCREEN_HEIGHT / 2.0);
 
   return loc;
+}
+
+DEAD_Map::MapLocation DEAD_Renderer::getMapLocFromScreenLoc(ScreenLocation loc) {
+  ScreenLocation mid = {.x=(int)(this->game->SCREEN_WIDTH/2), .y=(int)(this->game->SCREEN_HEIGHT/2)};
+  ScreenLocation relativeScreenLoc =  {.x=loc.x-mid.x, .y=loc.y-mid.y};
+  DEAD_Map::MapLocation relativeMapLoc = {.x=relativeScreenLoc.x/(double)this->renderBlockSize, .y=relativeScreenLoc.y/(double)this->renderBlockSize};
+  DEAD_Map::MapLocation returnMapLocation = {.x=relativeMapLoc.x+renderAnchor.x, .y=relativeMapLoc.y+renderAnchor.y};
+  return returnMapLocation;
 }
 
 void DEAD_Renderer::moveRenderAnchor(double x, double y) {

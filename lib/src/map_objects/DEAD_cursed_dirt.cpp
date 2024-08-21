@@ -21,3 +21,11 @@ bool DEAD_CursedDirt::isPlayerCollidable() {
 bool DEAD_CursedDirt::isZombieCollidable() {
   return false;
 }
+
+std::string DEAD_CursedDirt::getNote() {
+  return "Where Zombie Spawns";
+}
+
+std::string DEAD_CursedDirt::getName() {
+  return "Cursed Dirt";
+}

@@ -12,3 +12,11 @@ SDL_Rect DEAD_PileOfPaper::getTextureRect() {
 double DEAD_PileOfPaper::destroyRequireTicks() {
   return 500;
 }
+
+std::string DEAD_PileOfPaper::getNote() {
+  return "Press F while facing it to clean it up";
+}
+
+std::string DEAD_PileOfPaper::getName() {
+  return "Pile Of Paper";
+}

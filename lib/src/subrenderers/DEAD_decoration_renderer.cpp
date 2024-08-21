@@ -9,13 +9,9 @@
 #include <DEAD_controllable_player.h>
 
 DEAD_DecorationRenderer::DEAD_DecorationRenderer(DEAD_Renderer *renderer,
-                                                 DEAD_DecorationLayer *layer)
+                                                 DEAD_DecorationLayer *layer, SDL_Texture* texture)
     : DEAD_SubRendererBase(renderer), layer(layer) {
-  SDL_Surface *textureSurface =
-      IMG_Load(DEAD_FilePaths::DECORATION_TEXTURE_PNG.c_str());
-  this->decorationTexture =
-      SDL_CreateTextureFromSurface(renderer->getSDLRenderer(), textureSurface);
-  SDL_FreeSurface(textureSurface);
+  this->decorationTexture = texture;
 }
 
 DEAD_DecorationRenderer::~DEAD_DecorationRenderer() {

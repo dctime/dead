@@ -10,3 +10,11 @@ char DEAD_Air::getChar() { return ' '; }
 bool DEAD_Air::isPlayerCollidable() { return false; }
 bool DEAD_Air::isZombieCollidable() { return false; }
 
+std::string DEAD_Air::getName() {
+  return "Air";
+}
+
+std::string DEAD_Air::getNote() {
+  return "";
+}
+

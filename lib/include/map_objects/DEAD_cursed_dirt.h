@@ -9,4 +9,6 @@ public:
   SDL_Rect getTextureRect() override;
   bool isPlayerCollidable() override;
   bool isZombieCollidable() override;
+  std::string getNote() override;
+  std::string getName() override;
 };

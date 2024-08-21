@@ -18,4 +18,10 @@ DEAD_PlayerMemoriableManager * DEAD_Stone::getMemoryManager() {
   return this->memoryManager.get();
 }
 
+std::string DEAD_Stone::getNote() {
+  return "";
+}
 
+std::string DEAD_Stone::getName() {
+  return "Stone";
+}

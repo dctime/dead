@@ -6,7 +6,7 @@
 
 class DEAD_DecorationRenderer : public DEAD_SubRendererBase {
 public:
-  DEAD_DecorationRenderer(DEAD_Renderer* renderer, DEAD_DecorationLayer* layer);
+  DEAD_DecorationRenderer(DEAD_Renderer* renderer, DEAD_DecorationLayer* layer, SDL_Texture* texture);
   ~DEAD_DecorationRenderer();
   void render() override;
   ScreenLocation getDecorationRenderLocation(DEAD_DecorationBase* deco);

@@ -29,3 +29,11 @@ void DEAD_Door::openDoor() {
   this->isOpen = true;
   this->resetTextureRects();
 }
+
+std::string DEAD_Door::getName() {
+  return "Door";
+}
+
+std::string DEAD_Door::getNote() {
+  return "Press F while holding a key to open.";
+}

@@ -10,6 +10,8 @@ public:
   bool isZombieCollidable() override;
   SDL_Rect getTextureRect() override;
   DEAD_PlayerMemoriableManager * getMemoryManager() override;
+  std::string getNote() override;
+  std::string getName() override;
 private:
   std::unique_ptr<DEAD_PlayerMemoriableManager> memoryManager;
 };

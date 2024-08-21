@@ -7,4 +7,6 @@ public:
   bool isPlayerCollidable() override;
   bool isZombieCollidable() override;
   SDL_Rect getTextureRect() override;
+  std::string getName() override;
+  std::string getNote() override;
 };

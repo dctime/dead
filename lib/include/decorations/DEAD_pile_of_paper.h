@@ -6,5 +6,7 @@ public:
   DEAD_PileOfPaper(DEAD_Map::MapLocation loc, double rotationAngle, bool hasItemDrops, DEAD_Game* game);
   SDL_Rect getTextureRect() override;
   double destroyRequireTicks() override;
+  std::string getNote() override;
+  std::string getName() override;
 private:
 };
