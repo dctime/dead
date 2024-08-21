@@ -87,7 +87,9 @@ SDL_Texture* DEAD_Renderer::getDecorationTexture() {
   return this->decorationTexture;
 }
 
-
+SDL_Texture* DEAD_Renderer::getItemTexture() {
+  return this->itemTexture;
+}
 
 void DEAD_Renderer::initWithSharedFromThis(DEAD_Renderer *renderer) {
   this->uiRenderer = std::make_unique<DEAD_UIRenderer>(renderer);
@@ -98,7 +100,7 @@ void DEAD_Renderer::initWithSharedFromThis(DEAD_Renderer *renderer) {
   this->decorationRenderer = std::make_unique<DEAD_DecorationRenderer>(
       renderer, this->game->getDecorationLayer(), this->decorationTexture);
   this->shadowCaster = std::make_unique<DEAD_ShadowCaster>(this);
-  this->explainer = std::make_unique<DEAD_Explainer>(this, this->game->getMap(), this->game->getDecorationLayer());
+  this->explainer = std::make_unique<DEAD_Explainer>(this, this->game->getMap(), this->game->getDecorationLayer(), this->game->getItemDropLayer());
 }
 
 DEAD_Renderer::~DEAD_Renderer() {

@@ -54,6 +54,7 @@ public:
   DEAD_ParticleRenderer* getParticleRenderer();
   SDL_Texture* getMapObjectTexture();
   SDL_Texture* getDecorationTexture();
+  SDL_Texture* getItemTexture();
   SDL_Renderer* getSDLRenderer();
   int getRenderBlockSize();
   void initWithSharedFromThis(DEAD_Renderer* renderer);

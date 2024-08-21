@@ -56,3 +56,11 @@ SDL_Rect DEAD_Pistol::getItemTextureRect() {
   SDL_Rect rect = {.x=0, .y=0, .w=100, .h=100};
   return rect;
 }
+
+std::string DEAD_Pistol::getNote() {
+  return "A simple gun that does the job";
+}
+
+std::string DEAD_Pistol::getName() {
+  return "Pistol";
+}

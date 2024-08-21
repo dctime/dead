@@ -17,6 +17,8 @@ public:
   virtual void reload();
   // 0.0 - 1.0, -1 means not cooling;
   double checkStillReloading();
+  virtual std::string getName() override = 0;
+  virtual std::string getNote() override = 0;
   
 private:
   int ammoLeftInMagazine;

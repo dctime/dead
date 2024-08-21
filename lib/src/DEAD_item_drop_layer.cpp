@@ -1,3 +1,4 @@
+#include "DEAD_functions.h"
 #include "DEAD_item.h"
 #include "DEAD_item_drop.h"
 #include "DEAD_player.h"
@@ -27,23 +28,25 @@ void DEAD_ItemDropLayer::drop(std::shared_ptr<DEAD_ItemDrop> itemDrop) {
 int DEAD_ItemDropLayer::getDropsCount() { return this->itemDrops.size(); }
 
 void DEAD_ItemDropLayer::getNearItemDrop(
-    DEAD_Player *player, DEAD_Map::MapLocation loc, double radius,
-    std::shared_ptr<DEAD_Item> &returnItem) {
+    DEAD_Map::MapLocation loc, double radius,
+    std::shared_ptr<DEAD_ItemDrop> &returnItemDrop) {
   double minDistance = -1;
-  std::shared_ptr<DEAD_ItemDrop> nearestItemDrop = nullptr;
-
+  returnItemDrop = nullptr;
   for (const std::shared_ptr<DEAD_ItemDrop> &itemDrop : this->itemDrops) {
-    std::function<double(DEAD_Map::MapLocation, DEAD_Map::MapLocation)>
-        calDistance =
-            [](DEAD_Map::MapLocation loc1, DEAD_Map::MapLocation loc2) {
-              return sqrt(pow(loc1.x - loc2.x, 2) + pow(loc1.y - loc2.y, 2));
-            };
-    double distance = calDistance(itemDrop->getLoc(), loc);
+    double distance = DEAD_Functions::calDistance(itemDrop->getLoc().x, itemDrop->getLoc().y, loc.x, loc.y);
     if (distance <= radius && (minDistance == -1 || minDistance > distance)) {
-      nearestItemDrop = itemDrop;
+      returnItemDrop = itemDrop;
       minDistance = distance;
     }
   }
+}
+
+void DEAD_ItemDropLayer::getAndPickupNearItemDrop(
+    DEAD_Player *player, DEAD_Map::MapLocation loc, double radius,
+    std::shared_ptr<DEAD_Item> &returnItem) {
+  std::shared_ptr<DEAD_ItemDrop> nearestItemDrop;
+  this->getNearItemDrop(loc, radius, nearestItemDrop);
+
   if (nearestItemDrop == nullptr) {
     returnItem = nullptr;
     return;

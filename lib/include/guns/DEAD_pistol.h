@@ -12,5 +12,7 @@ public:
   virtual SDL_Rect getItemTextureRect() override;
   int getMagazineSize();
   void reload() override; 
+  std::string getNote() override;
+  std::string getName() override;
   
 };

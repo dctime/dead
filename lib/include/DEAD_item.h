@@ -13,6 +13,8 @@ public:
   virtual std::shared_ptr<DEAD_ItemDrop> getItemDrop(double x, double y);
   virtual SDL_Rect getTextureRect() = 0;
   virtual SDL_Rect getItemTextureRect() = 0;
+  virtual std::string getName() = 0;
+  virtual std::string getNote() = 0;
   void unbindItemDrop();
   DEAD_Player* getPlayer();
   void setPlayer(DEAD_Player* player); 

@@ -14,6 +14,8 @@ public:
   virtual SDL_Rect getTextureRect() override = 0;
   virtual void attack() = 0;
   virtual SDL_Rect getItemTextureRect() override = 0;
+  virtual std::string getName() override = 0;
+  virtual std::string getNote() override = 0;
   double checkStillCooling();
   bool use() override { return false; };
 

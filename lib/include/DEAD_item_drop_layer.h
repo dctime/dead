@@ -1,3 +1,5 @@
+#pragma once
+
 #include "DEAD_item_drop.h"
 #include "DEAD_player.h"
 #include <memory>
@@ -8,11 +10,13 @@ public:
   std::set<std::shared_ptr<DEAD_ItemDrop>> getItemDrops();
   void drop(std::shared_ptr<DEAD_ItemDrop> itemDrop);
   int getDropsCount();
-  void getNearItemDrop(DEAD_Player *player, DEAD_Map::MapLocation loc,
-                       double radius, std::shared_ptr<DEAD_Item> &returnItem);
+  void getAndPickupNearItemDrop(DEAD_Player *player, DEAD_Map::MapLocation loc,
+                                double radius,
+                                std::shared_ptr<DEAD_Item> &returnItem);
+  void getNearItemDrop(DEAD_Map::MapLocation loc, double radius,
+                       std::shared_ptr<DEAD_ItemDrop> &returnItemDrop);
 
-  template <typename T>
-  void summonItemDrop(double x, double y) {
+  template <typename T> void summonItemDrop(double x, double y) {
     std::shared_ptr<DEAD_Item> summonItem = std::make_shared<T>(nullptr);
     this->drop(summonItem->getItemDrop(x, y));
   }

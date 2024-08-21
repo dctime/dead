@@ -29,3 +29,11 @@ bool DEAD_HouseKey::use() {
   door->openDoor();
   return true;
 }
+
+std::string DEAD_HouseKey::getNote() {
+  return "Hold this key, face a door in the house at spawn and press F to open. Destroy when used.";
+}
+
+std::string DEAD_HouseKey::getName() {
+  return "House Key";
+}

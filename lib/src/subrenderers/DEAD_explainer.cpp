@@ -8,12 +8,14 @@
 #include <DEAD_game.h>
 #include <SDL_FontCache.h>
 #include <iostream>
+#include <memory>
 #include <subrenderers/DEAD_explainer.h>
 
 DEAD_Explainer::DEAD_Explainer(DEAD_Renderer *renderer, DEAD_Map *map,
-                               DEAD_DecorationLayer *decorationLayer)
+                               DEAD_DecorationLayer *decorationLayer,
+                               DEAD_ItemDropLayer *itemDropLayer)
     : DEAD_SubRendererBase(renderer), map(map),
-      decorationLayer(decorationLayer) {
+      decorationLayer(decorationLayer), itemDropLayer(itemDropLayer) {
   SDL_Color color = {.r = 255, .g = 255, .b = 255, .a = 255};
   this->nameFont = FC_CreateFont();
   this->noteFont = FC_CreateFont();
@@ -44,7 +46,16 @@ void DEAD_Explainer::render() {
   DEAD_Map::MapLocation mousePointingMapLocation =
       this->renderer->getMapLocFromScreenLoc(mouseScreenLocation);
 
-  DEAD_DecorationBase* decoObject = this->decorationLayer->getFirstDecorationByLoc(mousePointingMapLocation);
+  std::shared_ptr<DEAD_ItemDrop> itemDrop;
+  this->itemDropLayer->getNearItemDrop(mousePointingMapLocation, 0.3, itemDrop);
+
+  if (itemDrop != nullptr) {
+    this->renderItemDropExplain(imageSize, noteSize, boarderSize, itemDrop);
+    return;
+  }
+
+  DEAD_DecorationBase *decoObject =
+      this->decorationLayer->getFirstDecorationByLoc(mousePointingMapLocation);
 
   if (decoObject != nullptr) {
     this->renderDecorationExplain(imageSize, noteSize, boarderSize, decoObject);
@@ -59,16 +70,29 @@ void DEAD_Explainer::render() {
   }
 }
 
+void DEAD_Explainer::renderItemDropExplain(
+    int imageSize, int noteSize, int boarderSize,
+    std::shared_ptr<DEAD_ItemDrop> &itemDrop) {
+  renderExplain(imageSize, noteSize, boarderSize,
+                itemDrop->getName(), itemDrop->getNote(),
+                itemDrop->getItem()->getItemTextureRect(),
+                this->renderer->getItemTexture());
+}
+
 void DEAD_Explainer::renderDecorationExplain(int imageSize, int noteSize,
                                              int boarderSize,
                                              DEAD_DecorationBase *object) {
-  renderExplain(imageSize, noteSize, boarderSize, object->getName(), object->getNote(), object->getTextureRect(), this->decorationTexture);
+  renderExplain(imageSize, noteSize, boarderSize, object->getName(),
+                object->getNote(), object->getTextureRect(),
+                this->decorationTexture);
 }
 
 void DEAD_Explainer::renderMapObjectExplain(int imageSize, int noteSize,
                                             int boarderSize,
                                             DEAD_MapObjectBase *object) {
-  renderExplain(imageSize, noteSize, boarderSize, object->getName(), object->getNote(), object->getTextureRect(), this->mapObjectTexture);
+  renderExplain(imageSize, noteSize, boarderSize, object->getName(),
+                object->getNote(), object->getTextureRect(),
+                this->mapObjectTexture);
 }
 
 void DEAD_Explainer::renderExplain(int imageSize, int noteSize, int boarderSize,
@@ -91,8 +115,8 @@ void DEAD_Explainer::renderExplain(int imageSize, int noteSize, int boarderSize,
           (int)(maxTextWidth / 2);
 
   SDL_Rect renderRect = {.x = x, .y = 5, .w = imageSize, .h = imageSize};
-  SDL_RenderCopy(this->renderer->getSDLRenderer(), texture,
-                 &textureRect, &renderRect);
+  SDL_RenderCopy(this->renderer->getSDLRenderer(), texture, &textureRect,
+                 &renderRect);
   FC_Draw(this->nameFont, this->renderer->getSDLRenderer(),
           x + imageSize + boarderSize, (int)(boarderSize / 2),
           nameText.c_str());
@@ -103,5 +127,4 @@ void DEAD_Explainer::renderExplain(int imageSize, int noteSize, int boarderSize,
 
   FC_DrawAlign(this->noteFont, this->renderer->getSDLRenderer(), x,
                imageSize + boarderSize, FC_ALIGN_LEFT, this->noteTextTemp);
-
 }

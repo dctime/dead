@@ -7,4 +7,6 @@ public:
   ~DEAD_Shotgun();
   SDL_Rect getTextureRect() override;
   SDL_Rect getItemTextureRect() override;
+  std::string getName() override;
+  std::string getNote() override;
 };

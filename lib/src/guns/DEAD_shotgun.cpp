@@ -19,3 +19,11 @@ SDL_Rect DEAD_Shotgun::getItemTextureRect() {
   SDL_Rect rect = {.x=100, .y=0, .w=100, .h=100};
   return rect;
 }
+
+std::string DEAD_Shotgun::getName() {
+  return "Shotgun";
+}
+
+std::string DEAD_Shotgun::getNote() {
+  return "Not Implemented yet";
+}

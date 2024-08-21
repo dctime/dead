@@ -45,7 +45,7 @@ void DEAD_Player::dropHoldItem() { this->inventory->dropHoldItem(); }
 
 void DEAD_Player::pickupItem() {
   std::shared_ptr<DEAD_Item> tempItem;
-  this->getGame()->getItemDropLayer()->getNearItemDrop(
+  this->getGame()->getItemDropLayer()->getAndPickupNearItemDrop(
       this, this->getPos(), this->getPickItemRadius(), tempItem);
   SDL_Log("Picked Up Weapon");
   if (tempItem.get() == nullptr)

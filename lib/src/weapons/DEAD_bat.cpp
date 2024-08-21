@@ -63,3 +63,11 @@ SDL_Rect DEAD_Bat::getItemTextureRect() {
   return rect;
 }
 
+std::string DEAD_Bat::getNote() {
+  return "Short range AOE melee weapon";
+}
+
+std::string DEAD_Bat::getName() {
+  return "Bat";
+}
+

@@ -1,5 +1,6 @@
 #include <DEAD_item_drop.h>
 #include <SDL2/SDL_log.h>
+#include <DEAD_item.h>
 #include <memory>
 
 DEAD_ItemDrop::DEAD_ItemDrop(std::shared_ptr<DEAD_Item> item, DEAD_Map::MapLocation loc)
@@ -17,5 +18,13 @@ double DEAD_ItemDrop::getSize() {
 
 std::shared_ptr<DEAD_Item> DEAD_ItemDrop::getItem() {
   return this->item;
+}
+
+std::string DEAD_ItemDrop::getName() {
+  return this->item->getName();  
+}
+
+std::string DEAD_ItemDrop::getNote() {
+  return this->item->getNote(); 
 }
 

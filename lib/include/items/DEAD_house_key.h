@@ -6,5 +6,7 @@ public:
   SDL_Rect getTextureRect() override;
   SDL_Rect getItemTextureRect() override;
   bool use() override;
+  std::string getNote() override;
+  std::string getName() override;
 
 };
