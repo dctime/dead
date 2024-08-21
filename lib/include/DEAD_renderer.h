@@ -52,6 +52,8 @@ public:
   ScreenLocation getPointRenderLocation(double x, double y);
   DEAD_Map::MapLocation getMapLocFromScreenLoc(ScreenLocation loc);
   DEAD_ParticleRenderer* getParticleRenderer();
+  DEAD_Explainer* getExplainer();
+  DEAD_ShadowCaster* getShadowCaster();
   SDL_Texture* getMapObjectTexture();
   SDL_Texture* getDecorationTexture();
   SDL_Texture* getItemTexture();

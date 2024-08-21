@@ -138,6 +138,14 @@ void DEAD_Renderer::render() {
 
 SDL_Renderer *DEAD_Renderer::getSDLRenderer() { return this->renderer; }
 
+DEAD_Explainer* DEAD_Renderer::getExplainer() {
+  return this->explainer.get();
+}
+
+DEAD_ShadowCaster* DEAD_Renderer::getShadowCaster() {
+  return this->shadowCaster.get();
+}
+
 DEAD_Game *DEAD_Renderer::getGame() { return this->game; }
 
 int DEAD_Renderer::getRenderBlockSize() { return this->renderBlockSize; }

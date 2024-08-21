@@ -3,8 +3,59 @@
 #include <cmath>
 #include <map>
 
+
 double DEAD_Functions::calDistance(double x1, double y1, double x2, double y2) {
   return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
+}
+
+
+PointAndTriangleReturn DEAD_Functions::checkPointAndTriangle(DEAD_Vector point, DEAD_Triangle triangle) {
+  DEAD_Triangle triangle1, triangle2, triangle3;
+
+  triangle1.point1 = point;
+  triangle1.point2 = triangle.point1;
+  triangle1.point3 = triangle.point2;
+
+  triangle2.point1 = point;
+  triangle2.point2 = triangle.point2;
+  triangle2.point3 = triangle.point3;
+
+  triangle3.point1 = point;
+  triangle3.point2 = triangle.point3;
+  triangle3.point3 = triangle.point1;
+
+  double triangle1Area = fabs(DEAD_Functions::getTriangleArea(triangle1));
+  double triangle2Area = fabs(DEAD_Functions::getTriangleArea(triangle2));
+  double triangle3Area = fabs(DEAD_Functions::getTriangleArea(triangle3));
+  double triangleArea = fabs(DEAD_Functions::getTriangleArea(triangle));
+  
+  double trianglesAreaSum = triangle1Area + triangle2Area + triangle3Area;
+  double delta = 0;
+  if (triangleArea == trianglesAreaSum) {
+    if (triangle1Area == 0 || triangle2Area == 0 || triangle3Area == 0) {
+      return PointAndTriangleReturn::POINT_ON_TRIANGLE;
+    } else {
+      return PointAndTriangleReturn::POINT_IN_TRIANGLE;
+    }
+  } else {
+    return PointAndTriangleReturn::POINT_OUT_OF_TRIANGLE;
+  }
+}
+
+double DEAD_Functions::getTriangleArea(DEAD_Triangle triangle) {
+  return (0.5)*((triangle.point1.x*(triangle.point2.y-triangle.point3.y))+
+                    triangle.point2.x*(triangle.point3.y-triangle.point1.y)+
+                    triangle.point3.x*(triangle.point1.y-triangle.point2.y));
+}
+
+static DEAD_LineEquation getLineEquationFromPoints(DEAD_Vector point1, DEAD_Vector point2) {
+  DEAD_LineEquation equation;
+  // y = mx+k
+  // mx-y+k=0
+  equation.a = (point2.y-point1.y)/(point2.x-point1.x);
+  equation.c = point1.y-equation.a*point1.x;
+  equation.b = -1;
+  return equation; 
 }
 
 double DEAD_Functions::calAngle(double x1, double y1, double x2, double y2) {

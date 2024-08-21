@@ -1,3 +1,4 @@
+#include "SDL_mouse.h"
 #include "SDL_pixels.h"
 #include "SDL_surface.h"
 #include "labels/DEAD_label_base.h"
@@ -29,7 +30,13 @@ DEAD_ShadowCaster::DEAD_ShadowCaster(DEAD_Renderer *renderer)
       this->renderer->getGame()->SCREEN_HEIGHT);
 }
 
+bool DEAD_ShadowCaster::isMouseInLineOfSight() {
+  // always updated when rendering
+  return this->mouseInLineOfSight;
+}
+
 void DEAD_ShadowCaster::render() {
+  this->mouseInLineOfSight = false;
 
   // make a square mask
 
@@ -120,7 +127,8 @@ void DEAD_ShadowCaster::render() {
 
   // for (const DEAD_Vector &intersection : intersections) {
   //   ScreenLocation loc =
-  //       this->renderer->getPointRenderLocation(intersection.x, intersection.y);
+  //       this->renderer->getPointRenderLocation(intersection.x,
+  //       intersection.y);
   //   SDL_Rect rect = {.x = loc.x - 5, .y = loc.y - 5, .w = 10, .h = 10};
   //   SDL_RenderFillRect(this->renderer->getSDLRenderer(), &rect);
   // }
@@ -170,11 +178,30 @@ void DEAD_ShadowCaster::render() {
         {255, 255, 255, 255},
         {1, 1}};
 
+    DEAD_Triangle triangle;
+    triangle.point1 = {.x = (double)indexScreenLoc.x,
+                       .y = (double)indexScreenLoc.y};
+    triangle.point2 = {.x = (double)playerScreenLoc.x,
+                       .y = (double)playerScreenLoc.y};
+    triangle.point3 = {.x = (double)nextIndexScreenLoc.x,
+                       .y = (double)nextIndexScreenLoc.y};
+
+    ScreenLocation mouseLoc;
+    SDL_GetMouseState(&mouseLoc.x, &mouseLoc.y);
+    DEAD_Vector mouseLocVector = {.x = (double)mouseLoc.x,
+                                  .y = (double)mouseLoc.y};
+    PointAndTriangleReturn pointAndTriangleReturn =
+        DEAD_Functions::checkPointAndTriangle(mouseLocVector, triangle);
+
     SDL_Vertex vertices[] = {vertex_1, vertex_2, vertex_3};
 
     // only alpha matters, color doesnt matter
     SDL_RenderGeometry(this->renderer->getSDLRenderer(), NULL, vertices, 3,
                        NULL, 0);
+    if (pointAndTriangleReturn == POINT_IN_TRIANGLE ||
+        pointAndTriangleReturn == POINT_ON_TRIANGLE) {
+      this->mouseInLineOfSight = true;
+    }
   }
 
   // draw full screen black with mask blendmode
@@ -196,6 +223,7 @@ void DEAD_ShadowCaster::render() {
 }
 
 void DEAD_ShadowCaster::updateShadowCaster() {
+  // update this if there is zombie blocked blocks update
   this->lines.clear();
   this->points.clear();
   LocLineStatus locLineStatus(this->map);
@@ -338,7 +366,7 @@ void DEAD_ShadowCaster::updateShadowCaster() {
     }
   }
 
-  for (const DEAD_Map::MapLine& line : lines) {
+  for (const DEAD_Map::MapLine &line : lines) {
     points.insert(line.point1);
     points.insert(line.point2);
   }

@@ -45,6 +45,7 @@ public:
 
   void updateShadowCaster();
   void render() override;
+  bool isMouseInLineOfSight();
 
 private:
   DEAD_Map *map;
@@ -53,5 +54,6 @@ private:
   std::set<DEAD_Map::MapLocation> points;
   SDL_Texture *shadowMask;
   SDL_Texture *shadowOutwardMask;
+  bool mouseInLineOfSight;
   
 };

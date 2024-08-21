@@ -4,12 +4,14 @@
 #include "SDL_render.h"
 #include "SDL_ttf.h"
 #include "map_objects/DEAD_map_object_base.h"
+#include "map_objects/DEAD_player_memoriable_object.h"
 #include "subrenderers/DEAD_subrenderer_base.h"
 #include <DEAD_game.h>
 #include <SDL_FontCache.h>
 #include <iostream>
 #include <memory>
 #include <subrenderers/DEAD_explainer.h>
+#include <subrenderers/DEAD_shadow_caster.h>
 
 DEAD_Explainer::DEAD_Explainer(DEAD_Renderer *renderer, DEAD_Map *map,
                                DEAD_DecorationLayer *decorationLayer,
@@ -49,7 +51,7 @@ void DEAD_Explainer::render() {
   std::shared_ptr<DEAD_ItemDrop> itemDrop;
   this->itemDropLayer->getNearItemDrop(mousePointingMapLocation, 0.3, itemDrop);
 
-  if (itemDrop != nullptr) {
+  if (itemDrop != nullptr && this->renderer->getShadowCaster()->isMouseInLineOfSight()) {
     this->renderItemDropExplain(imageSize, noteSize, boarderSize, itemDrop);
     return;
   }
@@ -57,14 +59,17 @@ void DEAD_Explainer::render() {
   DEAD_DecorationBase *decoObject =
       this->decorationLayer->getFirstDecorationByLoc(mousePointingMapLocation);
 
-  if (decoObject != nullptr) {
+  if (decoObject != nullptr && this->renderer->getShadowCaster()->isMouseInLineOfSight()) {
     this->renderDecorationExplain(imageSize, noteSize, boarderSize, decoObject);
     return;
   }
 
   DEAD_MapObjectBase *object = this->map->getMapObject(
       (int)mousePointingMapLocation.x, (int)mousePointingMapLocation.y);
-  if (object != nullptr) {
+  DEAD_IPlayerMemoriableObject *memoriableObject = this->map->getPlayerMemoriableObject((int)mousePointingMapLocation.x, (int)mousePointingMapLocation.y);
+  if (object != nullptr && 
+    (memoriableObject == nullptr && this->renderer->getShadowCaster()->isMouseInLineOfSight() ||
+    (memoriableObject != nullptr && memoriableObject->getMemoryManager()->isVisible()))) {
     this->renderMapObjectExplain(imageSize, noteSize, boarderSize, object);
     return;
   }
