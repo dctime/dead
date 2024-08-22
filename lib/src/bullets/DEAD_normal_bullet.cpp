@@ -3,7 +3,7 @@
 #include <DEAD_game.h>
 #include <memory>
 DEAD_NormalBullet::DEAD_NormalBullet(DEAD_Player* owner, DEAD_Gun* gun) 
-  : DEAD_Bullet(owner, gun, 0.002, 25) {
+  : DEAD_Bullet(owner, gun, 0.005, 25) {
 }
 
 SDL_Rect DEAD_NormalBullet::getBulletTextureRect() {

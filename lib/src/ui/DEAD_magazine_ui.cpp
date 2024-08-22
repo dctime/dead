@@ -1,5 +1,5 @@
 #include "DEAD_renderer.h"
-#include "guns/DEAD_gun.h"
+#include <items/weapons/guns/DEAD_gun.h>
 #include "ui/DEAD_ui.h"
 #include <DEAD_game.h>
 #include <DEAD_player.h>

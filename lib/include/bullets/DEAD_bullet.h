@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../DEAD_player.h"
-#include "../guns/DEAD_gun.h"
+#include "../items/weapons/guns/DEAD_gun.h"
 #include <SDL2/SDL.h>
 #include <memory>
 

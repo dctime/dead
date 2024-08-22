@@ -1,10 +1,10 @@
-#include "DEAD_weapon.h"
+#include <items/weapons/DEAD_weapon.h>
 #include "DEAD_zombie_director.h"
 #include "hitbox/DEAD_rect_hitbox.h"
 #include <cmath>
 #include <iostream>
 #include <memory>
-#include <weapons/DEAD_bat.h>
+#include <items/weapons/DEAD_bat.h>
 #include <DEAD_player.h>
 #include <DEAD_game.h>
 #include <subrenderers/DEAD_particle_renderer.h>

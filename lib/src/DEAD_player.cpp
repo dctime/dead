@@ -4,14 +4,14 @@
 #include "decorations/DEAD_decoration_base.h"
 #include <DEAD_game.h>
 #include <DEAD_player.h>
-#include <DEAD_weapon.h>
+#include <items/weapons/DEAD_weapon.h>
 #include <SDL2/SDL_log.h>
-#include <guns/DEAD_pistol.h>
+#include <items/weapons/guns/DEAD_pistol.h>
 #include <iostream>
 #include <memory>
 
 DEAD_Player::DEAD_Player(DEAD_Game *game)
-    : DEAD_Entity::DEAD_Entity(game, 100, 0.8),
+    : DEAD_Entity::DEAD_Entity(game, 1000000000, 0.8),
       inventory(std::make_unique<DEAD_PlayerInventory>(this)),
       zombieKillcount(0) {}
 

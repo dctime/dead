@@ -1,9 +1,9 @@
 #pragma once
 
 #include "DEAD_entity.h"
-#include "DEAD_item.h"
+#include "items/DEAD_item.h"
 #include "DEAD_map.h"
-#include "DEAD_weapon.h"
+#include "items/weapons/DEAD_weapon.h"
 #include "hitbox/DEAD_circle_hitbox.h"
 #include "DEAD_player_inventory.h"
 #include "decorations/DEAD_decoration_base.h"

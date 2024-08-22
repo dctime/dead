@@ -1,6 +1,6 @@
-#include <DEAD_weapon.h>
+#include <items/weapons/DEAD_weapon.h>
 #include <SDL2/SDL_timer.h>
-#include <guns/DEAD_gun.h>
+#include <items/weapons/guns/DEAD_gun.h>
 #include <bullets/DEAD_normal_bullet.h>
 #include <iostream>
 #include <memory>

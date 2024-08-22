@@ -1,15 +1,14 @@
 #include "DEAD_functions.h"
-#include "DEAD_item.h"
+#include "items/DEAD_item.h"
 #include "DEAD_item_drop.h"
 #include "DEAD_player.h"
 #include <DEAD_item_drop_layer.h>
 #include <climits>
 #include <cmath>
-#include <functional>
-#include <guns/DEAD_pistol.h>
+#include <items/weapons/guns/DEAD_pistol.h>
 #include <iostream>
 #include <memory>
-#include <weapons/DEAD_bat.h>
+#include <items/weapons/DEAD_bat.h>
 
 DEAD_ItemDropLayer::DEAD_ItemDropLayer() {
   this->itemDrops.size();

@@ -1,4 +1,4 @@
-#include "../DEAD_weapon.h"
+#include "DEAD_weapon.h"
 class DEAD_Bat : public DEAD_Weapon {
 public:
   DEAD_Bat(DEAD_Player* owner);

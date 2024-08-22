@@ -1,8 +1,7 @@
 #include "DEAD_player.h"
-#include "guns/DEAD_gun.h"
+#include "items/weapons/guns/DEAD_gun.h"
 #include <SDL2/SDL_rect.h>
-#include <guns/DEAD_shotgun.h>
-#include <memory>
+#include <items/weapons/guns/DEAD_shotgun.h>
 
 DEAD_Shotgun::DEAD_Shotgun(DEAD_Player* player)
   : DEAD_Gun(player, 5, 5000, 5000) {

@@ -22,5 +22,3 @@ int main(int argc, char **argv) {
   game->run();
 }
 
-// todays mission: itemExplainer subrenderer (decoration layer -> mapobjects layer)
-// activate by hitbox using cursor.

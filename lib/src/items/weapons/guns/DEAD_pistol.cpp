@@ -1,7 +1,7 @@
 #include "DEAD_item_drop.h"
 #include "bullets/DEAD_bullet.h"
 #include <DEAD_game.h>
-#include <guns/DEAD_pistol.h>
+#include <items/weapons/guns/DEAD_pistol.h>
 #include <bullets/DEAD_normal_bullet.h>
 #include <SDL2/SDL_log.h>
 #include <iostream>

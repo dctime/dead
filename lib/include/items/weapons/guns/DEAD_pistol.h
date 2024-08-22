@@ -1,5 +1,5 @@
 #include "DEAD_gun.h"
-#include "../DEAD_player.h"
+#include "../../../DEAD_player.h"
 #include <memory>
 
 class DEAD_Pistol : public DEAD_Gun {

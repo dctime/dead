@@ -1,6 +1,5 @@
-#include "DEAD_player.h"
-#include <DEAD_weapon.h>
-#include <memory>
+#include <DEAD_player.h>
+#include <items/weapons/DEAD_weapon.h>
 
 DEAD_Weapon::~DEAD_Weapon() {}
 

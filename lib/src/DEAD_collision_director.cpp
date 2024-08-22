@@ -25,7 +25,7 @@ DEAD_CollisionDirector::entityCheckCollision(
   std::set<DEAD_MapObjectBase*> collideObjects;
   collideObjects.clear();
 
-  for (std::vector<int> v : checkSequence) {
+  for (const std::vector<int>& v : checkSequence) {
     int objectX = v[0] + (int)(targetX);
     int objectY = v[1] + (int)(targetY);
 

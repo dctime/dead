@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DEAD_weapon.h"
+#include "items/weapons/DEAD_weapon.h"
 #include "DEAD_map.h"
 #include "hitbox/DEAD_circle_hitbox.h"
 #include <memory>

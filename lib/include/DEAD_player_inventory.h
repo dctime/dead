@@ -1,5 +1,5 @@
 #pragma once
-#include "DEAD_item.h"
+#include "items/DEAD_item.h"
 #include <cstdint>
 #include <memory>
 

@@ -13,11 +13,11 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_video.h>
 #include <functional>
-#include <guns/DEAD_pistol.h>
+#include <items/weapons/guns/DEAD_pistol.h>
 #include <iostream>
 #include <items/DEAD_house_key.h>
 #include <memory>
-#include <weapons/DEAD_bat.h>
+#include <items/weapons/DEAD_bat.h>
 #include <zombies/DEAD_zombie.h>
 #include <DEAD_filepaths.h>
 
@@ -90,7 +90,7 @@ DEAD_Game::DEAD_Game(std::string playerName)
                     this->bulletCheckCollisionCallback, this));
   this->mainLoopID = SDL_AddTimer(DEAD_Game::MAIN_LOOP_DELAY,
                                   this->playerMovementCallback, this);
-  this->zombieSpawnID = SDL_AddTimer(1000, this->spawnZombieCallback, this);
+  this->zombieSpawnID = SDL_AddTimer(3000, this->spawnZombieCallback, this);
   this->lastTimeLoopTicks = SDL_GetTicks64();
 }
 

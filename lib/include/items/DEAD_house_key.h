@@ -1,4 +1,4 @@
-#include "../DEAD_item.h"
+#include "DEAD_item.h"
 
 class DEAD_HouseKey : public DEAD_Item {
 public:

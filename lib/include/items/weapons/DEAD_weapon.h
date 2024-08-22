@@ -1,6 +1,6 @@
 #pragma once
 
-#include "DEAD_item.h"
+#include "../DEAD_item.h"
 #include <SDL2/SDL.h>
 #include <memory>
 #include <string>

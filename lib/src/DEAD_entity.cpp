@@ -2,7 +2,7 @@
 #include <DEAD_game.h>
 #include <SDL2/SDL_timer.h>
 #include <cstdlib>
-#include <guns/DEAD_pistol.h>
+#include <items/weapons/guns/DEAD_pistol.h>
 #include <iostream>
 #include <memory>
 
@@ -98,6 +98,7 @@ void DEAD_Entity::move(double x, double y) {
   if (this->getGame()->getCollisionDirector()->entityCheckCollision(this, x, y).size() != 0) {
     return;
   } else {
+    // FIXME: Integrate speed and collision in move not objects that calls move function
     this->setPos(this->getPos().x+x, this->getPos().y+y);
   }
 }

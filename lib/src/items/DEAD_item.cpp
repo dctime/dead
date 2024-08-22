@@ -1,5 +1,5 @@
 #include "DEAD_item_drop.h"
-#include <DEAD_item.h>
+#include <items/DEAD_item.h>
 #include <memory>
 #include <DEAD_player.h>
 

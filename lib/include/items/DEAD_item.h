@@ -1,5 +1,5 @@
 #pragma once
-#include "DEAD_item_drop.h"
+#include "../DEAD_item_drop.h"
 #include <SDL2/SDL.h>
 #include <memory>
 

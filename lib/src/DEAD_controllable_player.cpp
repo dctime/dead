@@ -8,10 +8,10 @@
 #include <SDL2/SDL_scancode.h>
 #include <SDL2/SDL_timer.h>
 #include <cmath>
-#include <guns/DEAD_pistol.h>
+#include <items/weapons/guns/DEAD_pistol.h>
 #include <DEAD_controllable_player.h>
 #include <DEAD_game.h>
-#include <weapons/DEAD_bat.h>
+#include <items/weapons/DEAD_bat.h>
 #include <iostream>
 #include <subrenderers/DEAD_particle_renderer.h>
 

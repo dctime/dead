@@ -1,6 +1,6 @@
 #include <DEAD_item_drop.h>
 #include <SDL2/SDL_log.h>
-#include <DEAD_item.h>
+#include <items/DEAD_item.h>
 #include <memory>
 
 DEAD_ItemDrop::DEAD_ItemDrop(std::shared_ptr<DEAD_Item> item, DEAD_Map::MapLocation loc)
