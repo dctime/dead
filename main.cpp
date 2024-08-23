@@ -22,3 +22,7 @@ int main(int argc, char **argv) {
   game->run();
 }
 
+// Todays mission: inventory menu inventory object -> subinventory -> usables, ingredients, inspirations
+// renderer -> subrenderer -> subinventory renderer
+// subinventory renderer controlled by player isSubinventory member
+
