@@ -17,6 +17,7 @@ private:
   int minimapWidth;
   int minimapHeight;
   SDL_Texture* minimapTexture;
-  int verticleFOV;
   int horizontalFOV;
+  double heightForHalfFullInOneMapBlock;
+  double maxRenderDistance;
 };
