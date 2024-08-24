@@ -80,7 +80,7 @@ DEAD_Game::DEAD_Game(std::string playerName)
     this->player->setPos(locs[0].x, locs[0].y);
   }
   this->map->getMapSpawner()->initAccess(this);
-  this->renderer = std::make_unique<DEAD_Renderer>(this->window, this);
+  this->renderer = std::make_unique<DEAD_Renderer>(this->window, this, 50);
   this->renderer3D = std::make_unique<DEAD_Renderer3D>(
       this->window, this->renderer.get(), this);
 
@@ -242,14 +242,8 @@ void DEAD_Game::mainLoop(DEAD_Game *game) {
     game->bulletDirector->tickBullets();
     game->getZombieDirector()->tickZombies();
     game->checkPlayerDied();
-    // game->renderer->moveRenderAnchor(
-    //     game->player->getPos().x, game->player->getPos().y,
-    //     (int)(game->SCREEN_WIDTH / 2), (int)(game->SCREEN_HEIGHT / 2));
   }
-  // game->renderer->moveRenderAnchor(game->player->getPos().x,
-  //                                  game->player->getPos().y,
-  //                                  (int)(game->SCREEN_WIDTH/2), (int)(game->SCREEN_HEIGHT/2));
-  //
+  
   // game->renderer->render2D();
   game->renderer3D->render();
 }

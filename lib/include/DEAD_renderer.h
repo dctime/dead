@@ -48,7 +48,7 @@ public:
 
 class DEAD_Renderer {
 public:
-  DEAD_Renderer(SDL_Window *window, DEAD_Game *game);
+  DEAD_Renderer(SDL_Window *window, DEAD_Game *game, int initRenderBlockSize);
   ~DEAD_Renderer();
   void render2D();
   void moveRenderAnchor(double mapX, double mapY, int screenX, int screenY);
@@ -63,6 +63,7 @@ public:
   SDL_Texture *getDecorationTexture();
   SDL_Texture *getItemTexture();
   SDL_Renderer *getSDLRenderer();
+  SDL_Texture* getRenderTargetTexture();
   int getRenderBlockSize();
   void initWithSharedFromThis(DEAD_Renderer *renderer);
   void startYouDied();
@@ -93,6 +94,8 @@ private:
   SDL_Texture *youDiedFontTexture;
   SDL_Texture *decorationTexture;
 
+  SDL_Texture* renderTargetTexture;
+
   void renderMapObjects();
   void renderPlayer(DEAD_Player *player);
   void renderZombies(DEAD_ZombieDirector *zombieDirector);
@@ -105,6 +108,7 @@ private:
   void getTextureFromSurface(SDL_Texture *&texture, std::string filePath);
   void getTextureFromFont(std::string fontFilePath, SDL_Texture *&texture,
                           std::string text, int fontSize, SDL_Color color);
+  void setRenderBlockSize(int size);
   ScreenLocation
   getItemDropRenderLocation(const std::shared_ptr<DEAD_ItemDrop> &itemDrop);
   int youDiedAlpha;

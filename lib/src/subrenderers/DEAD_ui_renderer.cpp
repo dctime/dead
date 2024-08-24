@@ -15,6 +15,8 @@ DEAD_UIRenderer::DEAD_UIRenderer(DEAD_Renderer* renderer)
 }
 
 void DEAD_UIRenderer::render() {
+  SDL_SetRenderTarget(this->renderer->getSDLRenderer(), this->renderer->getRenderTargetTexture());
+
   for (std::unique_ptr<DEAD_UI>& ui : this->uis) {
     ui->render();
   }

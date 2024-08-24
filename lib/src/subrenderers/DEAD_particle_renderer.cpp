@@ -4,6 +4,7 @@
 #include <vector>
 #include <particles/DEAD_particle_base.h>
 #include <particles/DEAD_sword_attack_particle.h>
+#include <DEAD_renderer.h>
 
 DEAD_ParticleRenderer::DEAD_ParticleRenderer(
     DEAD_Renderer* renderer)
@@ -18,6 +19,7 @@ void DEAD_ParticleRenderer::playSwordAttackParticle(DEAD_Map::MapLocation loc,
 }
 
 void DEAD_ParticleRenderer::render() {
+  SDL_SetRenderTarget(this->renderer->getSDLRenderer(), this->renderer->getRenderTargetTexture());
   std::vector<std::shared_ptr<DEAD_ParticleBase>> readyToFreeParticles;
   for (const std::shared_ptr<DEAD_ParticleBase>& particle : this->playingParticles) {
     if (!particle->render())

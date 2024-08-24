@@ -39,6 +39,7 @@ DEAD_Explainer::~DEAD_Explainer() {
 }
 
 void DEAD_Explainer::render() {
+  SDL_SetRenderTarget(this->renderer->getSDLRenderer(), this->renderer->getRenderTargetTexture());
   // render a text area and a image and notes area
   int imageSize = 30;
   int noteSize = 200;

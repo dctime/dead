@@ -19,6 +19,7 @@ DEAD_DecorationRenderer::~DEAD_DecorationRenderer() {
 }
 
 void DEAD_DecorationRenderer::render() {
+  SDL_SetRenderTarget(this->renderer->getSDLRenderer(), this->renderer->getRenderTargetTexture());
   for (const std::unique_ptr<DEAD_DecorationBase> &deco :
        layer->getDecorations()) {
     ScreenLocation renderLoc = this->getDecorationRenderLocation(deco.get());

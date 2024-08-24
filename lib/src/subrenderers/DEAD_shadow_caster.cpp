@@ -36,6 +36,7 @@ bool DEAD_ShadowCaster::isMouseInLineOfSight() {
 }
 
 void DEAD_ShadowCaster::render() {
+  SDL_SetRenderTarget(this->renderer->getSDLRenderer(), this->renderer->getRenderTargetTexture());
   this->mouseInLineOfSight = false;
 
   // make a square mask
@@ -215,7 +216,7 @@ void DEAD_ShadowCaster::render() {
   SDL_SetRenderDrawBlendMode(this->renderer->getSDLRenderer(),
                              SDL_BLENDMODE_BLEND);
 
-  SDL_SetRenderTarget(this->renderer->getSDLRenderer(), NULL);
+  SDL_SetRenderTarget(this->renderer->getSDLRenderer(), this->renderer->getRenderTargetTexture());
   SDL_SetTextureBlendMode(this->shadowMask, SDL_BLENDMODE_BLEND);
 
   SDL_RenderCopy(this->renderer->getSDLRenderer(), this->shadowMask, NULL,

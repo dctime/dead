@@ -14,7 +14,11 @@ DEAD_PlayerInventoryRenderer::DEAD_PlayerInventoryRenderer(
   this->frameBoarderWidth = this->frameWidth / 10;
 }
 
-void DEAD_PlayerInventoryRenderer::render() { this->renderFrame(); }
+void DEAD_PlayerInventoryRenderer::render() {
+  SDL_SetRenderTarget(this->renderer->getSDLRenderer(), this->renderer->getRenderTargetTexture());
+
+  this->renderFrame(); 
+}
 
 void DEAD_PlayerInventoryRenderer::renderFrame() {
   DEAD_PlayerInventory *inventory =
