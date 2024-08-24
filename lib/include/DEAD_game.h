@@ -16,6 +16,7 @@
 #include "DEAD_decoration_layer.h"
 #include "DEAD_decoration_layer_builder.h"
 #include "DEAD_data_base_connector.h"
+#include "DEAD_renderer3d.h"
 
 class DEAD_ControllablePlayer;
 
@@ -50,6 +51,7 @@ private:
   bool running;
   bool ticking;
   std::unique_ptr<DEAD_Renderer> renderer;
+  std::unique_ptr<DEAD_Renderer3D> renderer3D;
   std::unique_ptr<DEAD_BulletDirector> bulletDirector;
   std::unique_ptr<DEAD_CollisionDirector> collisionDirector;
   std::unique_ptr<DEAD_ItemDropLayer> itemDropLayer;

@@ -1,5 +1,6 @@
 #include "DEAD_player.h"
 #include <DEAD_controllable_player.h>
+#include <DEAD_filepaths.h>
 #include <DEAD_game.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_events.h>
@@ -13,13 +14,12 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_video.h>
 #include <functional>
-#include <items/weapons/guns/DEAD_pistol.h>
 #include <iostream>
 #include <items/DEAD_house_key.h>
-#include <memory>
 #include <items/weapons/DEAD_bat.h>
+#include <items/weapons/guns/DEAD_pistol.h>
+#include <memory>
 #include <zombies/DEAD_zombie.h>
-#include <DEAD_filepaths.h>
 
 const int DEAD_Game::BULLET_COLLISION_DELAY = 1000.0 / 60;
 const int DEAD_Game::MAIN_LOOP_DELAY = 1000.0 / 60;
@@ -31,15 +31,15 @@ DEAD_Game::DEAD_Game(std::string playerName)
                               this->SCREEN_HEIGHT, SDL_WINDOW_SHOWN)),
       map(std::make_unique<DEAD_Map>()),
       itemDropLayer(std::make_unique<DEAD_ItemDropLayer>()),
-      decorationLayerBuilder(std::make_unique<DEAD_DecorationLayerBuilder>(this)),
+      decorationLayerBuilder(
+          std::make_unique<DEAD_DecorationLayerBuilder>(this)),
       dataBaseConnector(std::make_unique<DEAD_DataBaseConnector>()),
-      running(true),
-      ticking(true), passTicks(0) {
+      running(true), ticking(true), passTicks(0) {
 
   SDL_Log("Game Init");
 
-
-  int genStatus = system(("./" + DEAD_FilePaths::DEAD_QUOTE_GEN + " &").c_str());
+  int genStatus =
+      system(("./" + DEAD_FilePaths::DEAD_QUOTE_GEN + " &").c_str());
   if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER) != 0) {
     SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
   }
@@ -81,6 +81,9 @@ DEAD_Game::DEAD_Game(std::string playerName)
   }
   this->map->getMapSpawner()->initAccess(this);
   this->renderer = std::make_unique<DEAD_Renderer>(this->window, this);
+  this->renderer3D = std::make_unique<DEAD_Renderer3D>(
+      this->window, this->renderer.get(), this);
+
   this->bulletDirector = std::make_unique<DEAD_BulletDirector>(this);
   this->collisionDirector = std::make_unique<DEAD_CollisionDirector>(this);
   this->zombieDirector = std::make_unique<DEAD_ZombieDirector>(this);
@@ -149,8 +152,7 @@ DEAD_ItemDropLayer *DEAD_Game::getItemDropLayer() {
   return this->itemDropLayer.get();
 }
 
-
-DEAD_DecorationLayer* DEAD_Game::getDecorationLayer() {
+DEAD_DecorationLayer *DEAD_Game::getDecorationLayer() {
   return this->decorationLayer.get();
 }
 
@@ -162,22 +164,22 @@ DEAD_SoundDirector *DEAD_Game::getSoundDirector() {
   return this->soundDirector.get();
 }
 
-DEAD_DataBaseConnector* DEAD_Game::getDataBaseConnector() {
+DEAD_DataBaseConnector *DEAD_Game::getDataBaseConnector() {
   return this->dataBaseConnector.get();
 }
 
-int DEAD_Game::getPassTicks() {
-  return this->passTicks;
-}
+int DEAD_Game::getPassTicks() { return this->passTicks; }
 
 void DEAD_Game::checkPlayerDied() {
   if (this->getPlayer()->getHealth() > 0)
     return;
   std::cout << "YOU DIED!" << std::endl;
-  std::cout << "You Survived " << this->passTicks/1000 << " seconds" << std::endl;
+  std::cout << "You Survived " << this->passTicks / 1000 << " seconds"
+            << std::endl;
   this->renderer->startYouDied();
   this->soundDirector->playYouDiedSound();
-  this->dataBaseConnector->sendDataToDataBase(this->player->getEntityName(), this->getPassTicks()/1000);
+  this->dataBaseConnector->sendDataToDataBase(this->player->getEntityName(),
+                                              this->getPassTicks() / 1000);
   ticking = false;
 }
 
@@ -240,17 +242,26 @@ void DEAD_Game::mainLoop(DEAD_Game *game) {
     game->bulletDirector->tickBullets();
     game->getZombieDirector()->tickZombies();
     game->checkPlayerDied();
-    game->renderer->moveRenderAnchor(game->player->getPos().x,
-                                     game->player->getPos().y);
+    // game->renderer->moveRenderAnchor(
+    //     game->player->getPos().x, game->player->getPos().y,
+    //     (int)(game->SCREEN_WIDTH / 2), (int)(game->SCREEN_HEIGHT / 2));
   }
-  game->renderer->render();
+  // game->renderer->moveRenderAnchor(game->player->getPos().x,
+  //                                  game->player->getPos().y,
+  //                                  (int)(game->SCREEN_WIDTH/2), (int)(game->SCREEN_HEIGHT/2));
+  //
+  // game->renderer->render2D();
+  game->renderer3D->render();
 }
+
 void DEAD_Game::checkAndDeleteCollisionBullets(DEAD_Game *game) {
-  if (!game->ticking) return;
+  if (!game->ticking)
+    return;
   game->bulletDirector->checkAndDeleteCollisionBullets();
 }
 
 void DEAD_Game::zombieSpawn(DEAD_Game *game) {
-  if (!game->ticking) return;
+  if (!game->ticking)
+    return;
   game->getMap()->getMapSpawner()->randomSpawnAZombie();
 }
