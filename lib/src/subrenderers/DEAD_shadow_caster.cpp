@@ -19,7 +19,6 @@
 DEAD_ShadowCaster::DEAD_ShadowCaster(DEAD_Renderer *renderer)
     : DEAD_SubRendererBase(renderer), map(renderer->getGame()->getMap()),
       labelRenderer(std::make_unique<DEAD_LabelRenderer>(renderer)) {
-  updateShadowCaster();
   this->shadowMask = SDL_CreateTexture(
       this->renderer->getSDLRenderer(), SDL_PIXELFORMAT_RGBA8888,
       SDL_TEXTUREACCESS_TARGET, this->renderer->getGame()->SCREEN_WIDTH,
@@ -43,7 +42,7 @@ void DEAD_ShadowCaster::render() {
 
   SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), 255, 0, 0, 255);
 
-  for (DEAD_Map::MapLine line : lines) {
+  for (DEAD_Map::MapLine line : this->map->getLines()) {
     ScreenLocation loc1 =
         this->renderer->getPointRenderLocation(line.point1.x, line.point1.y);
     ScreenLocation loc2 =
@@ -67,7 +66,7 @@ void DEAD_ShadowCaster::render() {
       this->renderer->getGame()->getPlayer()->getPos();
   double deltaAngle = 0.0001;
 
-  for (const DEAD_Map::MapLocation &point : points) {
+  for (const DEAD_Map::MapLocation &point : this->map->getPoints()) {
     double angle =
         DEAD_Functions::calAngle(playerLoc.x, playerLoc.y, point.x, point.y);
     directions.push_back(angle - deltaAngle);
@@ -100,7 +99,7 @@ void DEAD_ShadowCaster::render() {
     DEAD_Vector closestIntersection;
     double closestIntersectionDistance = MAXFLOAT;
 
-    for (const DEAD_Map::MapLine &line : this->lines) {
+    for (const DEAD_Map::MapLine &line : this->map->getLines()) {
       DEAD_Line boarderLine;
       boarderLine.point1.x = line.point1.x;
       boarderLine.point1.y = line.point1.y;
@@ -223,164 +222,4 @@ void DEAD_ShadowCaster::render() {
                  NULL);
 }
 
-void DEAD_ShadowCaster::updateShadowCaster() {
-  // update this if there is zombie blocked blocks update
-  this->lines.clear();
-  this->points.clear();
-  LocLineStatus locLineStatus(this->map);
 
-  for (int y = 0; y < this->map->getMapSize().height; y++) {
-    for (int x = 0; x < this->map->getMapSize().width; x++) {
-      DEAD_MapObjectBase *object = this->map->getMapObject(x, y);
-      if (!object->isZombieCollidable()) {
-        continue;
-      }
-      // check left
-      DEAD_MapObjectBase *leftObject = this->map->getMapObject(x - 1, y);
-      DEAD_MapObjectBase *upObject = this->map->getMapObject(x, y - 1);
-      DEAD_MapObjectBase *rightObject = this->map->getMapObject(x + 1, y);
-      DEAD_MapObjectBase *downObject = this->map->getMapObject(x, y + 1);
-
-      // check left side
-      // check if solid target
-      if (leftObject != nullptr && leftObject->isZombieCollidable()) {
-        // do nothing
-      } else {
-        // check if there a already drawn target
-        if (upObject != nullptr && upObject->isZombieCollidable()) {
-          int leftLineIndex =
-              locLineStatus.getLineStatus(x, y - 1, this->map).leftLineIndex;
-          if (leftLineIndex != -1) {
-            lines.at(leftLineIndex).point2 = {.x = (double)(x),
-                                              .y = (double)(y + 1)};
-            locLineStatus.setLineStatus(x, y).leftLineIndex = leftLineIndex;
-          } else {
-            int index = lines.size();
-            DEAD_Map::MapLine line = {
-                .point1 = {.x = (double)x, .y = (double)y},
-                .point2 = {.x = (double)x, .y = (double)(y + 1)}};
-            lines.push_back(line);
-            locLineStatus.setLineStatus(x, y).leftLineIndex = index;
-          }
-        } else {
-          int index = lines.size();
-          DEAD_Map::MapLine line = {
-              .point1 = {.x = (double)x, .y = (double)y},
-              .point2 = {.x = (double)x, .y = (double)(y + 1)}};
-          lines.push_back(line);
-          locLineStatus.setLineStatus(x, y).leftLineIndex = index;
-        }
-      }
-
-      // check right side
-      // check if solid target
-      if (rightObject != nullptr && rightObject->isZombieCollidable()) {
-        // do nothing
-      } else {
-        // check if there a already drawn target
-        if (upObject != nullptr && upObject->isZombieCollidable()) {
-          int rightLineIndex =
-              locLineStatus.getLineStatus(x, y - 1, this->map).rightLineIndex;
-          if (rightLineIndex != -1) {
-            lines.at(rightLineIndex).point2 = {.x = (double)(x + 1),
-                                               .y = (double)(y + 1)};
-            locLineStatus.setLineStatus(x, y).rightLineIndex = rightLineIndex;
-          } else {
-            int index = lines.size();
-            DEAD_Map::MapLine line = {
-                .point1 = {.x = (double)x + 1, .y = (double)y},
-                .point2 = {.x = (double)x + 1, .y = (double)(y + 1)}};
-            lines.push_back(line);
-            locLineStatus.setLineStatus(x, y).rightLineIndex = index;
-          }
-        } else {
-          int index = lines.size();
-          DEAD_Map::MapLine line = {
-              .point1 = {.x = (double)x + 1, .y = (double)y},
-              .point2 = {.x = (double)x + 1, .y = (double)(y + 1)}};
-          lines.push_back(line);
-          locLineStatus.setLineStatus(x, y).rightLineIndex = index;
-        }
-      }
-
-      // check up side
-      // check if solid target
-      if (upObject != nullptr && upObject->isZombieCollidable()) {
-        // do nothing
-      } else {
-        // check if there a already drawn target
-        if (leftObject != nullptr && leftObject->isZombieCollidable()) {
-          int upLineIndex =
-              locLineStatus.getLineStatus(x - 1, y, this->map).upLineIndex;
-          if (upLineIndex != -1) {
-            lines.at(upLineIndex).point2 = {.x = (double)(x + 1),
-                                            .y = (double)(y)};
-            locLineStatus.setLineStatus(x, y).upLineIndex = upLineIndex;
-          } else {
-            int index = lines.size();
-            DEAD_Map::MapLine line = {
-                .point1 = {.x = (double)x, .y = (double)y},
-                .point2 = {.x = (double)x + 1, .y = (double)(y)}};
-            lines.push_back(line);
-            locLineStatus.setLineStatus(x, y).upLineIndex = index;
-          }
-        } else {
-          int index = lines.size();
-          DEAD_Map::MapLine line = {
-              .point1 = {.x = (double)x, .y = (double)y},
-              .point2 = {.x = (double)x + 1, .y = (double)(y)}};
-          lines.push_back(line);
-          locLineStatus.setLineStatus(x, y).upLineIndex = index;
-        }
-      }
-
-      // check down side
-      // check if solid target
-      if (downObject != nullptr && downObject->isZombieCollidable()) {
-        // do nothing
-      } else {
-        // check if there a already drawn target
-        if (leftObject != nullptr && leftObject->isZombieCollidable()) {
-          int downLineIndex =
-              locLineStatus.getLineStatus(x - 1, y, this->map).downLineIndex;
-          if (downLineIndex != -1) {
-            lines.at(downLineIndex).point2 = {.x = (double)(x + 1),
-                                              .y = (double)(y + 1)};
-            locLineStatus.setLineStatus(x, y).downLineIndex = downLineIndex;
-          } else {
-            int index = lines.size();
-            DEAD_Map::MapLine line = {
-                .point1 = {.x = (double)x, .y = (double)y + 1},
-                .point2 = {.x = (double)x + 1, .y = (double)(y + 1)}};
-            lines.push_back(line);
-            locLineStatus.setLineStatus(x, y).downLineIndex = index;
-          }
-        } else {
-          int index = lines.size();
-          DEAD_Map::MapLine line = {
-              .point1 = {.x = (double)x, .y = (double)y + 1},
-              .point2 = {.x = (double)x + 1, .y = (double)(y + 1)}};
-          lines.push_back(line);
-          locLineStatus.setLineStatus(x, y).downLineIndex = index;
-        }
-      }
-    }
-  }
-
-  for (const DEAD_Map::MapLine &line : lines) {
-    points.insert(line.point1);
-    points.insert(line.point2);
-  }
-
-  int mapPoints[][2] = {
-      {0, 0},
-      {0, this->map->getMapSize().height},
-      {this->map->getMapSize().width, 0},
-      {this->map->getMapSize().width, this->map->getMapSize().height}};
-
-  for (int element = 0; element < 4; element++) {
-    DEAD_Map::MapLocation loc = {.x = (double)mapPoints[element][0],
-                                 .y = (double)mapPoints[element][1]};
-    points.insert(loc);
-  }
-}

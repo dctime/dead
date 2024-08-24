@@ -27,6 +27,7 @@ public:
   void incrementZombieKillCount();
   int getZombieKillCount();
   DEAD_DecorationBase* getCurrentDestoryingDeco();
+  double getPlayerHeight();
 
 protected:
   void attack();
@@ -42,4 +43,5 @@ private:
   DEAD_DecorationBase* getDecorationInFrontof(double range, double precision);
   int zombieKillcount;
   DEAD_DecorationBase* currentDestroyingDeco;
+  double playerHeight;
 };

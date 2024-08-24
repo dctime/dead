@@ -1,3 +1,4 @@
+#include "DEAD_functions.h"
 #include "subrenderers/DEAD_decoration_renderer.h"
 #include <DEAD_controllable_player.h>
 #include <DEAD_game.h>
@@ -13,7 +14,7 @@
 DEAD_Renderer3D::DEAD_Renderer3D(SDL_Window *window, DEAD_Renderer *renderer,
                                  DEAD_Game *game)
     : window(window), renderer(renderer), game(game), minimapWidth(324),
-      minimapHeight(216) {
+      minimapHeight(216), verticleFOV(60), horizontalFOV(120) {
   this->minimapTexture =
       SDL_CreateTexture(this->renderer->getSDLRenderer(),
                         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
@@ -31,6 +32,19 @@ void DEAD_Renderer3D::render() {
   SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), 10, 0, 10, 255);
   SDL_RenderClear(this->renderer->getSDLRenderer());
 
+  double playerFacingDegree = this->game->getPlayer()->getRotation();
+  double minPlayerFacingDegree = playerFacingDegree - this->horizontalFOV/2.0;
+  double unitDegreePerX = this->horizontalFOV/(double)this->game->SCREEN_WIDTH;
+
+  // render lines by x
+
+  for (int x = 0; x < this->game->SCREEN_WIDTH; x++) {
+    double tempDegree = DEAD_Functions::getDegreeFromZeroTo360(minPlayerFacingDegree + x*unitDegreePerX);
+    
+    SDL_SetRenderDrawColor(this->renderer->getSDLRenderer(), 255, 255, 255, 255);
+    SDL_RenderDrawLine(this->renderer->getSDLRenderer(), x, 100, x, 200);
+  }
+
 
   this->renderer->uiRenderer->render();
   this->renderer->playerInventoryRenderer->render();
@@ -39,6 +53,7 @@ void DEAD_Renderer3D::render() {
 
   SDL_RenderPresent(this->renderer->getSDLRenderer());
 }
+
 
 void DEAD_Renderer3D::renderMinimap() {
   this->renderer->setRenderBlockSize(30);

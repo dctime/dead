@@ -8,6 +8,18 @@ double DEAD_Functions::calDistance(double x1, double y1, double x2, double y2) {
   return sqrt(pow(x1 - x2, 2) + pow(y1 - y2, 2));
 }
 
+double DEAD_Functions::getDegreeFromZeroTo360(double degree) {
+  while (degree < 0) {
+    degree += 360;
+  }
+
+  while (degree > 360) {
+    degree -= 360;
+  }
+
+  return degree;
+}
+
 
 PointAndTriangleReturn DEAD_Functions::checkPointAndTriangle(DEAD_Vector point, DEAD_Triangle triangle) {
   DEAD_Triangle triangle1, triangle2, triangle3;

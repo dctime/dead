@@ -45,4 +45,5 @@ public:
   static DEAD_LineEquation getLineEquationFromPoints(DEAD_Vector point1, DEAD_Vector point2);
   static PointAndTriangleReturn checkPointAndTriangle(DEAD_Vector point, DEAD_Triangle triangle);
   static double getTriangleArea(DEAD_Triangle triangle);
+  static double getDegreeFromZeroTo360(double degree);
 };
