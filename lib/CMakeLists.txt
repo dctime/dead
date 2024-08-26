@@ -18,6 +18,7 @@ file(GLOB SOURCES
   "src/decorations/*.cpp"
   "src/subrenderers/*.cpp"
   "src/labels/*.cpp"
+  "src/player_input_method/*.cpp"
 )
 
 add_library(${PROJECT_NAME} ${SOURCES})

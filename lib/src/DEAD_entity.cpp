@@ -1,4 +1,5 @@
 #include "DEAD_entity.h"
+#include "DEAD_functions.h"
 #include <DEAD_game.h>
 #include <SDL2/SDL_timer.h>
 #include <cstdlib>
@@ -77,7 +78,9 @@ void DEAD_Entity::setPos(double x, double y) {
 
 void DEAD_Entity::setSpeed(int speed) { this->speed = speed; }
 
-void DEAD_Entity::setRotation(double rotation) { this->rotation = rotation; }
+void DEAD_Entity::setRotation(double rotation) {
+  this->rotation = DEAD_Functions::getDegreeFromZeroTo360(rotation); 
+}
 
 int DEAD_Entity::getSpeed() { return this->speed; }
 

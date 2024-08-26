@@ -18,8 +18,9 @@
 DEAD_Renderer3D::DEAD_Renderer3D(SDL_Window *window, DEAD_Renderer *renderer,
                                  DEAD_Game *game)
     : window(window), renderer(renderer), game(game), minimapWidth(324),
-      minimapHeight(216), horizontalFOV(40),
-      heightForHalfFullInOneMapBlock(0.5), maxRenderDistance(10) {
+      minimapHeight(216), horizontalFOV(60),
+      heightForHalfFullInOneMapBlock(1), maxRenderDistance(10),
+      blockRenderHeight(4) {
   this->minimapTexture =
       SDL_CreateTexture(this->renderer->getSDLRenderer(),
                         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
@@ -172,7 +173,7 @@ void DEAD_Renderer3D::renderFirstLayer() {
     double upperHalfLength = 1 - this->game->getPlayer()->getPlayerHeight();
     if (upperHalfLength > 0) {
       int renderLength = (int)((this->game->SCREEN_HEIGHT / 2.0) *
-                               (upperHalfLength / fullHalfRequiredHeight));
+                               (upperHalfLength / fullHalfRequiredHeight) * this->blockRenderHeight);
       int startY = (int)((this->game->SCREEN_HEIGHT / 2.0) - renderLength);
       if (startY < 0) {
         startY = 0;
@@ -190,7 +191,7 @@ void DEAD_Renderer3D::renderFirstLayer() {
     double lowerHalfLength = this->game->getPlayer()->getPlayerHeight();
     if (lowerHalfLength > 0) {
       int renderLength = (int)((this->game->SCREEN_HEIGHT / 2.0) *
-                               (lowerHalfLength / fullHalfRequiredHeight));
+                               (lowerHalfLength / fullHalfRequiredHeight) * this->blockRenderHeight);
 
       int endY = (int)((this->game->SCREEN_HEIGHT / 2.0) + renderLength);
       if (endY >= this->game->SCREEN_HEIGHT) {

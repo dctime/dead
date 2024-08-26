@@ -23,5 +23,6 @@ private:
   double heightForHalfFullInOneMapBlock;
   double maxRenderDistance;
   SDL_Texture* playerViewLayerTexture;
+  double blockRenderHeight;
   SDL_PixelFormat *format = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
 };
