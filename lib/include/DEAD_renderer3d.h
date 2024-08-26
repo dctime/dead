@@ -10,6 +10,8 @@ public:
   ~DEAD_Renderer3D();
   void render();
   void renderMinimap();
+  void renderFirstLayer();
+
 private:
   SDL_Window* window;
   DEAD_Renderer* renderer;
@@ -20,4 +22,6 @@ private:
   int horizontalFOV;
   double heightForHalfFullInOneMapBlock;
   double maxRenderDistance;
+  SDL_Texture* playerViewLayerTexture;
+  SDL_PixelFormat *format = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
 };
