@@ -12,6 +12,7 @@ public:
   void renderMinimap();
   void renderFirstLayer();
 
+
 private:
   SDL_Window* window;
   DEAD_Renderer* renderer;
@@ -25,4 +26,11 @@ private:
   SDL_Texture* playerViewLayerTexture;
   double blockRenderHeight;
   SDL_PixelFormat *format = SDL_AllocFormat(SDL_PIXELFORMAT_RGBA8888);
+
+  struct XToDistance {
+    int x;
+    double distance;
+  };
+
+  static bool sortByDistance(const XToDistance& data1, const XToDistance& data2);
 };

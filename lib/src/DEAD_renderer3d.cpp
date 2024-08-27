@@ -18,9 +18,8 @@
 DEAD_Renderer3D::DEAD_Renderer3D(SDL_Window *window, DEAD_Renderer *renderer,
                                  DEAD_Game *game)
     : window(window), renderer(renderer), game(game), minimapWidth(324),
-      minimapHeight(216), horizontalFOV(60),
-      heightForHalfFullInOneMapBlock(1), maxRenderDistance(10),
-      blockRenderHeight(4) {
+      minimapHeight(216), horizontalFOV(60), heightForHalfFullInOneMapBlock(1),
+      maxRenderDistance(10), blockRenderHeight(4) {
   this->minimapTexture =
       SDL_CreateTexture(this->renderer->getSDLRenderer(),
                         SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
@@ -106,10 +105,10 @@ void DEAD_Renderer3D::renderFirstLayer() {
 
   for (int y = 0; y < this->game->SCREEN_HEIGHT; y++) {
     for (int x = 0; x < this->game->SCREEN_WIDTH; x++) {
-      pixelData[y * (pitch / 4) + x] = SDL_MapRGBA(format, 0, 0, 0, 255); // Set pixel color
+      pixelData[y * (pitch / 4) + x] =
+          SDL_MapRGBA(format, 0, 0, 0, 255); // Set pixel color
     }
   }
-
 
   double playerFacingDegree = this->game->getPlayer()->getRotation();
   double minPlayerFacingDegree = playerFacingDegree - this->horizontalFOV / 2.0;
@@ -119,6 +118,10 @@ void DEAD_Renderer3D::renderFirstLayer() {
   DEAD_Map::MapLocation playerLoc = this->game->getPlayer()->getPos();
   DEAD_Vector playerLocVector = {.x = (double)playerLoc.x,
                                  .y = (double)playerLoc.y};
+
+  // store x by distance
+
+  std::vector<XToDistance> xToDistanceVector;
 
   // render lines by x
 
@@ -141,6 +144,7 @@ void DEAD_Renderer3D::renderFirstLayer() {
     DEAD_Map::MapLocation closestIntersection;
     DEAD_Vector tempIntersection;
     double closestDistance = MAXFLOAT;
+
     for (const DEAD_Map::MapLine &line : this->game->getMap()->getLines()) {
       DEAD_Vector linePoint1 = {.x = (double)line.point1.x,
                                 .y = (double)line.point1.y};
@@ -160,28 +164,37 @@ void DEAD_Renderer3D::renderFirstLayer() {
       }
     }
 
+    XToDistance xToDistance = {.x = x, .distance = closestDistance};
+    xToDistanceVector.push_back(xToDistance);
+  }
+
+  std::sort(xToDistanceVector.begin(), xToDistanceVector.end(),
+            this->sortByDistance);
+
+  for (const XToDistance &data : xToDistanceVector) {
+    std::cout << data.distance << std::endl;
     double colorRatio = 0;
-    if (closestDistance <= this->maxRenderDistance) {
+    if (data.distance <= this->maxRenderDistance) {
       colorRatio =
-          (this->maxRenderDistance - closestDistance) / this->maxRenderDistance;
+          (this->maxRenderDistance - data.distance) / this->maxRenderDistance;
     }
 
     double fullHalfRequiredHeight =
-        this->heightForHalfFullInOneMapBlock * closestDistance;
+        this->heightForHalfFullInOneMapBlock * data.distance;
 
     // upper half
     double upperHalfLength = 1 - this->game->getPlayer()->getPlayerHeight();
     if (upperHalfLength > 0) {
       int renderLength = (int)((this->game->SCREEN_HEIGHT / 2.0) *
-                               (upperHalfLength / fullHalfRequiredHeight) * this->blockRenderHeight);
+                               (upperHalfLength / fullHalfRequiredHeight) *
+                               this->blockRenderHeight);
       int startY = (int)((this->game->SCREEN_HEIGHT / 2.0) - renderLength);
       if (startY < 0) {
         startY = 0;
       }
 
-      for (int y = startY;
-           y <= (int)(this->game->SCREEN_HEIGHT / 2.0); y++) {
-        pixelData[y * (pitch / 4) + x] =
+      for (int y = startY; y <= (int)(this->game->SCREEN_HEIGHT / 2.0); y++) {
+        pixelData[y * (pitch / 4) + data.x] =
             SDL_MapRGBA(format, 255 * colorRatio, 255 * colorRatio,
                         255 * colorRatio, 255); // Set pixel color
       }
@@ -191,16 +204,16 @@ void DEAD_Renderer3D::renderFirstLayer() {
     double lowerHalfLength = this->game->getPlayer()->getPlayerHeight();
     if (lowerHalfLength > 0) {
       int renderLength = (int)((this->game->SCREEN_HEIGHT / 2.0) *
-                               (lowerHalfLength / fullHalfRequiredHeight) * this->blockRenderHeight);
+                               (lowerHalfLength / fullHalfRequiredHeight) *
+                               this->blockRenderHeight);
 
       int endY = (int)((this->game->SCREEN_HEIGHT / 2.0) + renderLength);
       if (endY >= this->game->SCREEN_HEIGHT) {
-        endY = this->game->SCREEN_HEIGHT-1;
+        endY = this->game->SCREEN_HEIGHT - 1;
       }
 
-      for (int y = (int)(this->game->SCREEN_HEIGHT / 2.0);
-           y <= endY; y++) {
-        pixelData[y * (pitch / 4) + x] =
+      for (int y = (int)(this->game->SCREEN_HEIGHT / 2.0); y <= endY; y++) {
+        pixelData[y * (pitch / 4) + data.x] =
             SDL_MapRGBA(format, 255 * colorRatio, 255 * colorRatio,
                         255 * colorRatio, 255); // Set pixel color
       }
@@ -211,4 +224,9 @@ void DEAD_Renderer3D::renderFirstLayer() {
 
   SDL_RenderCopy(this->renderer->getSDLRenderer(), this->playerViewLayerTexture,
                  NULL, NULL);
+}
+
+bool DEAD_Renderer3D::sortByDistance(const XToDistance &data1,
+                                     const XToDistance &data2) {
+  return data1.distance > data2.distance;
 }
