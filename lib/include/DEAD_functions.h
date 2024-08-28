@@ -46,4 +46,5 @@ public:
   static PointAndTriangleReturn checkPointAndTriangle(DEAD_Vector point, DEAD_Triangle triangle);
   static double getTriangleArea(DEAD_Triangle triangle);
   static double getDegreeFromZeroTo360(double degree);
+  static bool checkIfCertainRotationInRange(double inputRotation, double minRotation, double maxRotation);
 };

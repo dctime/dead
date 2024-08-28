@@ -12,6 +12,7 @@ const std::string DEAD_FilePaths::ZOMBIES_TEXTURE_PNG = ASSETS_FILE_PATH + "/img
 const std::string DEAD_FilePaths::PARTICLE_TEXTURE_PNG = ASSETS_FILE_PATH + "/imgs/particles.png";
 const std::string DEAD_FilePaths::DECORATION_TEXTURE_PNG = ASSETS_FILE_PATH + "/imgs/decorations.png";
 const std::string DEAD_FilePaths::LABEL_TEXTURE_PNG = ASSETS_FILE_PATH + "/imgs/labels.png";
+const std::string DEAD_FilePaths::ZOMBIES_3D_TEXTURE_PNG = ASSETS_FILE_PATH + "/imgs/zombies3d.png";
 
 const std::string DEAD_FilePaths::YOU_DIED_FONT = ASSETS_FILE_PATH + "/fonts/you_died.ttf";
 

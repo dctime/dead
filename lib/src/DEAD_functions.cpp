@@ -182,6 +182,22 @@ bool DEAD_Functions::linesIntersection(DEAD_Line& line1, DEAD_Line& line2, DEAD_
   return true;
 }
 
+bool DEAD_Functions::checkIfCertainRotationInRange(double inputRotation, double minRotation, double maxRotation) {
+  if (minRotation <= maxRotation) {
+    if (minRotation <= inputRotation && inputRotation <= maxRotation) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    if (minRotation <= inputRotation || inputRotation <= maxRotation) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+}
+
 
 
 

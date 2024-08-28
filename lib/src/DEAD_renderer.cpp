@@ -62,7 +62,7 @@ DEAD_Renderer::DEAD_Renderer(SDL_Window *window, DEAD_Game *game,
     SDL_LogError(SDL_LOG_CATEGORY_VIDEO, "[Renderer] Window is null");
   }
 
-  this->renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED);
+  this->renderer = SDL_CreateRenderer(window, 0, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE);
   if (this->renderer == NULL) {
     SDL_LogError(SDL_LOG_CATEGORY_RENDER, "[Renderer] %s", SDL_GetError());
   }

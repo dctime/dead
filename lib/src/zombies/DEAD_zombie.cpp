@@ -9,9 +9,18 @@
 
 DEAD_Zombie::DEAD_Zombie(DEAD_Game *game)
     : DEAD_Entity::DEAD_Entity(game, 100, 0.8), lastTimeAttackTicks(0),
-      attackCoolDown(1000) {
+      attackCoolDown(1000), height(2) {
   this->movingUnitVector = {.vectorX = 0, .vectorY = 0};
   std::cout << "Zombie Built" << std::endl;
+}
+
+double DEAD_Zombie::getHeight() {
+  return this->height;
+}
+
+SDL_Rect DEAD_Zombie::get3DRenderTextureRect() {
+  SDL_Rect rect = {.x=0, .y=0, .w=100, .h=200};
+  return rect;
 }
 
 SDL_Rect DEAD_Zombie::getTextureRect() {
