@@ -117,10 +117,13 @@ int DEAD_Renderer3D::getRenderXFromAngle(double angle) {
 
   double playerFacingDegree = this->game->getPlayer()->getRotation();
   
-  double minPlayerFacingDegree = playerFacingDegree - this->horizontalFOV / 2.0;
+  double minPlayerFacingDegree = DEAD_Functions::getDegreeFromZeroTo360(playerFacingDegree - this->horizontalFOV / 2.0);
   double unitDegreePerX =
       this->horizontalFOV / (double)this->game->SCREEN_WIDTH;
 
+  std::cout << "angle: " << angle << "playerFacingDegree" << playerFacingDegree << "minPlayerFacingDegree" << minPlayerFacingDegree << "unitDegreePerX: " << unitDegreePerX << std::endl;
+  
+  if (minPlayerFacingDegree > angle) { minPlayerFacingDegree -= 360; }
   int x = (angle - minPlayerFacingDegree) / unitDegreePerX;
   return x;
 }
@@ -236,7 +239,6 @@ void DEAD_Renderer3D::renderFirstLayer() {
         playerRotation - (this->horizontalFOV / 2.0) - additionalRotation);
 
 
-    std::cout << playerLookZombieRotation << "|" << minPlayerView << "|" << maxPlayerView << std::endl;
     if (DEAD_Functions::checkIfCertainRotationInRange(
             playerLookZombieRotation, minPlayerView, maxPlayerView)) {
       // rotation to x;
@@ -306,8 +308,6 @@ void DEAD_Renderer3D::renderFirstLayer() {
         if (tempXMax > this->game->SCREEN_WIDTH-1) {
           tempXMax = this->game->SCREEN_WIDTH-1;
         }
-
-        std::cout << "data.x:" << data.x << "tempX" << tempXMin << "tempY" << tempXMax << std::endl;
 
         for (int tempY = tempYMax; tempY > tempYMin; tempY--) {
           for (int tempX = tempXMin;
