@@ -6,6 +6,7 @@
 #include <DEAD_game.h>
 #include <DEAD_renderer.h>
 #include <DEAD_renderer3d.h>
+#include <SDL2/SDL_blendmode.h>
 #include <SDL2/SDL_error.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_log.h>
@@ -116,19 +117,21 @@ double DEAD_Renderer3D::getAngleFromRenderX(int x) {
 int DEAD_Renderer3D::getRenderXFromAngle(double angle) {
 
   double playerFacingDegree = this->game->getPlayer()->getRotation();
-  
-  double minPlayerFacingDegree = DEAD_Functions::getDegreeFromZeroTo360(playerFacingDegree - this->horizontalFOV / 2.0);
+
+  double minPlayerFacingDegree = DEAD_Functions::getDegreeFromZeroTo360(
+      playerFacingDegree - this->horizontalFOV / 2.0);
   double unitDegreePerX =
       this->horizontalFOV / (double)this->game->SCREEN_WIDTH;
 
-  std::cout << "angle: " << angle << "playerFacingDegree" << playerFacingDegree << "minPlayerFacingDegree" << minPlayerFacingDegree << "unitDegreePerX: " << unitDegreePerX << std::endl;
-  
-  if (minPlayerFacingDegree > angle) { minPlayerFacingDegree -= 360; }
+  if (minPlayerFacingDegree > angle) {
+    minPlayerFacingDegree -= 360;
+  }
   int x = (angle - minPlayerFacingDegree) / unitDegreePerX;
   return x;
 }
 
-Uint32 DEAD_Renderer3D::getPixelFromSurface(SDL_Surface *surface, int x, int y) {
+Uint32 DEAD_Renderer3D::getPixelFromSurface(SDL_Surface *surface, int x,
+                                            int y) {
   int bpp = surface->format->BytesPerPixel;
   Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
   return *(Uint32 *)p;
@@ -146,7 +149,8 @@ void DEAD_Renderer3D::getPixelInfoFromRectAndXYWithScale(
   int fetchX = textureLocRect.x + unitStep * x;
   int fetchY = textureLocRect.y + unitStep * y;
 
-  Uint32 pixel = this->getPixelFromSurface(this->zombie3DSurface, fetchX, fetchY);
+  Uint32 pixel =
+      this->getPixelFromSurface(this->zombie3DSurface, fetchX, fetchY);
 
   r = 0 + static_cast<uint8_t>(pixel);
   g = 0 + static_cast<uint8_t>(pixel >> 8);
@@ -161,6 +165,7 @@ void DEAD_Renderer3D::renderFirstLayer() {
 
   SDL_SetRenderTarget(this->renderer->getSDLRenderer(),
                       this->playerViewLayerTexture);
+
   SDL_LockTexture(this->playerViewLayerTexture, NULL, &pixels, &pitch);
 
   Uint32 *pixelData = (Uint32 *)pixels;
@@ -230,14 +235,14 @@ void DEAD_Renderer3D::renderFirstLayer() {
        this->game->getZombieDirector()->getZombies()) {
     double additionalRotation = 30;
     DEAD_Map::MapLocation zombieLoc = zombie->getPos();
-    double playerLookZombieRotation = DEAD_Functions::getDegreeFromZeroTo360(DEAD_Functions::calAngle(
-        playerLoc.x, playerLoc.y, zombieLoc.x, zombieLoc.y));
+    double playerLookZombieRotation =
+        DEAD_Functions::getDegreeFromZeroTo360(DEAD_Functions::calAngle(
+            playerLoc.x, playerLoc.y, zombieLoc.x, zombieLoc.y));
     double playerRotation = this->game->getPlayer()->getRotation();
     double maxPlayerView = DEAD_Functions::getDegreeFromZeroTo360(
         playerRotation + this->horizontalFOV / 2.0 + additionalRotation);
     double minPlayerView = DEAD_Functions::getDegreeFromZeroTo360(
         playerRotation - (this->horizontalFOV / 2.0) - additionalRotation);
-
 
     if (DEAD_Functions::checkIfCertainRotationInRange(
             playerLookZombieRotation, minPlayerView, maxPlayerView)) {
@@ -283,7 +288,7 @@ void DEAD_Renderer3D::renderFirstLayer() {
         SDL_Rect renderRect = {.x = 0, .y = 0, .w = 100, .h = 200};
 
         // distance 10 scale 0.1
-        double scale = (renderLength+30) / (double)data.zombieRenderRect.h;
+        double scale = (renderLength + 30) / (double)data.zombieRenderRect.h;
         // render Width 100 -> 10
         int renderWidth = data.zombieRenderRect.w * scale;
         // render Height 200 -> 20
@@ -295,8 +300,8 @@ void DEAD_Renderer3D::renderFirstLayer() {
         }
 
         int tempYMax = endY;
-        if (tempYMax > this->game->SCREEN_HEIGHT-1) {
-          tempYMax = this->game->SCREEN_HEIGHT-1;
+        if (tempYMax > this->game->SCREEN_HEIGHT - 1) {
+          tempYMax = this->game->SCREEN_HEIGHT - 1;
         }
 
         int tempXMin = data.x - renderWidth / 2;
@@ -305,21 +310,22 @@ void DEAD_Renderer3D::renderFirstLayer() {
         }
 
         int tempXMax = data.x + renderWidth / 2;
-        if (tempXMax > this->game->SCREEN_WIDTH-1) {
-          tempXMax = this->game->SCREEN_WIDTH-1;
+        if (tempXMax > this->game->SCREEN_WIDTH - 1) {
+          tempXMax = this->game->SCREEN_WIDTH - 1;
         }
 
         for (int tempY = tempYMax; tempY > tempYMin; tempY--) {
-          for (int tempX = tempXMin;
-               tempX <= tempXMax; tempX++) {
+          for (int tempX = tempXMin; tempX <= tempXMax; tempX++) {
             int r, g, b, a;
             this->getPixelInfoFromRectAndXYWithScale(
-                r, g, b, a, tempX-(data.x-renderWidth/2),
-                tempY-(endY-renderHeight), data.zombieRenderRect, scale);
-            
-            pixelData[tempY * (pitch / 4) + tempX] =
-                SDL_MapRGBA(format, r * colorRatio, g * colorRatio,
-                            b * colorRatio, a); // Set pixel color
+                r, g, b, a, tempX - (data.x - renderWidth / 2),
+                tempY - (endY - renderHeight), data.zombieRenderRect, scale);
+
+            if (a == 255) {
+              pixelData[tempY * (pitch / 4) + tempX] =
+                  SDL_MapRGBA(format, r * colorRatio, g * colorRatio,
+                              b * colorRatio, a); // Set pixel color
+            }
           }
         }
       }

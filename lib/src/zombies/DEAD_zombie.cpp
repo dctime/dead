@@ -19,6 +19,7 @@ double DEAD_Zombie::getHeight() {
 }
 
 SDL_Rect DEAD_Zombie::get3DRenderTextureRect() {
+  // Zombie Texture Does no support alpha cuz im lazy
   SDL_Rect rect = {.x=0, .y=0, .w=100, .h=200};
   return rect;
 }

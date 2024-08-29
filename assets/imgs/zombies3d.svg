@@ -42,17 +42,17 @@
      inkscape:groupmode="layer"
      id="layer1">
     <rect
-       style="fill:#008000;stroke-width:0.264583"
+       style="fill:#008000;stroke-width:0.296719"
        id="rect2"
-       width="17.049622"
-       height="34.883686"
-       x="4.6948419"
-       y="15.211421" />
+       width="19.120497"
+       height="39.120712"
+       x="3.4965849"
+       y="13.84885" />
     <circle
-       style="fill:#008000;stroke-width:0.264583"
+       style="fill:#008000;stroke-width:0.296719"
        id="path2"
-       cx="12.828446"
-       cy="9.1789865"
-       r="6.0928416" />
+       cx="12.618111"
+       cy="7.0837069"
+       r="6.8328876" />
   </g>
 </svg>
