@@ -116,12 +116,10 @@ double DEAD_Renderer3D::getAngleFromRenderX(int x) {
 int DEAD_Renderer3D::getRenderXFromAngle(double angle) {
 
   double playerFacingDegree = this->game->getPlayer()->getRotation();
+  
   double minPlayerFacingDegree = playerFacingDegree - this->horizontalFOV / 2.0;
   double unitDegreePerX =
       this->horizontalFOV / (double)this->game->SCREEN_WIDTH;
-  if (angle < minPlayerFacingDegree) {
-    angle += 360;
-  }
 
   int x = (angle - minPlayerFacingDegree) / unitDegreePerX;
   return x;
@@ -227,7 +225,7 @@ void DEAD_Renderer3D::renderFirstLayer() {
   // Load in zombie data
   for (const std::unique_ptr<DEAD_Zombie> &zombie :
        this->game->getZombieDirector()->getZombies()) {
-    double additionalRotation = 10;
+    double additionalRotation = 30;
     DEAD_Map::MapLocation zombieLoc = zombie->getPos();
     double playerLookZombieRotation = DEAD_Functions::getDegreeFromZeroTo360(DEAD_Functions::calAngle(
         playerLoc.x, playerLoc.y, zombieLoc.x, zombieLoc.y));
@@ -235,12 +233,12 @@ void DEAD_Renderer3D::renderFirstLayer() {
     double maxPlayerView = DEAD_Functions::getDegreeFromZeroTo360(
         playerRotation + this->horizontalFOV / 2.0 + additionalRotation);
     double minPlayerView = DEAD_Functions::getDegreeFromZeroTo360(
-        playerRotation - this->horizontalFOV / 2.0 - additionalRotation);
+        playerRotation - (this->horizontalFOV / 2.0) - additionalRotation);
 
 
+    std::cout << playerLookZombieRotation << "|" << minPlayerView << "|" << maxPlayerView << std::endl;
     if (DEAD_Functions::checkIfCertainRotationInRange(
             playerLookZombieRotation, minPlayerView, maxPlayerView)) {
-      std::cout << "Zombie in rotation" << std::endl;
       // rotation to x;
       double zombieDistance = DEAD_Functions::calDistance(
           zombieLoc.x, zombieLoc.y, playerLoc.x, playerLoc.y);
@@ -272,23 +270,21 @@ void DEAD_Renderer3D::renderFirstLayer() {
     if (data.isZombie) {
       double lowerHalfLength = this->game->getPlayer()->getPlayerHeight();
       if (lowerHalfLength > 0) {
+        // renderLength: mid to bottom
         int renderLength = (int)((this->game->SCREEN_HEIGHT / 2.0) *
                                  (lowerHalfLength / fullHalfRequiredHeight) *
                                  this->blockRenderHeight);
 
+        // endY might be out of the screen
         int endY = (int)((this->game->SCREEN_HEIGHT / 2.0) + renderLength);
-        if (endY >= this->game->SCREEN_HEIGHT) {
-          endY = this->game->SCREEN_HEIGHT - 1;
-        }
 
-        // endY = ground
         SDL_Rect renderRect = {.x = 0, .y = 0, .w = 100, .h = 200};
 
         // distance 10 scale 0.1
         double scale = (renderLength+30) / (double)data.zombieRenderRect.h;
-        // renderWidth 100 -> 10
+        // render Width 100 -> 10
         int renderWidth = data.zombieRenderRect.w * scale;
-        // renderheight 200 -> 20
+        // render Height 200 -> 20
         int renderHeight = data.zombieRenderRect.h * scale;
 
         int tempYMin = endY - renderHeight;
@@ -296,22 +292,30 @@ void DEAD_Renderer3D::renderFirstLayer() {
           tempYMin = 0;
         }
 
+        int tempYMax = endY;
+        if (tempYMax > this->game->SCREEN_HEIGHT-1) {
+          tempYMax = this->game->SCREEN_HEIGHT-1;
+        }
+
         int tempXMin = data.x - renderWidth / 2;
         if (tempXMin < 0) {
           tempXMin = 0;
         }
+
         int tempXMax = data.x + renderWidth / 2;
         if (tempXMax > this->game->SCREEN_WIDTH-1) {
           tempXMax = this->game->SCREEN_WIDTH-1;
         }
 
-        for (int tempY = endY; tempY > tempYMin; tempY--) {
+        std::cout << "data.x:" << data.x << "tempX" << tempXMin << "tempY" << tempXMax << std::endl;
+
+        for (int tempY = tempYMax; tempY > tempYMin; tempY--) {
           for (int tempX = tempXMin;
                tempX <= tempXMax; tempX++) {
             int r, g, b, a;
             this->getPixelInfoFromRectAndXYWithScale(
-                r, g, b, a, tempX - (data.x - renderWidth / 2),
-                tempY - (endY - renderHeight), data.zombieRenderRect, scale);
+                r, g, b, a, tempX-(data.x-renderWidth/2),
+                tempY-(endY-renderHeight), data.zombieRenderRect, scale);
             
             pixelData[tempY * (pitch / 4) + tempX] =
                 SDL_MapRGBA(format, r * colorRatio, g * colorRatio,

@@ -45,6 +45,7 @@ void DEAD_ControllablePlayer::playerEvents(SDL_Event event) {
       this->useItem();
       break;
     case SDLK_v:
+      this->game->getMap()->getMapSpawner()->randomSpawnAZombie();      
       std::cout << "Zombie count: "
                 << this->game->getZombieDirector()->getZombies().size()
                 << std::endl;

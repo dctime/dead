@@ -257,5 +257,5 @@ void DEAD_Game::checkAndDeleteCollisionBullets(DEAD_Game *game) {
 void DEAD_Game::zombieSpawn(DEAD_Game *game) {
   if (!game->ticking)
     return;
-  game->getMap()->getMapSpawner()->randomSpawnAZombie();
+  // game->getMap()->getMapSpawner()->randomSpawnAZombie();
 }
